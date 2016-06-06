@@ -66,7 +66,7 @@ public class Driver {
 
     entry.setUserName("Bob");
     entry.setTime(date);
-    entry.setHashValue("123");
+    //entry.setHashValue("123");
     entry.setOutput("no error");
     entry.setPathToLocalFile("over there");
 
