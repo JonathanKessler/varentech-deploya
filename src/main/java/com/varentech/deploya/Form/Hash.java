@@ -4,14 +4,9 @@ import org.apache.commons.codec.digest.DigestUtils;
 import java.io.*;
 import java.util.logging.*;
 
-//http://javarevisited.blogspot.com/2013/06/how-to-generate-md5-checksum-for-files.html
+
 public class Hash {
     private static final Logger logger = Logger.getLogger(Hash.class.getName());
-
-    public static void FileInfo() {
-
-        //System.out.println("MD5 checksum of file in Java using Apache commons is: " + checkSum(file));
-    }
 
     public static String checkSum() {
         String file = "C:\\Users\\raynorm\\Documents\\HelloWorldJar" +
