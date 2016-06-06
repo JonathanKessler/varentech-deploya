@@ -1,9 +1,11 @@
 package com.varentech.deploya;
 
 import com.varentech.deploya.Form.ExecuteJar;
+import com.varentech.deploya.Form.Resource;
 import com.varentech.deploya.Form.ServerConnection;
 import com.varentech.deploya.Form.ServerConnection;
 import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
+import com.varentech.deploya.entities.Entries;
 import com.varentech.deploya.entities.EntriesDetail;
 
 import java.util.Date;
@@ -61,17 +63,19 @@ public class Driver {
 
   }
 
-  public void exampleArgs(EntriesDetail entry){
-    Date date = new Date();
+  public void exampleArgs(){
+    Resource res = new Resource();
 
-    entry.setUserName("Bob");
-    entry.setTime(date);
+
+
+    res.entry.setUserName("Bob");
+    res.entry.setPathToLocalFile("over there");
     //entry.setHashValue("123");
-    entry.setOutput("no error");
-    entry.setPathToLocalFile("over there");
+    //res.entry.setOutput("no error");
+
 
     EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
-    impl.insert(entry);
+    impl.insertIntoEntries();
 
     ExecuteJar ex = new ExecuteJar();
     ex.exJar();
