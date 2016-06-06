@@ -2,6 +2,7 @@ package com.varentech.deploya.Form;
 
 import com.varentech.deploya.Driver;
 import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
+import com.varentech.deploya.entities.Entries;
 import com.varentech.deploya.entities.EntriesDetail;
 
 import javax.ws.rs.*;
@@ -13,7 +14,9 @@ import java.util.Date;
 
 public class Resource {
 
-    public static EntriesDetail entry = new EntriesDetail();
+    public static Entries entry = new Entries();
+    public static EntriesDetail entriesDetail = new EntriesDetail();
+
     @POST
     @Path("post")
     @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -26,22 +29,20 @@ public class Resource {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");//format the date to have no spaces
         String formatted_time = formatter.format(date);
 
-        Resource r = new Resource();
+        Resource res = new Resource();
         Hash h = new Hash();
         Driver drive = new Driver();
 
-        System.out.println(file_name);
-        System.out.println(path_to_destination);
-        System.out.println(execute_args);
-        System.out.println(unpack_args);
+        res.entry.setPathToDestination(path_to_destination);
+        res.entry.setExecuteArguments(execute_args);
+        res.entry.setUnpackArguments(unpack_args);
+        res.entry.setTime(formatted_time);
+        res.entry.setFileName(res.renaming(file_name));
+        //res.entry.setUserName();
+        //res.entry.setPathToLocalFile();
 
-        entry.setPathToDestination(path_to_destination);
-        entry.setExecuteArguments(execute_args);
-        entry.setUnpackArguments(unpack_args);
-        entry.setTime(formatted_time);
-        entry.setHashValue(h.checkSum());
-        entry.setFileName(r.renaming(file_name));
 
+        //res.entry.setHashValue(h.checkSum());
         drive.exampleArgs();
 
         return "<h2> Hello, " + path_to_destination + "</h2>";
