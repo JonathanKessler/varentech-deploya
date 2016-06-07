@@ -21,7 +21,7 @@ public interface DatabaseInterface {
   @param EntriesDetail  the object that needs to be inserted into the database.
    */
   void insertIntoEntries();
-  void insertIntoEntriesDetail();
+  void insertIntoEntriesDetail(EntriesDetail entriesDetail);
   /*
   <p>This method is used to list down
   all the record from the Entries table or the

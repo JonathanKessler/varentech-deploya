@@ -43,7 +43,7 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
 
   }
 
-  public void insertIntoEntriesDetail() {
+  public void insertIntoEntriesDetail(EntriesDetail entriesDetail) {
 
     Resource res = new Resource();
 
@@ -63,9 +63,9 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
       );
 
       preparedStatement.setString(1, String.valueOf(id));
-      preparedStatement.setString(2, res.entriesDetail.getFileName());
-      preparedStatement.setString(3, String.valueOf(res.entriesDetail.getHashValue()));
-      preparedStatement.setString(4, String.valueOf(res.entriesDetail.getOutput()));
+      preparedStatement.setString(2, entriesDetail.getFileName());
+      preparedStatement.setString(3, String.valueOf(entriesDetail.getHashValue()));
+      preparedStatement.setString(4, String.valueOf(entriesDetail.getOutput()));
       preparedStatement.executeUpdate();
 
     } catch (SQLException e) {

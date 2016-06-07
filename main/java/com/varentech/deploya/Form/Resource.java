@@ -28,15 +28,17 @@ public class Resource {
                              @FormParam("execute_args") String execute_args,
                              @FormParam("unpack_args") String unpack_args) {
 
+        Resource res = new Resource();
+        Hash h = new Hash();
+        LocalDirectories local = new LocalDirectories();
+        EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
+        Driver drive = new Driver();
+
         //fomat data for timestamp
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");//format the date to have no spaces
         String formatted_time = formatter.format(date);
 
-        Resource res = new Resource();
-        Hash h = new Hash();
-        LocalDirectories local = new LocalDirectories();
-        Driver drive = new Driver();
 
         //add to entry table
         res.entry.setPathToDestination(path_to_destination);
@@ -44,31 +46,44 @@ public class Resource {
         res.entry.setUnpackArguments(unpack_args);
         res.entry.setTime(formatted_time);
         res.entry.setFileName(res.renaming(file_name));
+        res.entry.setUserName("Bob");
+        res.entry.setPathToLocalFile("here");
         //res.entry.setUserName();
+        //res.entry.setPathToLocalFile();
 
-        //add to entriesDetail table
+        //add entry to database
+        impl.insertIntoEntries();
+
+        //add file name to entriesDetail
         res.entriesDetail.setFileName(res.entry.getFileName());
 
-        //save file locally
-        //File file = local.createAndGetLocalDirectoriesNames();
-        //local.addToDirectory(file, res.entry.getFileName());
 
-        //are we unpacking or not
-       // Unpack tj = new Unpack();
-        //tj.unpack(res.entry.getFileName());
+        //set hash value
+        File file = new File(res.entry.getFileName());
+        String hash = ""+file.hashCode();
+        res.entriesDetail.setHashValue(hash);
+
+        //unpack if necessary
+        Unpack un = new Unpack();
+        //unpack._____();
 
 
-        //execute jar file
+        //execute jar/tar file and save output
         ExecuteJar ex = new ExecuteJar();
         ex.exJar();
+
+        //add entriesDetail to database
+        impl.insertIntoEntriesDetail(res.entriesDetail);
+
+        //find all file names and hash codes for subfiles of a tar
         ex.findAllFileNames();
 
 
 
         //res.entry.setHashValue(h.checkSum());
-        drive.exampleArgs();
+        //drive.exampleArgs();
 
-        return "<h2> Hello, " + path_to_destination + "</h2>";
+        return "<h2>" + res.entriesDetail.getOutput() + "</h2>";
     }
 
     public String renaming (String file_name){ //method to add timestamp to file name
@@ -76,4 +91,6 @@ public class Resource {
         String time_stamped = file_name.substring(0,dot) + "_" + entry.getTime() + file_name.substring(dot);
         return time_stamped;
     }
+
+
 }

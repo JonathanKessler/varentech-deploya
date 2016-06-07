@@ -10,13 +10,8 @@ public class Unpack {
 
         //if we are going to unpack
         if(res.entry.getUnpackArguments()!=null){
+        //unpack file here
 
-
-        }else{
-            //if we are not unpacking the file
-            //just execute
         }
-
     }
-
 }

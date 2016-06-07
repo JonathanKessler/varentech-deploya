@@ -69,17 +69,18 @@ public class Driver {
 
 
     res.entry.setUserName("Bob");
+    res.entry.setPathToLocalFile("here");
 
 
 
-    res.entriesDetail.setHashValue("123");
-    res.entriesDetail.setOutput("no error");
+    //res.entriesDetail.setHashValue("123");
+    //res.entriesDetail.setOutput("no error");
 
 
-    EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
+    /*EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
     impl.insertIntoEntries();
-    impl.insertIntoEntriesDetail();
-
+    impl.insertIntoEntriesDetail(res.entriesDetail);
+*/
 
   }
 
