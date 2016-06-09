@@ -8,7 +8,7 @@
 
     <logger name="com.varentech.deploya" level="error"/>
 
-    <root level="debug" >
+    <root level="error" >
         <appender-ref ref="STDOUT" />
     </root>
 </configuration>
