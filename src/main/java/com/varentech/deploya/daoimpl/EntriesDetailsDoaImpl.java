@@ -9,13 +9,6 @@ import java.util.List;
 
 public class EntriesDetailsDoaImpl implements DatabaseInterface {
 
- /* public void createTable() {
-    //Create two table called "Entries" & "Entries_Details" with
-    //the necessary columns so we can properly insert them in the
-    //database.
-  }
-*/
-
   public void insertIntoEntries() {
 
     Resource res = new Resource();
