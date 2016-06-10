@@ -24,6 +24,8 @@ public static class loginServlet extends HttpServlet {
         session.setAttribute("Username", username);
 
         //redirect to the main form
+        //NOTE: THIS IS DIFFERENT FOR EVERYONE!!!!!
+        //NEED TO CHANGE ".../TryAgain/VarenProject/..." to where my bootstrapPage.html file is.
         response.sendRedirect("http://localhost:63342/TryAgain/VarenProject/bootstrapPage.html");
         return;
 
