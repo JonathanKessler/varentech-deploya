@@ -35,6 +35,7 @@ public class FormServlet {
             String path_to_destination = request.getParameter("path_to_destination");
             String execute_args = request.getParameter("execute_args");
             String unpack_args = request.getParameter("unpack_args");
+            String archive = request.getParameter("archive");
 
             //fomat data for timestamp
             Date date = new Date();
@@ -48,6 +49,7 @@ public class FormServlet {
             res.entry.setTime(formatted_time);
             res.entry.setFileName(form.renaming(file));
             res.entry.setUserName(session.getAttribute("Username").toString());
+            res.entry.setArchive(archive);
             res.entry.setPathToLocalFile("here");
 
             //add entry to database
