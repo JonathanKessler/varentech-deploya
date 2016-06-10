@@ -35,8 +35,7 @@ public class GetConfigProps {
             result = "Configurations: " + port_number + " ," + default_directory + " ," + log_level + " ," +acceptable_extensions ;
             System.out.println(result + "\nProgram Ran on " + time );
 
-            //if you have a lot of key-value pairs this way is much simpler,
-            //still need to find out how to deal with acceptable extensions being a list
+            //if you have a lot of key-value pairs this way is much simpler
             Enumeration enuKeys = prop.keys();
             while (enuKeys.hasMoreElements()) {
                 String key = (String) enuKeys.nextElement();
