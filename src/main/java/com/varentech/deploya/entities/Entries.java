@@ -2,6 +2,11 @@ package com.varentech.deploya.entities;
 
 import java.util.Date;
 
+/**
+ * Entries class that holds all information for the Entries table.
+ * @author VarenTech
+ */
+
 public class Entries {
 
     private String userName;
@@ -13,8 +18,10 @@ public class Entries {
     private String executeArguments;
     private String archive;
 
+    //Default Constructor
     public Entries(){}
 
+    //Constructor
     public Entries(
             String userName, String fileName, String time, String pathToLocalFile,
             String pathToDestination, String unpackArguments, String executeArguments, String archive){

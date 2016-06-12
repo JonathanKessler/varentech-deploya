@@ -1,13 +1,19 @@
 package com.varentech.deploya.entities;
 
+/**
+ * Class that holds the values of all the Entries_Details values.
+ * @author VarenTech
+ */
 public class EntriesDetail {
 
   private String fileName;
   private String hashValue;
   private String output;
 
+  //Default Constructor
   public EntriesDetail(){}
 
+  //Constructor
   public EntriesDetail(
           String fileName, String hashValue, String output){
     this.fileName = fileName;
