@@ -5,8 +5,22 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 
+/**
+ * This class creates a ServerConnection between servlets.
+ * Specifically, the LoginServlet and the FormServlet
+ * @author VarenTech
+ * @see org.eclipse.jetty.server.Server
+ * @see org.eclipse.jetty.servlet.ServletContextHandler
+ * @see org.eclipse.jetty.servlet.ServletHolder
+ * @see org.glassfish.jersey.server.ResourceConfig
+ */
 
 public class ServerConnection {
+
+    /**
+     * This method connects servlets together.
+     */
+
     public void connect() {
         ResourceConfig config = new ResourceConfig();
         config.packages("com/varentech/deploya");

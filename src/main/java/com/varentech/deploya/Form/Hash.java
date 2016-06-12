@@ -1,10 +1,28 @@
 package com.varentech.deploya.Form;
 
 import org.apache.commons.codec.digest.DigestUtils;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.*;
+
+/**
+ * This class creates a new Hash value that changes everytime so that each file that is different gets a new hash value.
+ * @author VarenTech
+ * @see org.apache.commons.codec.digest.DigestUtils
+ * @see java.io.InputStream
+ * @see java.io.File
+ * @see java.io.FileInputStream
+ * @see java.io.IOException
+ * @see java.io.FileNotFoundException
+ * @see java.security.MessageDigest
+ * @see java.security.NoSuchAlgorithmException
+ * @see java.util.logging.Logger
+ *
+ *
+ */
+
 
 //http://javarevisited.blogspot.com/2013/06/how-to-generate-md5-checksum-for-files.html
 public class Hash {

@@ -6,10 +6,28 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
+
+/**
+ *
+ * This class gets properties from the configuration file.
+ * @author VarenTech
+ * @see java.io.FileNotFoundException
+ * @see java.io.IOException
+ * @see java.io.InputStream
+ * @see java.util.Enumeration
+ * @see java.util.Properties
+ *
+ */
+
 public class GetConfigProps {
     String result = " ";
     InputStream inputStream;
 
+    /**
+     *
+     * @return String that has the the value of result????
+     * @throws IOException
+     */
     public String getPropValues() throws IOException {
 
         try {

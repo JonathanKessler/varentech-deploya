@@ -13,8 +13,31 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
+/**
+ * This class is a servlet for the Form html where after a user logs into the web app,
+ * this is where we will easily store their data into our database.
+ *
+ * @author VarenTech
+ * @see com.varentech.deploya.Driver
+ * @see com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl
+ * @see javax.servlet.ServletException
+ * @see javax.servlet.http.HttpServlet
+ * @see javax.servlet.http.HttpServletRequest
+ * @see javax.servlet.http.HttpServletResponse
+ * @see javax.servlet.http.HttpSession
+ * @see java.io.IOException
+ * @see java.text.SimpleDateFormat
+ * @see java.util.Date
+ *
+ */
+
 public class FormServlet {
 
+    /**
+     * Creates a servlet to the form page so that we can get information from the client when they type
+     * their commands in the HTML form. This also inserts the information into our database, while they enter it.
+     *
+     */
     public static class formServlet extends HttpServlet {
         Resource res = new Resource();
         FormServlet form = new FormServlet();
@@ -87,7 +110,13 @@ public class FormServlet {
         }
     }
 
+    /**
+     *
+     * @param file_name
+     * @return a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
+     */
 
+    //TODO: Save this file_name + timestamp file into the archive directory.
     public String renaming(String file_name) { //method to add timestamp to file name
         Resource res = new Resource();
         int dot = file_name.lastIndexOf('.');

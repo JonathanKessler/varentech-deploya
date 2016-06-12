@@ -8,11 +8,24 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 
+/**
+ * This class holds the Login Servlet
+ * @author VarenTech
+ * @see javax.servlet.ServletException
+ * @see javax.servlet.http.HttpServlet
+ * @see javax.servlet.http.HttpServletRequest
+ * @see javax.servlet.http.HttpServletResponce
+ * @see javax.servlet.http.HttpSession
+ */
+
 public class LoginServlet{
 
 public static class loginServlet extends HttpServlet {
 
-    //this method runs when login submit button is clicked
+    /**
+     * This method runs when the login submit button is clicked.
+     */
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
