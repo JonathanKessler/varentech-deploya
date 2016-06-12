@@ -2,6 +2,11 @@ package com.varentech.deploya.entities;
 
 import java.util.Date;
 
+/**
+ * Entries class that holds all information for the Entries table.
+ * @author VarenTech
+ */
+
 public class Entries {
 
     private String userName;
@@ -11,12 +16,15 @@ public class Entries {
     private String pathToDestination;
     private String unpackArguments;
     private String executeArguments;
+    private String archive;
 
+    //Default Constructor
     public Entries(){}
 
+    //Constructor
     public Entries(
             String userName, String fileName, String time, String pathToLocalFile,
-            String pathToDestination, String unpackArguments, String executeArguments){
+            String pathToDestination, String unpackArguments, String executeArguments, String archive){
         this.userName = userName;
         this.fileName = fileName;
         this.time = time;
@@ -24,6 +32,7 @@ public class Entries {
         this.pathToDestination = pathToDestination;
         this.unpackArguments = unpackArguments;
         this.executeArguments = executeArguments;
+        this.archive=archive;
     }
 
     //Setters
@@ -48,6 +57,7 @@ public class Entries {
     public void setExecuteArguments(String executeArguments){
         this.executeArguments = executeArguments;
     }
+    public void setArchive(String archive){this.archive = archive;}
 
     //Getters
     public String getUserName(){
@@ -71,5 +81,6 @@ public class Entries {
     public String getExecuteArguments(){
         return executeArguments;
     }
+    public String getArchive() { return archive; }
 
 }
