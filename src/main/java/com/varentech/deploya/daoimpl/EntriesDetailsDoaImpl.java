@@ -7,7 +7,28 @@ import com.varentech.deploya.util.ConnectionConfiguration;
 import java.sql.*;
 import java.util.List;
 
+/**
+ *
+ * This class first connects to our db, then with the given methods, enters specific parameters into different columns in
+ * either the Entries table or Entries_Details table.
+ * Note: The Entries Table is information that the client provides via web app.
+ * The Entries_Details Table is information that this program does on the backend.
+ *
+ * @author VarenTech
+ *
+ * @see com.varentech.deploya.util.ConnectionConfiguration
+ * @see List
+ * @see java.sql.PreparedStatement
+ * @see java.sql.Connection
+ */
+
 public class EntriesDetailsDoaImpl implements DatabaseInterface {
+
+
+  /**
+   * This method inserts into the Entries table. It calls upon the Resource class
+   * to insert easily into the table.
+   */
 
   public void insertIntoEntries() {
 
@@ -35,6 +56,11 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
 
   }
 
+  /**
+   * This method inserts into the Entries_Details table using a parameter of an EntriesDetail object.
+   * @param entriesDetail
+   *
+     */
   public void insertIntoEntriesDetail(EntriesDetail entriesDetail) {
 
     Resource res = new Resource();
@@ -63,6 +89,22 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
     } catch (SQLException e) {
       e.printStackTrace();
     }
+  }
+
+
+  /**
+   * Auto-generated from the interface.
+   */
+  public void createTable() {
+
+  }
+
+  /**
+   * Auto-generated from interface.
+   *
+     */
+  public void insert(EntriesDetail entriesDetail) {
+
   }
 
   //TODO: Perhaps add a prepared statement that lists all of the data in the entire database.
