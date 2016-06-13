@@ -40,11 +40,13 @@ public class FormServlet {
     public static class formServlet extends HttpServlet {
         Resource res = new Resource();
         FormServlet form = new FormServlet();
+        private final Logger logg = LoggerFactory.getLogger(FormServlet.class);
 
         //this method runs when the submit button is clicked on the main form
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             response.setContentType("text/html");
+             logg.info("Successfully connected to form servlet.");
             response.setStatus(HttpServletResponse.SC_OK);
 
             HttpSession session = request.getSession();
@@ -58,6 +60,7 @@ public class FormServlet {
             String execute_args = request.getParameter("execute_args");
             String unpack_args = request.getParameter("unpack_args");
             String archive = request.getParameter("archive");
+            logg.info("Filename is {} Execute this way: {} Unpack this way {} Archive? {}", file,execute_args,unpack_args,archive);
 
             //fomat data for timestamp
             Date date = new Date();
@@ -76,6 +79,7 @@ public class FormServlet {
 
             //add entry to database
             impl.insertIntoEntries();
+             logg.info("Successfully added entries to database.");
 
             //add file name to entriesDetail object
             res.entriesDetail.setFileName(res.entry.getFileName());
