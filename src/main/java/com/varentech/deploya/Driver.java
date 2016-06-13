@@ -2,33 +2,24 @@ package com.varentech.deploya;
 
 import com.varentech.deploya.Form.*;
 import com.varentech.deploya.Form.ServerConnection;
-import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
-import com.varentech.deploya.entities.EntriesDetail;
-
 
 import java.io.IOException;
 
-
 public class Driver {
-
-
   //This string should be final as it should not change. At initial run, the
   //program should be able to create this directory if it is not found.
   final static String pathToLocal = "/opt/deploya";
 
-
   public static void main(String[] args) throws IOException {
-      GetConfigProps prop = new GetConfigProps();
+    /*  GetConfigProps prop = new GetConfigProps();
       try {
           prop.getPropValues();
       } catch (IOException e) {
           e.printStackTrace();
-      }
+      }*/
     //connect to server
     ServerConnection server = new ServerConnection();
-    server.connect();
-
-
+      server.connect();
 
       //EntriesDetailsDoaImpl eddi = new EntriesDetailsDoaImpl();
     //EntriesDetail entriesDetail = new EntriesDetail();
@@ -67,7 +58,6 @@ public class Driver {
     //TODO: Save the file to a location in the computer given.
 
     //TODO: Find a way to save and print the output of the program.
-
 
   }
 
