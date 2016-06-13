@@ -94,8 +94,8 @@ public class FormServlet {
 
 
             //execute jar/tar file and save output
-            ExecuteJar ex = new ExecuteJar();
-            ex.exJar();
+            //ExecuteJar ex = new ExecuteJar();
+            //ex.exJar();
 
             //add entriesDetail to database
             impl.insertIntoEntriesDetail(res.entriesDetail);
