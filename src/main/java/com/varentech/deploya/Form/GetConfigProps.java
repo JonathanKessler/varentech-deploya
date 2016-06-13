@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.Properties;
 
-
 /**
  *
  * This class gets properties from the configuration file.
@@ -22,16 +21,33 @@ import java.util.Properties;
 public class GetConfigProps {
     String result = " ";
     InputStream inputStream;
-
+    private static final Properties prop = new Properties();
     /**
      *
      * @return String that has the the value of result????
      * @throws IOException
      */
-    public String getPropValues() throws IOException {
 
+    //public void getPropValues() throws IOException {
+        static {
+            try {
+                ClassLoader loader = Thread.currentThread().getContextClassLoader();
+                prop.load(loader.getResourceAsStream("config.properties"));
+            } catch (IOException e) {
+                throw new ExceptionInInitializerError(e);
+            }
+        }
+
+
+        public static String getSetting(String key) {
+            return prop.getProperty(key);
+        }
+
+
+
+        /*
         try {
-            Properties prop = new Properties();
+
             String propFileName = "config.properties";
             inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 
@@ -40,18 +56,19 @@ public class GetConfigProps {
             } else {
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
-
+            System.out.println(prop.getProperty("port_number") );
             Enumeration enuKeys = prop.keys();
             while (enuKeys.hasMoreElements()) {
                 String key = (String) enuKeys.nextElement();
                 String value = prop.getProperty(key);
-                System.out.println(key + ": " + value);
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         } finally {
             inputStream.close();
         }
-        return result;
-    }
+*/
+       // return result;
+
+
 }
