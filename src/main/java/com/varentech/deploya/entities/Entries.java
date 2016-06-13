@@ -1,7 +1,5 @@
 package com.varentech.deploya.entities;
 
-import java.util.Date;
-
 /**
  * Entries class that holds all information for the Entries table.
  * @author VarenTech
