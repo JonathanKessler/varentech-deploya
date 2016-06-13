@@ -11,12 +11,7 @@ public class Driver {
   final static String pathToLocal = "/opt/deploya";
 
   public static void main(String[] args) throws IOException {
-    /*  GetConfigProps prop = new GetConfigProps();
-      try {
-          prop.getPropValues();
-      } catch (IOException e) {
-          e.printStackTrace();
-      }*/
+   
     //connect to server
     ServerConnection server = new ServerConnection();
       server.connect();
