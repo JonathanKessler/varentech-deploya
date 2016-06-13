@@ -22,16 +22,20 @@ public class ServerConnection {
     /**
      * This method connects servlets together.
      */
-     
-  private Logger logger= LoggerFactory.getLogger(ServerConnection.class);
+    private Logger logger= LoggerFactory.getLogger(ServerConnection.class);
     public void connect() {
         ResourceConfig config = new ResourceConfig();
         config.packages("com/varentech/deploya");
 
+        //gets port number from configuration file
+        GetConfigProps property= new GetConfigProps();
+        int port = Integer.valueOf( property.getSetting("port_number"));
+
         //create a server object
-        Server server = new Server(8080);
+        Server server = new Server(port);
         ServletContextHandler context;
         context = new ServletContextHandler(ServletContextHandler.SESSIONS);
+
 
         //set home path
         context.setContextPath("/home");
@@ -46,6 +50,7 @@ public class ServerConnection {
             server.start();
             logger.info("Successfully connected to server.");
             server.join();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (Exception e) {
