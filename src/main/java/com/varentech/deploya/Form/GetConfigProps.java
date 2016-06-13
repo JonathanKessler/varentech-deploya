@@ -30,7 +30,7 @@ public class GetConfigProps {
 
 
         /**
-         * @returns String property of corresponding key value
+         * @return String property of corresponding key value
          */
         public static String getSetting(String key) {
             return prop.getProperty(key);
