@@ -24,7 +24,6 @@ import java.util.List;
 
 public class EntriesDetailsDoaImpl implements DatabaseInterface {
 
-
   /**
    * This method inserts into the Entries table. It calls upon the Resource class
    * to insert easily into the table.
@@ -53,14 +52,14 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
     } catch (SQLException se) {
       se.printStackTrace();
     }
-
   }
 
-  /**
-   * This method inserts into the Entries_Details table using a parameter of an EntriesDetail object.
-   * @param entriesDetail
-   *
+    /**
+     * This method inserts into the Entries_Details table using a parameter of an EntriesDetail object.
+     * @param entriesDetail
+     *
      */
+
   public void insertIntoEntriesDetail(EntriesDetail entriesDetail) {
 
     Resource res = new Resource();
@@ -76,14 +75,15 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
 
       PreparedStatement preparedStatement = connection.prepareStatement(
               "INSERT INTO Entries_Details " +
-                      "(entries_id, file_name, hash_value, output)" +
-                      "VALUES (?,?,?,?)"
+                      "(entries_id, file_name, hash_value, output, error)" +
+                      "VALUES (?,?,?,?,?)"
       );
 
       preparedStatement.setString(1, String.valueOf(id));
       preparedStatement.setString(2, entriesDetail.getFileName());
       preparedStatement.setString(3, String.valueOf(entriesDetail.getHashValue()));
       preparedStatement.setString(4, String.valueOf(entriesDetail.getOutput()));
+      preparedStatement.setString(5, String.valueOf(entriesDetail.getError()));
       preparedStatement.executeUpdate();
 
     } catch (SQLException e) {
@@ -91,24 +91,16 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
     }
   }
 
-
-  /**
-   * Auto-generated from the interface.
-   */
-  public void createTable() {
-
-  }
-
-  /**
-   * Auto-generated from interface.
-   *
+    /**
+     * Auto-generated from interface.
+     *
      */
-  public void insert(EntriesDetail entriesDetail) {
+    public void insert(EntriesDetail entriesDetail) {
 
-  }
+    }
 
   //TODO: Perhaps add a prepared statement that lists all of the data in the entire database.
   public List<EntriesDetail> listEntries() {
-    return null;
+      return null;
   }
 }
