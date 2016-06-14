@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.*;
 
 /**
-* This class creates a new Hash value that changes only when the file changes. Each different file should have a different hash value
+ * This class creates a new Hash value that changes everytime so that each file that is different gets a new hash value.
  * @author VarenTech
  * @see org.apache.commons.codec.digest.DigestUtils
  * @see java.io.InputStream
@@ -22,8 +22,6 @@ import java.util.logging.*;
  *
  *
  */
-
-
 //http://javarevisited.blogspot.com/2013/06/how-to-generate-md5-checksum-for-files.html
 public class Hash {
     private static final Logger logger = Logger.getLogger(Hash.class.getName());
@@ -66,5 +64,37 @@ public class Hash {
 
         return digest.digest().toString();
     }
+
+
+    public void getHash(){
+
+
+        try {
+            String hashCommand = "CertUtil -hashfile C:\\Users\\kesslerk\\Documents\\HelloWorldJar\\out\\artifacts\\HelloWorldJar_jar\\HelloWorldJar.jar MD5";
+            Process p = Runtime.getRuntime().exec(hashCommand);
+
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(p.getInputStream()));
+            String line = null;
+            String output = "";
+
+            while ((line = in.readLine()) != null) {
+                //System.out.println(line);
+                output= output + line;
+            }
+
+            System.out.println(output);
+            Resource res = new Resource();
+            res.entriesDetail.setHashValue(output);
+
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 }
 

@@ -13,27 +13,27 @@ import java.util.Properties;
  */
 
 public class GetConfigProps {
-   
+
     private static final Properties prop = new Properties();
     /**
      * @loads config file
      * @throws IOException
      */
-        static {
-            try {
-                ClassLoader loader = Thread.currentThread().getContextClassLoader();
-                prop.load(loader.getResourceAsStream("config.properties"));
-            } catch (IOException e) {
-                throw new ExceptionInInitializerError(e);
-            }
+    static {
+        try {
+            ClassLoader loader = Thread.currentThread().getContextClassLoader();
+            prop.load(loader.getResourceAsStream("config.properties"));
+        } catch (IOException e) {
+            throw new ExceptionInInitializerError(e);
         }
+    }
 
 
-        /**
-         * @return String property of corresponding key value
-         */
-        public static String getSetting(String key) {
-            return prop.getProperty(key);
-        }
+    /**
+     * @return String property of corresponding key value
+     */
+    public static String getSetting(String key) {
+        return prop.getProperty(key);
+    }
 
 }

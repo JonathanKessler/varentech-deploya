@@ -1,11 +1,14 @@
 package com.varentech.deploya.Form;
 
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.MultipartConfigElement;
 
 /**
  * This class creates a ServerConnection between servlets.
@@ -43,7 +46,11 @@ public class ServerConnection {
 
         //add servlets and paths
         context.addServlet(new ServletHolder(new LoginServlet.loginServlet()), "/login");
-        context.addServlet(new ServletHolder(new FormServlet.formServlet()), "/upload");
+
+        ServletHolder sh = new ServletHolder(new FormServlet.formServlet());
+        sh.getRegistration().setMultipartConfig(new MultipartConfigElement("/temp", 1048576, 1048576, 262144));
+        context.addServlet(sh, "/upload");
+       // context.addServlet(new ServletHolder(new FormServlet.formServlet()), "/upload");
 
         //connect to server
         try {

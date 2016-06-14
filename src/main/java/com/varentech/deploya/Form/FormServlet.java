@@ -3,13 +3,12 @@ package com.varentech.deploya.Form;
 import com.varentech.deploya.directories.LocalDirectories;
 import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
+import javax.servlet.http.*;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.apache.commons.compress.utils.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,21 +47,23 @@ public class FormServlet {
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             response.setContentType("text/html");
-             logg.info("Successfully connected to form servlet.");
+            logg.info("Successfully connected to form servlet.");
             response.setStatus(HttpServletResponse.SC_OK);
 
             HttpSession session = request.getSession();
-            Hash h = new Hash();
+            Hash hash = new Hash();
             LocalDirectories local = new LocalDirectories();
             EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
+            SendFile send = new SendFile();
+            ProcessFile process = new ProcessFile();
 
             //get all parameters from the form
-            String file = request.getParameter("file_name");
+            String file_name = request.getPart("file_name").getSubmittedFileName();
             String path_to_destination = request.getParameter("path_to_destination");
             String execute_args = request.getParameter("execute_args");
             String unpack_args = request.getParameter("unpack_args");
             String archive = request.getParameter("archive");
-            logg.info("Filename is {} Execute this way: {} Unpack this way {} Archive? {}", file,execute_args,unpack_args,archive);
+            logg.info("Filename is {} Execute this way: {} Unpack this way {} Archive? {}", file_name,execute_args,unpack_args,archive);
 
             //fomat data for timestamp
             Date date = new Date();
@@ -74,34 +75,33 @@ public class FormServlet {
             res.entry.setExecuteArguments(execute_args);
             res.entry.setUnpackArguments(unpack_args);
             res.entry.setTime(formatted_time);
-            res.entry.setFileName(form.renaming(file));
+            res.entry.setFileName(form.renaming(file_name));
             res.entry.setUserName(session.getAttribute("Username").toString());
             res.entry.setArchive(archive);
-            res.entry.setPathToLocalFile("here");
-
+            if(archive!=null) {
+                GetConfigProps property= new GetConfigProps();
+                res.entry.setPathToLocalFile(property.getSetting("default_directory"));
+            }
             //add entry to database
             impl.insertIntoEntries();
-             logg.info("Successfully added entries to database.");
+            logg.info("Successfully added entries to database.");
 
             //add file name to entriesDetail object
             res.entriesDetail.setFileName(res.entry.getFileName());
 
+            //saves file to destination
+            Part part = request.getPart("file_name");
+            send.sendToDestination(part);
+
+            //unpack file if necessary
+            //process.unpackArchiveArguments();
 
             //set hash value
-            //File file = new File(file_name);
-            //String hash = ""+file.hashCode();
-            //res.entriesDetail.setHashValue(hash);
-            //System.out.println(h.createSha1(file));
-
-
-            //unpack if necessary
-            Unpack un = new Unpack();
-            //unpack._____();
-
+            //might be finding these in FindAllFileNames
+            //hash.getHash();
 
             //execute jar/tar file and save output
-            //ExecuteJar ex = new ExecuteJar();
-            //ex.exJar();
+            //process.executeArguments();
 
             //add entriesDetail to database
             impl.insertIntoEntriesDetail(res.entriesDetail);
@@ -129,5 +129,3 @@ public class FormServlet {
         return time_stamped;
     }
 }
-
-
