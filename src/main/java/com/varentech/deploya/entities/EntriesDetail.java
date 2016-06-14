@@ -4,11 +4,13 @@ package com.varentech.deploya.entities;
  * Class that holds the values of all the Entries_Details values.
  * @author VarenTech
  */
+
 public class EntriesDetail {
 
   private String fileName;
   private String hashValue;
   private String output;
+    private String error;
 
   //Default Constructor
   public EntriesDetail(){}
@@ -19,6 +21,7 @@ public class EntriesDetail {
     this.fileName = fileName;
     this.hashValue = hashValue;
     this.output = output;
+      this.error=error;
   }
 
   //Setters
@@ -31,6 +34,7 @@ public class EntriesDetail {
   public void setOutput(String output){
     this.output = output;
   }
+    public void setError(String error){ this.error = error;}
 
   //Getters
   public String getFileName(){return fileName;}
@@ -40,6 +44,6 @@ public class EntriesDetail {
   public String getOutput(){
     return output;
   }
-
+    public String getError(){return error;}
 
 }
