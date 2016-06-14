@@ -8,7 +8,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.logging.*;
 
 /**
- * This class creates a new Hash value that changes everytime so that each file that is different gets a new hash value.
+* This class creates a new Hash value that changes only when the file changes. Each different file should have a different hash value
  * @author VarenTech
  * @see org.apache.commons.codec.digest.DigestUtils
  * @see java.io.InputStream
