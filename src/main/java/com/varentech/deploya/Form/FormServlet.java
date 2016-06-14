@@ -92,6 +92,7 @@ public class FormServlet {
             //saves file to destination
             Part part = request.getPart("file_name");
             send.sendToDestination(part);
+            logg.info("Successfully sent file to destination.");
 
             //unpack file if necessary
             //process.unpackArchiveArguments();
