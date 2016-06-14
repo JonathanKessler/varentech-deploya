@@ -1,7 +1,5 @@
 package com.varentech.deploya.Form;
 
-import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
-import com.varentech.deploya.entities.EntriesDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,46 +25,42 @@ public class ProcessFile {
      * program.
      * @throws Exception if an invalid execute command is given.
      */
+
     public void executeArguments() {
 
         try {
 
             Resource res = new Resource();
             String output = "";
-            //Process p = Runtime.getRuntime().exec("java -jar C:\\Users\\kesslerk\\Documents\\HelloWorldJar\\out\\artifacts\\HelloWorldJar_jar\\HelloWorldJar.jar");
-
-            logger.debug("Execute command is: " + res.entry.getExecuteArguments());
 
             Process p = Runtime.getRuntime().exec(res.entry.getExecuteArguments());
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(p.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = null;
 
-
-            logger.debug("The standard output stream is: ");
+            logger.info("The standard output stream is: ");
 
             while ((line = in.readLine()) != null) {
-                //System.out.println(line);
                 output= output + line;
+                System.out.println(line);
             }
 
-            String stdErr = "";
+            String stdErr = null;
             BufferedReader stdErrReader = new BufferedReader(
                     new InputStreamReader(p.getErrorStream()));
 
-            logger.debug("The standard error stream is: ");
+            logger.error("The standard error stream is: ");
 
             while((line = stdErrReader.readLine()) != null){
                 stdErr = stdErr + line;
+                System.out.println(stdErr);
             }
 
-            //save output
+            //save output and error
             res.entriesDetail.setOutput(output);
-
+            res.entriesDetail.setError(stdErr);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -106,7 +100,7 @@ public class ProcessFile {
      * @return String[] of file names that are in the given file.
      */
 
-    public void findAllFileNames(File file) {
+    public ArrayList<String> findAllFileNames(File file) {
         Resource resource = new Resource();
 
         ArrayList<String> fileNames = new ArrayList<String>();
@@ -123,7 +117,6 @@ public class ProcessFile {
         if (fileExtenstion.contains("tar")){
             //List all files in the the tar.gz or tar file.
             try{
-                //Process process = Runtime.getRuntime().exec("tar -tvf " + file.toString());
                 Process process = Runtime.getRuntime().exec("tar -tvf " + resource.entry.getFileName());
                 BufferedReader in = new BufferedReader(new InputStreamReader(process.getInputStream()));
                 String line = null;
@@ -149,19 +142,7 @@ public class ProcessFile {
             logger.error("Incompatible extension type!");
         }
 
-
-        for (int i=0; i<fileNames.size();i++){
-            EntriesDetail subEntry = new EntriesDetail();
-            EntriesDetailsDoaImpl imp = new EntriesDetailsDoaImpl();
-            Hash hash = new Hash();
-
-            subEntry.setFileName(fileNames.get(i));
-            //subEntry.setHashValue(hash.getHash());
-            subEntry.setOutput(resource.entriesDetail.getOutput());
-            subEntry.setHashValue("123");
-
-            imp.insertIntoEntriesDetail(subEntry);
-        }
-
+        return fileNames;
     }
 }
+
