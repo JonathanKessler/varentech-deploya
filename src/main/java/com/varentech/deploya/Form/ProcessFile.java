@@ -33,28 +33,27 @@ public class ProcessFile {
       String output = "";
       //Process p = Runtime.getRuntime().exec("java -jar C:\\Users\\kesslerk\\Documents\\HelloWorldJar\\out\\artifacts\\HelloWorldJar_jar\\HelloWorldJar.jar");
 
-      logger.debug("Execute command is: " + res.entry.getExecuteArguments());
-
       Process p = Runtime.getRuntime().exec(res.entry.getExecuteArguments());
       BufferedReader in = new BufferedReader(
               new InputStreamReader(p.getInputStream()));
       String line = null;
 
-      logger.debug("The standard output stream is: ");
+      logger.info("The standard output stream is: ");
 
       while ((line = in.readLine()) != null) {
-        //System.out.println(line);
         output= output + line;
+        System.out.println(line);
       }
 
       String stdErr = "";
       BufferedReader stdErrReader = new BufferedReader(
               new InputStreamReader(p.getErrorStream()));
 
-      logger.debug("The standard error stream is: ");
+      logger.error("The standard error stream is: ");
 
       while((line = stdErrReader.readLine()) != null){
         stdErr = stdErr + line;
+        System.out.println(stdErr);
       }
 
       //save output
