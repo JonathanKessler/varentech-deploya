@@ -1,7 +1,13 @@
 package com.varentech.deploya.Form;
 
-import com.varentech.deploya.directories.LocalDirectories;
 import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -9,13 +15,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 /**
  * This class is a servlet for the Form html where after a user logs into the web app,
@@ -42,13 +41,12 @@ public class FormServlet {
      * their commands in the HTML form. This also inserts the information into our database, while they enter it.
      *
      */
-
     public static class formServlet extends HttpServlet {
         Resource res = new Resource();
         FormServlet form = new FormServlet();
         private final Logger logg = LoggerFactory.getLogger(FormServlet.class);
 
-        //this method runs when the submit button is clicked on the login form
+        //this method runs when the submit button is clicked on the main form
         protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
             response.setContentType("text/html");
@@ -57,53 +55,50 @@ public class FormServlet {
 
             HttpSession session = request.getSession();
             Hash hash = new Hash();
-            LocalDirectories local = new LocalDirectories();
             EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
             SendFile send = new SendFile();
-            ProcessFile process= new ProcessFile();
-            GetConfigProps property = new GetConfigProps();
+            ProcessFile process = new ProcessFile();
 
-            String unpack_args=null;
-            String archive=null;
-            String file_name=null;
-            String execute_args=null;
-            String path_to_destination=null;
-            String inputName;
+            String file_name = null;
+            String path_to_destination = null;
+            String execute_args = null;
+            String unpack_args = null;
+            String archive = null;
             FileItem fileItem = null;
-            String no_stamp =null;
 
+            //get all parameters from the form
             try {
                 List<FileItem> multiparts = null;
                 multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-            //parse through the form data to get our data
-            for(FileItem item : multiparts){
-                if(!item.isFormField()){   // Check regular field.
-                    file_name = new File(item.getName()).getName();
-                    no_stamp=file_name;
-                    fileItem=item;
-                }
-                if(item.isFormField()){  // Check regular field.
-                    inputName = item.getFieldName();
-                    if(inputName.equalsIgnoreCase("path_to_destination")){
-                        path_to_destination = item.getString();
-                    }else if(inputName.equalsIgnoreCase("execute_args")){
-                        execute_args = item.getString();
-                    }else if(inputName.equalsIgnoreCase("unpack_args")){
-                        unpack_args = item.getString();
-                    }else if(inputName.equalsIgnoreCase("archive")){
-                        archive = item.getString();
+                String inputName = null;
+                for(FileItem item : multiparts){
+
+                    //gets file item from form
+                    if(!item.isFormField()){
+                        file_name = new File(item.getName()).getName();
+                        fileItem = item;
+                    }
+                    //gets all other parameters from form
+                    if(item.isFormField()){
+                        inputName = (String)item.getFieldName();
+                        if(inputName.equalsIgnoreCase("path_to_destination")){
+                            path_to_destination = (String)item.getString();
+                        } else if(inputName.equalsIgnoreCase("execute_args")){
+                            execute_args = (String)item.getString();
+                        } else if(inputName.equalsIgnoreCase("unpack_args")){
+                            unpack_args = (String)item.getString();
+                        } else if(inputName.equalsIgnoreCase("archive")){
+                            archive = (String)item.getString();
+                        }
                     }
                 }
-            }
             } catch (FileUploadException e) {
-            e.printStackTrace();
-        }
+                e.printStackTrace();
+            }
 
-            logg.info("Filename is {} Execute this way: {} Unpack {} Archive {}", file_name,execute_args,unpack_args,archive);
-
-            //format data for timestamp
+            //fomat data for timestamp
             Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");//format the date to have no spaces
             String formatted_time = formatter.format(date);
 
             //add to entry object
@@ -114,26 +109,14 @@ public class FormServlet {
             res.entry.setFileName(form.renaming(file_name));
             res.entry.setUserName(session.getAttribute("Username").toString());
             res.entry.setArchive(archive);
-
-            //if they want to archive then set the path to the archive destination
-            if(archive != null) {
+            if(archive!=null) {
+                GetConfigProps property= new GetConfigProps();
                 res.entry.setPathToLocalFile(property.getSetting("default_directory"));
             }
 
             //add entry to database
             impl.insertIntoEntries();
             logg.info("Successfully added entries to database.");
-
-            //if they want to archive, then send file to archive destination
-            if(archive != null){
-                try {
-                    fileItem.write( new File(res.entry.getPathToLocalFile() + File.separator + no_stamp));
-                    logg.info("Successfully archived file");
-                } catch (Exception e) {
-                    logg.error("Could not archive file");
-                   // e.printStackTrace();
-                }
-            }
 
             //add file name to entriesDetail object
             res.entriesDetail.setFileName(res.entry.getFileName());
@@ -144,19 +127,34 @@ public class FormServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            logg.info("Successfully sent file to destination.");
+
+            logg.info("Successfully sent file to destination");
+
+            //save file to archive
+            /*
+            if(archive!=null) {
+                GetConfigProps property= new GetConfigProps();
+                try {
+                    fileItem.write(new File(property.getSetting("default_directory") + File.separator + res.entry.getFileName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                logg.info("Successfully sent file to destination");
+            }
+*/
 
             //unpack file if necessary
-            if(unpack_args != null) {
-                process.unpackArchiveArguments();
+            if(unpack_args!=null) {
+                process.unpackArchiveArguments(file_name);
             }
 
             //set hash value
             //might be finding these in FindAllFileNames
             //hash.getHash();
 
-            //execute jar/tar file and save output ( only if no error occurred in unpacking)
-            if(res.entriesDetail.getError() == null) {
+            //execute jar/tar file and save output. Only execute if there was no error while unpacking
+            if(res.entriesDetail.getError()==null) {
                 process.executeArguments();
             }
 
@@ -164,14 +162,28 @@ public class FormServlet {
             impl.insertIntoEntriesDetail(res.entriesDetail);
 
             //find all file names and hash codes for subfiles of a tar
-            //ex.findAllFileNames();
+            //ProcessFile.findAllFileNames();
 
-            //send output to the screen
-            response.getWriter().println(res.entriesDetail.getOutput());
+            //send output and error to the screen (error will appear in red)
+            PrintWriter out = response.getWriter();
+            out.println("<html>");
+            out.println("<body>");
+            if(res.entriesDetail.getOutput()!=null) {
+                out.println("<font color=”000000”>" + res.entriesDetail.getOutput() + "</font>");
+                out.println("<br>");
+            }
+            if(res.entriesDetail.getError()!=null) {
+                out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
+            }
+            out.println("</body>");
+            out.println("</html>");
+
+
         }
     }
 
     /**
+     *
      * @param file_name
      * @return a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
      */
