@@ -1,14 +1,17 @@
 package com.varentech.deploya.Form;
 
-import com.varentech.deploya.directories.LocalDirectories;
 import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
-import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,18 +55,46 @@ public class FormServlet {
 
             HttpSession session = request.getSession();
             Hash hash = new Hash();
-            LocalDirectories local = new LocalDirectories();
             EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
             SendFile send = new SendFile();
             ProcessFile process = new ProcessFile();
 
+            String file_name = null;
+            String path_to_destination = null;
+            String execute_args = null;
+            String unpack_args = null;
+            String archive = null;
+            FileItem fileItem = null;
+
             //get all parameters from the form
-            String file_name = request.getPart("file_name").getSubmittedFileName();
-            String path_to_destination = request.getParameter("path_to_destination");
-            String execute_args = request.getParameter("execute_args");
-            String unpack_args = request.getParameter("unpack_args");
-            String archive = request.getParameter("archive");
-            logg.info("Filename is {} Execute this way: {} Unpack this way {} Archive? {}", file_name,execute_args,unpack_args,archive);
+            try {
+                List<FileItem> multiparts = null;
+                multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+                String inputName = null;
+                for(FileItem item : multiparts){
+
+                    //gets file item from form
+                    if(!item.isFormField()){
+                        file_name = new File(item.getName()).getName();
+                        fileItem = item;
+                    }
+                    //gets all other parameters from form
+                    if(item.isFormField()){
+                        inputName = (String)item.getFieldName();
+                        if(inputName.equalsIgnoreCase("path_to_destination")){
+                            path_to_destination = (String)item.getString();
+                        } else if(inputName.equalsIgnoreCase("execute_args")){
+                            execute_args = (String)item.getString();
+                        } else if(inputName.equalsIgnoreCase("unpack_args")){
+                            unpack_args = (String)item.getString();
+                        } else if(inputName.equalsIgnoreCase("archive")){
+                            archive = (String)item.getString();
+                        }
+                    }
+                }
+            } catch (FileUploadException e) {
+                e.printStackTrace();
+            }
 
             //fomat data for timestamp
             Date date = new Date();
@@ -82,6 +113,7 @@ public class FormServlet {
                 GetConfigProps property= new GetConfigProps();
                 res.entry.setPathToLocalFile(property.getSetting("default_directory"));
             }
+
             //add entry to database
             impl.insertIntoEntries();
             logg.info("Successfully added entries to database.");
@@ -90,28 +122,62 @@ public class FormServlet {
             res.entriesDetail.setFileName(res.entry.getFileName());
 
             //saves file to destination
-            Part part = request.getPart("file_name");
-            send.sendToDestination(part);
-            logg.info("Successfully sent file to destination.");
+            try {
+                fileItem.write( new File(path_to_destination + File.separator + file_name));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            logg.info("Successfully sent file to destination");
+
+            //save file to archive
+            /*
+            if(archive!=null) {
+                GetConfigProps property= new GetConfigProps();
+                try {
+                    fileItem.write(new File(property.getSetting("default_directory") + File.separator + res.entry.getFileName()));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                logg.info("Successfully sent file to destination");
+            }
+*/
 
             //unpack file if necessary
-            //process.unpackArchiveArguments();
+            if(unpack_args!=null) {
+                process.unpackArchiveArguments(file_name);
+            }
 
             //set hash value
             //might be finding these in FindAllFileNames
             //hash.getHash();
 
-            //execute jar/tar file and save output
-            //process.executeArguments();
+            //execute jar/tar file and save output. Only execute if there was no error while unpacking
+            if(res.entriesDetail.getError()==null) {
+                process.executeArguments();
+            }
 
             //add entriesDetail to database
             impl.insertIntoEntriesDetail(res.entriesDetail);
 
             //find all file names and hash codes for subfiles of a tar
-            //ex.findAllFileNames();
+            //ProcessFile.findAllFileNames();
 
-            //send output to the screen
-            response.getWriter().println(res.entriesDetail.getOutput());
+            //send output and error to the screen (error will appear in red)
+            PrintWriter out = response.getWriter();
+            out.println("<html>");
+            out.println("<body>");
+            if(res.entriesDetail.getOutput()!=null) {
+                out.println("<font color=”000000”>" + res.entriesDetail.getOutput() + "</font>");
+                out.println("<br>");
+            }
+            if(res.entriesDetail.getError()!=null) {
+                out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
+            }
+            out.println("</body>");
+            out.println("</html>");
+
 
         }
     }
