@@ -58,6 +58,7 @@ public class FormServlet {
             EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
             SendFile send = new SendFile();
             ProcessFile process = new ProcessFile();
+            GetConfigProps property = new GetConfigProps();
 
             String file_name = null;
             String path_to_destination = null;
@@ -109,8 +110,8 @@ public class FormServlet {
             res.entry.setFileName(form.renaming(file_name));
             res.entry.setUserName(session.getAttribute("Username").toString());
             res.entry.setArchive(archive);
+            
             if(archive!=null) {
-                GetConfigProps property= new GetConfigProps();
                 res.entry.setPathToLocalFile(property.getSetting("default_directory"));
             }
 
@@ -127,17 +128,17 @@ public class FormServlet {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             logg.info("Successfully sent file to destination");
 
-            //save file to archive
+            //if they want to archive, then send file to archive destination
             /*
             if(archive!=null) {
-                GetConfigProps property= new GetConfigProps();
                 try {
                     fileItem.write(new File(property.getSetting("default_directory") + File.separator + res.entry.getFileName()));
+                    logg.info("Successfully archived file");
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logg.error("Could not archive file.");
+                   // e.printStackTrace();
                 }
 
                 logg.info("Successfully sent file to destination");
