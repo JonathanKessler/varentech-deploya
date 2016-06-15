@@ -29,27 +29,24 @@ public class ProcessFile {
     public void executeArguments() {
 
         try {
-
             Resource res = new Resource();
             String output = "";
 
             Process p = Runtime.getRuntime().exec(res.entry.getExecuteArguments());
             BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-            String line = null;
+            String line = "";
 
             logger.info("The standard output stream is: ");
-
             while ((line = in.readLine()) != null) {
                 output= output + line;
                 System.out.println(line);
             }
 
-            String stdErr = null;
+            String stdErr = "";
             BufferedReader stdErrReader = new BufferedReader(
                     new InputStreamReader(p.getErrorStream()));
 
             logger.error("The standard error stream is: ");
-
             while((line = stdErrReader.readLine()) != null){
                 stdErr = stdErr + line;
                 System.out.println(stdErr);
@@ -68,19 +65,16 @@ public class ProcessFile {
      * Also prints the standard error if such error occurred.
      * @throws Exception if an invalid unpacking argument is given.
      */
+
     public void unpackArchiveArguments(){
         try{
             //Create new Resource object to get the unpack commands.
             Resource res = new Resource();
 
-            logger.debug("The unpacking arguments are: " + res.entry.getUnpackArguments());
-
             //Create a new Process to handle the process command given from res.
-            //Process process = Runtime.getRuntime().exec(res.entry.getUnpackArguments());
+            Process process = Runtime.getRuntime().exec("tar -xvf test.tar");
 
-            Process process = Runtime.getRuntime().exec(res.entry.getUnpackArguments());
-
-            String line = null;
+            String line = "";
             String stdErr = "";
             BufferedReader stdErrReader = new BufferedReader(
                     new InputStreamReader(process.getErrorStream()));
@@ -88,7 +82,7 @@ public class ProcessFile {
                 stdErr = stdErr + line;
             }
 
-
+            res.entriesDetail.setError(stdErr);
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -145,4 +139,3 @@ public class ProcessFile {
         return fileNames;
     }
 }
-
