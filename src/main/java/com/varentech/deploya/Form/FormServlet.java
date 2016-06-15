@@ -110,7 +110,7 @@ public class FormServlet {
             res.entry.setFileName(form.renaming(file_name));
             res.entry.setUserName(session.getAttribute("Username").toString());
             res.entry.setArchive(archive);
-            
+
             if(archive!=null) {
                 res.entry.setPathToLocalFile(property.getSetting("default_directory"));
             }
@@ -123,27 +123,13 @@ public class FormServlet {
             res.entriesDetail.setFileName(res.entry.getFileName());
 
             //saves file to destination
-            try {
-                fileItem.write( new File(path_to_destination + File.separator + file_name));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            logg.info("Successfully sent file to destination");
+            send.sendToDestination(fileItem,file_name);
 
             //if they want to archive, then send file to archive destination
-            /*
             if(archive!=null) {
-                try {
-                    fileItem.write(new File(property.getSetting("default_directory") + File.separator + res.entry.getFileName()));
-                    logg.info("Successfully archived file");
-                } catch (Exception e) {
-                    logg.error("Could not archive file.");
-                   // e.printStackTrace();
-                }
-
-                logg.info("Successfully sent file to destination");
+                send.sendToArchive(file_name);
             }
-*/
+
 
             //unpack file if necessary
             if(unpack_args!=null) {
