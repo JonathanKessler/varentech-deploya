@@ -5,8 +5,8 @@
 
 ###LIST OF DEPENDENCIES USERS MUST HAVE INSTALLED TO USE THE APP
  
-  *Java 1.8*,
-  *Python 3.x*
+  - *Java 1.8*,
+  - *Python 3.x*
 
 ###STEPS TO ACTUALLY RUN THE APP
   
