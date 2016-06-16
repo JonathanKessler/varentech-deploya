@@ -1,4 +1,4 @@
-# varentech-deploya
+# VARENTECH-DEPLOYA
 ### SIMPLE OVERVIEW OF THE APP
 
   The user will upload a file along with execute instructions, a desired location, and options to unpack and archive as well. The app will first store the file in the desired location and archive if necessary. Then it will unpack, if selected, and execute the file, which will produce standard output and/or standard error. A hash of the file, and all files contained in an archive, will be computed. All data will be stored in a database. 
