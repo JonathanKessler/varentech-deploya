@@ -50,7 +50,8 @@ public class ServerConnection {
         ServletHolder sh = new ServletHolder(new FormServlet.formServlet());
         sh.getRegistration().setMultipartConfig(new MultipartConfigElement("/temp", 1048576, 1048576, 262144));
         context.addServlet(sh, "/upload");
-       // context.addServlet(new ServletHolder(new FormServlet.formServlet()), "/upload");
+
+        context.addServlet(new ServletHolder(new HistoryServlet.historyServlet()), "/history");
 
         //connect to server
         try {

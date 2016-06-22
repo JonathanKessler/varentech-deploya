@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * @see javax.servlet.ServletException
  * @see javax.servlet.http.HttpServlet
  * @see javax.servlet.http.HttpServletRequest
- * @see javax.servlet.http.HttpServletResponce
+ * @see javax.servlet.http.HttpServletResponse
  * @see javax.servlet.http.HttpSession
  */
 
@@ -40,10 +40,9 @@ public class LoginServlet{
             session.setAttribute("Username", username);
 
             //redirect to the main form
-            //NOTE: THIS IS DIFFERENT FOR EVERYONE!!!!!
-            //NEED TO CHANGE ".../TryAgain/VarenProject/..." to where my bootstrapPage.html file is.
+
             logger.info("Now redirecting to file upload page.");
-            response.sendRedirect("http://localhost:63342/TryAgain/VarenProject/bootstrapPage.html");
+            response.sendRedirect("http://localhost:63342/InternApp/bootstrapPage.html");
             return;
 
         }
