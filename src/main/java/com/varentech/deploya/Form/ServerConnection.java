@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.MultipartConfigElement;
+import java.util.ResourceBundle;
 
 /**
  * This class creates a ServerConnection between servlets.
@@ -31,11 +32,11 @@ public class ServerConnection {
         config.packages("com/varentech/deploya");
 
         //gets port number from configuration file
-        GetConfigProps property= new GetConfigProps();
-        int port = Integer.valueOf( property.getSetting("port_number"));
+        ResourceBundle resource = ResourceBundle.getBundle("config");
+        String port = resource.getString("port");
 
         //create a server object
-        Server server = new Server(port);
+        Server server = new Server(Integer.valueOf(port));
         ServletContextHandler context;
         context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
@@ -45,13 +46,13 @@ public class ServerConnection {
         server.setHandler(context);
 
         //add servlets and paths
-        context.addServlet(new ServletHolder(new LoginServlet.loginServlet()), "/login");
+        context.addServlet(new ServletHolder(new LoginServlet()), "/login");
 
-        ServletHolder sh = new ServletHolder(new FormServlet.formServlet());
+        ServletHolder sh = new ServletHolder(new FormServlet());
         sh.getRegistration().setMultipartConfig(new MultipartConfigElement("/temp", 1048576, 1048576, 262144));
         context.addServlet(sh, "/upload");
-
-        context.addServlet(new ServletHolder(new HistoryServlet.historyServlet()), "/history");
+        // context.addServlet(new ServletHolder(new FormServlet.formServlet()), "/upload");
+        context.addServlet(new ServletHolder(new HistoryServlet()), "/history");
 
         //connect to server
         try {
