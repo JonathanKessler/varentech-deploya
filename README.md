@@ -9,4 +9,4 @@
 
 ###STEPS TO ACTUALLY RUN THE APP
   
-  Execute the jar file and open the login.html, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen.
+  Execute the jar file and go to the login page in their web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url), which includes the information stored in the database. 
