@@ -1,59 +1,50 @@
 package com.varentech.deploya;
 
-import com.varentech.deploya.Form.*;
-import com.varentech.deploya.Form.ServerConnection;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.webapp.WebAppContext;
+
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class Driver {
-  //This string should be final as it should not change. At initial run, the
-  //program should be able to create this directory if it is not found.
-  final static String pathToLocal = "/opt/deploya";
+    //This string should be final as it should not change. At initial run, the
+    //program should be able to create this directory if it is not found.
+    final static String pathToLocal = "/opt/deploya";
 
-  public static void main(String[] args) throws IOException {
-   
-    //connect to server
-    ServerConnection server = new ServerConnection();
-      server.connect();
+    public static void main(String[] args) throws IOException {
 
-      //EntriesDetailsDoaImpl eddi = new EntriesDetailsDoaImpl();
-    //EntriesDetail entriesDetail = new EntriesDetail();
+        ResourceBundle resource = ResourceBundle.getBundle("config");
+        String port = resource.getString("port_number");
+        String context_path=resource.getString("context_path");
 
-    //A new instance of Date must be called everytime at run.
-    //Date date = new Date();
+        //connect to server
+        Server server = new Server(Integer.valueOf(port));
 
-    //TODO: Make sure that a directory is located at /opt/deploya/
+        WebAppContext ctx = new WebAppContext();
+        ctx.setResourceBase("src/main/webapp");
+        ctx.setContextPath("/" + context_path);
+        //3. Including the JSTL jars for the webapp.
+        ctx.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",".*/[^/]*jstl.*\\.jar$");
+        //4. Enabling the Annotation based configuration
+        org.eclipse.jetty.webapp.Configuration.ClassList classlist = org.eclipse.jetty.webapp.Configuration.ClassList.setServerDefault(server);
+        classlist.addAfter("org.eclipse.jetty.webapp.FragmentConfiguration", "org.eclipse.jetty.plus.webapp.EnvConfiguration", "org.eclipse.jetty.plus.webapp.PlusConfiguration");
+        classlist.addBefore("org.eclipse.jetty.webapp.JettyWebXmlConfiguration", "org.eclipse.jetty.annotations.AnnotationConfiguration");
+        //5. Setting the handler and starting the Server
+        server.setHandler(ctx);
+        try {
 
-    //TODO: Create that directory if it does not exist.
+            server.start();
+            server.join();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-    //TODO: Find a way to get the username so we can add it to the database.
-    //Get username Code
-    //entriesDetail.setUserName();
 
-    //Storing the date in the entriesDetail object.
-    //entriesDetail.setTime(date);
 
-    //TODO: Find a way to get the file name
-    //Get filename
-    //entriesDetail.setFileName();
 
-    //Store the path of the local saved file.
-    //entriesDetail.setPathToLocalFile(pathToLocal);
 
-    //TODO: Find a way to store where the given file will be stored.
-    //Get desired file location
-    //entriesDetail.setPathToDestination();
 
-    //TODO: Find a way to get the unpacking arguments. If none given, default of null.
-    //Get unpack arguments.
-    //entriesDetail.setUnpackArguments();
-
-    //TODO: Find a way to get the executable arguments.
-
-    //TODO: Save the file to a location in the computer given.
-
-    //TODO: Find a way to save and print the output of the program.
-
-  }
+    }
 
 }
