@@ -1,16 +1,18 @@
 package com.varentech.deploya;
 
+
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ResourceBundle;
 
+
 public class Driver {
-    //This string should be final as it should not change. At initial run, the
-    //program should be able to create this directory if it is not found.
-    final static String pathToLocal = "/opt/deploya";
+
+    static Logger logg = LoggerFactory.getLogger(Driver.class);
 
     public static void main(String[] args) throws IOException {
 
@@ -20,6 +22,7 @@ public class Driver {
 
         //connect to server
         Server server = new Server(Integer.valueOf(port));
+        logg.info("Successfully connected to Server.");
 
         WebAppContext ctx = new WebAppContext();
         ctx.setResourceBase("src/main/webapp");
