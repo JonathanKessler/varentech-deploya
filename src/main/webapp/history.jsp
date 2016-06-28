@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.sql.*" %>
-<%@ page import="org.sqlite.*" %>
 <%@ page import="com.varentech.deploya.util.ConnectionConfiguration" %>
 
 <!DOCTYPE html>
@@ -26,9 +25,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.2/jquery-ui.min.js"></script>
-    <script src="paging.js"></script>
+    <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css">
+    <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 
 
@@ -54,7 +53,8 @@
 
     <div class="tab-content">
         <div id="entries" class="tab-pane fade in active">
-            <table id = "table1" border="1">
+            <table id = "table1" class="table table-striped" >
+                <thead>
                 <tr>
                     <th>ID:</th>
                     <th>Time Stamp:</th>
@@ -66,7 +66,8 @@
                     <th>Execute Arguments:</th>
                     <th>Archive:</th>
                 </tr>
-
+                </thead>
+                <tbody>
 
                 <%
                     Class.forName("org.sqlite.JDBC");
@@ -105,36 +106,20 @@
                     statement.close();
                     connection.close();
                 %>
+                </tbody>
             </table>
 
            <script>
-              $(document).ready(function(){
-            $('#table1').after('<div id="nav"></div>');
-            var rowsShown = 20;
-            var rowsTotal = $('#table1 tbody tr').length;
-            var numPages = rowsTotal/rowsShown;
-            for(i = 0;i < numPages;i++) {
-            var pageNum = i + 1;
-            $('#nav').append('<a href="#" rel="'+i+'">'+pageNum+'</a> ');
-            }
-            $('#data tbody tr').hide();
-            $('#data tbody tr').slice(0, rowsShown).show();
-            $('#nav a:first').addClass('active');
-            $('#nav a').bind('click', function(){
 
-            $('#nav a').removeClass('active');
-            $(this).addClass('active');
-            var currPage = $(this).attr('rel');
-            var startItem = currPage * rowsShown;
-            var endItem = startItem + rowsShown;
-            $('#table1 tbody tr').css('opacity','0.0').hide().slice(startItem, endItem).
-            css('display','table-row').animate({opacity:1}, 300);
-            });
-            });
+               $(document).ready(function(){
+                   $('#table1').dataTable();
+               });
+
            </script>
         </div>
         <div id="entriesDetails" class="tab-pane fade">
-            <table border="1">
+            <table id= "table2" class="table table-striped">
+                <thead>
                 <tr>
                     <th>ID:</th>
                     <th>Entries Table ID:</th>
@@ -143,6 +128,8 @@
                     <th>Output:</th>
                     <th>Error:</th>
                 </tr>
+                </thead>
+                <tbody>
 
                 <%
                     Class.forName("org.sqlite.JDBC");
@@ -165,9 +152,14 @@
                     entriesDetailsStatement.close();
                     entriesDetailsConnection.close();
                 %>
+                </tbody>
             </table>
 
-
+<script>
+    $(document).ready(function(){
+        $('#table2').dataTable();
+    });
+</script>
 
         </div>
     </div>
