@@ -16,13 +16,12 @@ public class ConnectionConfiguration {
    * @return Connection to the database, or an error if there was a problem connecting to it.
      */
 
-  //TODO: Make the database configurable through our Config file?
   public static Connection getConnection(){
     Connection connection = null;
 
     try{
       Class.forName("org.sqlite.JDBC");
-      connection = DriverManager.getConnection("jdbc:sqlite:Thunder.db");
+      connection = DriverManager.getConnection("jdbc:sqlite:Deploya.db");
     }catch (Exception e){
       e.printStackTrace();
     }
