@@ -44,9 +44,8 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("Username", username);
 
         //redirect to the main form
-
         logger.info("Now redirecting to file upload page.");
-        response.sendRedirect("http://localhost:" + port + "/" + context_path + "/form.jsp");
+        response.sendRedirect("http://"+request.getServerName()+":" + port + "/" + context_path + "/form.jsp");
         return;
 
     }
