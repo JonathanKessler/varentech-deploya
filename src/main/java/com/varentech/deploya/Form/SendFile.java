@@ -5,8 +5,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.http.Part;
 import java.io.*;
+import java.util.ResourceBundle;
 
 /*
 *This class saves a file in the destination directory and archive if necessary
@@ -34,15 +34,16 @@ public class SendFile {
 
 
     }
-    
+
     void sendToArchive(String file_name){
 
         Resource res = new Resource();
-        GetConfigProps properties = new GetConfigProps();
+        ResourceBundle reso = ResourceBundle.getBundle("config");
+
 
         try {
             InputStream inputStream = new FileInputStream(res.entry.getPathToDestination() + File.separator + file_name);
-            File destination_file = new File(properties.getSetting("default_directory")+ File.separator + res.entry.getFileName());
+            File destination_file = new File(reso.getString("default_directory") + File.separator + res.entry.getFileName());
             OutputStream outputStream = null;
             outputStream = new FileOutputStream(destination_file);
             IOUtils.copy(inputStream, outputStream);

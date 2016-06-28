@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
 
@@ -36,6 +37,8 @@ public class ProcessFile {
 
     public void executeArguments() {
 
+        ResourceBundle resource = ResourceBundle.getBundle("config");
+        int timeout = Integer.parseInt(resource.getString("execute_timeout"));
 
         ExecutorService service = Executors.newSingleThreadExecutor();
 
@@ -76,14 +79,16 @@ public class ProcessFile {
 
             Future<?> f = service.submit(r);
 
-            f.get(1, TimeUnit.MINUTES);     // attempt the task for one minute
+            if(timeout!=-1) {
+                f.get(timeout, TimeUnit.MINUTES);     // attempt the task for one minute
+            }
         } catch (final InterruptedException e) {
             // The thread was interrupted during sleep, wait or join
         } catch (final TimeoutException e) {
             // Took too long!
-            logger.error("Execution timed out after 1 minute");
+            logger.error("Execution timed out after" + timeout + " minute(s)");
             Resource res = new Resource();
-            res.entriesDetail.setError("Execute command timed out after 1 minute. " + res.entriesDetail.getError());
+            res.entriesDetail.setError("Execute command timed out after" + timeout + " minute(s)." + res.entriesDetail.getError());
         } catch (final ExecutionException e) {
             // An exception from within the Runnable task
         }
