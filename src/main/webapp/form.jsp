@@ -6,13 +6,10 @@
     String page_title = resource.getString("page_title");
     String context_path = resource.getString("context_path");
     String port = resource.getString("port_number");
-
-
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://localhost:" + port +  "/"+ context_path +"/login.jsp");
+        response.sendRedirect("http://"+request.getServerName()+":" + port +  "/"+ context_path +"/login.jsp");
         return;
     }
-
 %>
 <html lang="en">
 <head>
@@ -40,7 +37,7 @@
 
 
 <!-- creates form-->
-<form class="form-horizontal" id="form_members" role="form" method="POST" action="http://localhost:<%=port%>/<%=context_path%>/upload" enctype="multipart/form-data">
+<form class="form-horizontal" id="form_members" role="form" method="POST" action="http://<%=request.getServerName()%>:<%=port%>/<%=context_path%>/upload" enctype="multipart/form-data">
 
 
     <div class="col-md-4 col-md-offset-4">
@@ -98,7 +95,7 @@
 
 </form>
 <div class="navbar-inner navbar-fixed-bottom">
-    <center> <a href="http://localhost:<%=port%>/<%=context_path%>/history.jsp">Click to see history</a> </center>
+    <center> <a href="http://<%=request.getServerName()%>:<%=port%>/<%=context_path%>/history.jsp">Click to see history</a> </center>
 </div>
 </body>
 </html>

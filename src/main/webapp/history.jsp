@@ -13,7 +13,7 @@
     String port_number = resource.getString("port_number");
 
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://localhost:" + port_number + "/" + context_path + "/login.jsp");
+        response.sendRedirect("http://"+request.getServerName()+":" + port_number + "/" + context_path + "/login.jsp");
         return;
     }
 

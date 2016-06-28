@@ -30,7 +30,7 @@
     </nav>
 </div>
 
-<form class="form-horizontal" id="form_members" role="form" action="http://localhost:<%=port%>/<%=context_path%>/login" method="get">
+<form class="form-horizontal" id="form_members" role="form" action="http://<%=request.getServerName()%>:<%=port%>/<%=context_path%>/login" method="get">
 
     <div class="col-md-4 col-md-offset-4">
         <div class="form-group">
