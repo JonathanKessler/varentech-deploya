@@ -22,7 +22,7 @@ public class Driver {
 
         //connect to server
         Server server = new Server(Integer.valueOf(port));
-        logg.info("Successfully connected to Server.");
+        logg.debug("Successfully connected to Server.");
 
         WebAppContext ctx = new WebAppContext();
         ctx.setResourceBase("src/main/webapp");
@@ -40,8 +40,7 @@ public class Driver {
             server.start();
             server.join();
         }catch (Exception e){
-            //TODO: Tav: logger.error()
-            e.printStackTrace();
+           logg.error("Exception while connecting to the server: ", e);
         }
 
 
