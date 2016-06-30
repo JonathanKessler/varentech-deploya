@@ -6,9 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
 
-// TODO: Tav: lots of info logging needs to be debug logging.
 // TODO: Tav: classnames start with a capital letter!
-// TODO: Tav: several e.printStackTrace()s that need to be logg.error()s.
 // TODO: Tav: why is this package capitalized? It's cool if there is a valid
 // reason. Just wondering.
 // TODO: Tav: Potentially can be broken down into smaller methods to improve
@@ -27,12 +25,12 @@ public class saveTempDirectory {
             File temp = File.createTempFile("temp","");
             temp.delete();
             temp.mkdir();
-            logg.info("Temporary directory has been made: {}" , temp);
+            logg.debug("Temporary directory has been made: {}" , temp);
 
             OutputStream outputStream = null;
             outputStream = new FileOutputStream(temp + File.separator + file_name);
             IOUtils.copy(inputStream, outputStream);
-            logg.info("{} has been copied to the temporary directory.", file_name);
+            logg.debug("{} has been copied to the temporary directory.", file_name);
             outputStream.close();
 
             File[] files = temp.listFiles();
@@ -41,7 +39,7 @@ public class saveTempDirectory {
             //unpack the file into the temporary directory
             ProcessFile pro = new ProcessFile();
             File tempDir = pro.unpack(current);
-            logg.info("{} has been unpacked into the temporary directory.", file_name);
+            logg.debug("{} has been unpacked into the temporary directory.", file_name);
             File[] tempDirList = tempDir.listFiles();
 
             //moves unpacked files to destination if user checked directory
@@ -49,7 +47,6 @@ public class saveTempDirectory {
                 for(File file: tempDirList){
 
                     if(file != current){
-
 
                         if(file.isDirectory() ==false) {
                             inputStream = new FileInputStream(file);
@@ -62,24 +59,22 @@ public class saveTempDirectory {
                         }
                     }
                 }
-                logg.info("{} has been unpacked into the destination.", file_name);
+                logg.debug("{} has been unpacked into the destination.", file_name);
             }
-
 
             //execute jar/tar file and save output. Only execute if there was no error while unpacking
             if(res.entriesDetail.getError()=="" || (res.entriesDetail.getError()!="" && res.entry.getUnpackArguments()==null)) {
                 pro.executeArguments();
-                logg.info("{} has been executed.", file_name);
+                logg.debug("{} has been executed.", file_name);
             }
 
             //find hash of all files
             pro.hashFiles(tempDirList, current);
 
-
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logg.error("Exception while finding file: ", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logg.error("Exception while saving or moving file to temporary directory: ", e);
         }
     }
 
