@@ -1,5 +1,5 @@
 
-package com.varentech.deploya.Form;
+package com.varentech.deploya.form;
 
 import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
 
@@ -133,7 +133,7 @@ public class FormServlet extends HttpServlet {
         }
 
         //save all files to a temporary directory in order to directory and get hash, and execute
-        saveTempDirectory un = new saveTempDirectory();
+        SaveTempDirectory un = new SaveTempDirectory();
         un.directory(file_name);
 
 
