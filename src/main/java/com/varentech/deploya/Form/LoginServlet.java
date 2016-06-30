@@ -13,22 +13,15 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This class holds the Login Servlet
- * @author VarenTech
- * @see javax.servlet.ServletException
- * @see javax.servlet.http.HttpServlet
- * @see javax.servlet.http.HttpServletRequest
- * @see javax.servlet.http.HttpServletResponse
- * @see javax.servlet.http.HttpSession
+ * Runs a servlet for the form page to gather information from the user.
  */
-
-
 public class LoginServlet extends HttpServlet {
     private Logger logg = LoggerFactory.getLogger(LoginServlet.class);
-    /**
+   /**
      * This method runs when the login submit button is clicked.
+     * Adds username as a session attribute.
+     * Redirects to form.jsp
      */
-
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
