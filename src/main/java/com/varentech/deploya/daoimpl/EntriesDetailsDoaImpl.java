@@ -4,6 +4,8 @@ import com.varentech.deploya.Form.Resource;
 import com.varentech.deploya.doa.DatabaseInterface;
 import com.varentech.deploya.entities.EntriesDetail;
 import com.varentech.deploya.util.ConnectionConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.sql.*;
 import java.util.List;
 
@@ -28,7 +30,7 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
    * This method inserts into the Entries table. It calls upon the Resource class
    * to insert easily into the table.
    */
-
+  Logger logg = LoggerFactory.getLogger(EntriesDetailsDoaImpl.class);
   public void insertIntoEntries() {
 
     Resource res = new Resource();
@@ -49,8 +51,8 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
       preparedStatement.setString(7, res.entry.getExecuteArguments());
       preparedStatement.setString(8, res.entry.getArchive());
       preparedStatement.executeUpdate();
-    } catch (SQLException se) {
-      se.printStackTrace();
+    } catch (SQLException e) {
+     logg.error("Exception while inserting entries into database: ", e);
     }
   }
 
@@ -87,9 +89,7 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
       preparedStatement.executeUpdate();
 
     } catch (SQLException e) {
-      // FIXME: Tav: dont print stack traces using standard out, setup and use a logger.
-      // logger.error("Exception while inserting entries into db: ", e);
-      e.printStackTrace();
+    logg.error("Exception while inserting entries details into database: ", e);
     }
   }
 
