@@ -45,7 +45,7 @@ public class SaveTempDirectory {
 
             //moves unpacked files to destination if user checked directory
             moveFiles(tempDirList, current);
-            logg.info("{} has been unpacked into the destination.", file_name);
+            logg.debug("{} has been unpacked into the destination.", file_name);
 
             //execute jar/tar file and save output. Only execute if there was no error while unpacking
             if(res.entriesDetail.getError()=="" || (res.entriesDetail.getError()!="" && res.entry.getUnpackArguments()==null)) {
