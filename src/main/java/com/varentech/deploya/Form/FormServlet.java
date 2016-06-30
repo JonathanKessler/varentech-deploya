@@ -42,12 +42,6 @@ public class FormServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         response.setContentType("text/html");
-        // TODO: Tav: This is going to print this info message every single time
-        // This is executed... which is not terribly useful. However, this looks
-        // to be a great progress message for debugging, so changing it to the
-        // debug log level allow you to turn it on when you need it without
-        // leaving it on for normal operations where it can spam a log with its
-        // obvious success message.
         logg.debug("Successfully connected to form servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
 
