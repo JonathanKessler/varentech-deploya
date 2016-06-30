@@ -103,7 +103,7 @@ public class ProcessFile {
         Process p = null;
 
         try {
-            logger.debug("Unpack to the temporary directory");
+            logg.debug("Unpack to the temporary directory");
 
             if (fileExtension.equals(".tar")) {
                 p = Runtime.getRuntime().exec("tar -xf " + current + " -C " + current.getParent());
@@ -156,7 +156,7 @@ public class ProcessFile {
 
                 if (file.equals(current)) {
                     res.entriesDetail.setHashValue(hashCode.toString());
-                    logger.debug("Hash code was found for {}.", fileName);
+                    logg.debug("Hash code was found for {}.", fileName);
                 } else {
 
                     EntriesDetail subentry = new EntriesDetail();
@@ -170,7 +170,7 @@ public class ProcessFile {
                     }
 
                     imp.insertIntoEntriesDetail(subentry);
-                    logger.debug("{} was added to the database.", fileName);
+                    logg.debug("{} was added to the database.", fileName);
 
                 }
 
