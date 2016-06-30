@@ -2,9 +2,7 @@ package com.varentech.deploya.entities;
 
 /**
  * Class that holds the values of all the Entries_Details values.
- * @author VarenTech
  */
-
 public class EntriesDetail {
 
   private String fileName;
