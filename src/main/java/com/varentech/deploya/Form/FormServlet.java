@@ -1,7 +1,7 @@
 
 package com.varentech.deploya.form;
 
-import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
+import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
