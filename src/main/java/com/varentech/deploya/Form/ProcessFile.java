@@ -3,7 +3,7 @@ package com.varentech.deploya.form;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
-import com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
+import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 import com.varentech.deploya.entities.EntriesDetail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -160,7 +160,7 @@ public class ProcessFile {
                 } else {
 
                     EntriesDetail subentry = new EntriesDetail();
-                    EntriesDetailsDoaImpl imp = new EntriesDetailsDoaImpl();
+                    EntriesDetailsDaoImpl imp = new EntriesDetailsDaoImpl();
 
                     subentry.setFileName(form.renaming(fileName));
                     subentry.setOutput(res.entriesDetail.getOutput());
