@@ -20,25 +20,7 @@ import org.slf4j.LoggerFactory;
 
 
 /**
- * This class is a servlet for the Form html where after a user logs into the web app,
- * this is where we will easily store their data into our database.
- *
- * @author VarenTech
- * @see com.varentech.deploya.Driver
- * @see com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl
- * @see javax.servlet.ServletException
- * @see javax.servlet.http.HttpServlet
- * @see javax.servlet.http.HttpServletRequest
- * @see javax.servlet.http.HttpServletResponse
- * @see javax.servlet.http.HttpSession
- * @see java.io.IOException
- * @see java.text.SimpleDateFormat
- * @see java.util.Date
- */
-
-/**
- * Creates a servlet to the form page so that we can get information from the client when they type
- * their commands in the HTML form. This also inserts the information into our database, while they enter it.
+ * Runs a servlet for the form page to gather information from the user.
  */
 public class FormServlet extends HttpServlet {
     Resource res = new Resource();
@@ -47,7 +29,13 @@ public class FormServlet extends HttpServlet {
     // TODO: Tav: Without really diving into it, this method looks like it can
     // be broken down into multiple smaller methods.
     // Tav: I really like the quick-n-simple progress comments!
-    //this method runs when the submit button is clicked on the main form
+    
+    
+     /**
+      * This method runs when the submit button is clicked on the form.jsp.
+      * Calls all methods necessary to process the file.
+      * Inserts information into our database.
+      */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 
@@ -183,10 +171,9 @@ public class FormServlet extends HttpServlet {
     }
 
 
-    /**
-     * @param file_name
-     * @return a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
-     */
+      /**
+       * Returns a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
+       */
     public static String renaming(String file_name) { //method to add timestamp to file name
         Resource res = new Resource();
         String time_stamped;
