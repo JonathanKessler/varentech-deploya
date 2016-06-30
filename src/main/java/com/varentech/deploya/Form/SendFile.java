@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  */
 public class SendFile {
 
-    private Logger logger = LoggerFactory.getLogger(SendFile.class);
+    private Logger logg = LoggerFactory.getLogger(SendFile.class);
 
      /**
       * This method saves the file into the destination directory
@@ -24,7 +24,7 @@ public class SendFile {
 
         try {
             fileItem.write( new File(res.entry.getPathToDestination() + File.separator + file_name));
-            logger.debug("Successfully sent file to destination");
+            logg.debug("Successfully sent file to destination");
         } catch (Exception e) {
            logg.error("Exception while sending file to destination: ", e);
         }
@@ -46,7 +46,7 @@ public class SendFile {
             IOUtils.copy(inputStream, outputStream);
             outputStream.close();
 
-            logger.debug("Successfully archived to default directory");
+            logg.debug("Successfully archived to default directory");
 
         } catch (FileNotFoundException e) {
             logg.error("Exception while finding file to archive: ", e);
