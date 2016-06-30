@@ -13,12 +13,9 @@ import java.util.ResourceBundle;
 *
  */
 // TODO: Tav: This header comment looks funky.
-// TODO: Tav: lots of info logging needs to be debug logging.
-// TODO: Tav: several e.printStackTrace()s that need to be logg.error()s.
 public class SendFile {
 
     private Logger logger = LoggerFactory.getLogger(SendFile.class);
-
 
     /*
     *Takes the InputStream of the file from the form and saves it into a file in the destination directory
@@ -30,19 +27,16 @@ public class SendFile {
 
         try {
             fileItem.write( new File(res.entry.getPathToDestination() + File.separator + file_name));
-            logger.info("Successfully sent file to destination");
+            logger.debug("Successfully sent file to destination");
         } catch (Exception e) {
-            e.printStackTrace();
+           logg.error("Exception while sending file to destination: ", e);
         }
-
-
     }
 
     void sendToArchive(String file_name){
 
         Resource res = new Resource();
         ResourceBundle reso = ResourceBundle.getBundle("config");
-
 
         try {
             InputStream inputStream = new FileInputStream(res.entry.getPathToDestination() + File.separator + file_name);
@@ -52,12 +46,12 @@ public class SendFile {
             IOUtils.copy(inputStream, outputStream);
             outputStream.close();
 
-            logger.info("Successfully archived to default directory");
+            logger.debug("Successfully archived to default directory");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            logg.error("Exception while finding file to archive: ", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            logg.error("Exception while sending file to archive destination: ", e);
         }
     }
 }
