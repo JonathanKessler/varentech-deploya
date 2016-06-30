@@ -60,7 +60,7 @@ public class FormServlet extends HttpServlet {
         // debug log level allow you to turn it on when you need it without
         // leaving it on for normal operations where it can spam a log with its
         // obvious success message.
-        logg.info("Successfully connected to form servlet.");
+        logg.debug("Successfully connected to form servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
 
 
@@ -106,8 +106,7 @@ public class FormServlet extends HttpServlet {
                 }
             }
         } catch (FileUploadException e) {
-            //TODO: Tav: use the logger here.
-            e.printStackTrace();
+            logg.error("Exception while uploading file: ", e);
         }
 
         //format data for timestamp
@@ -130,8 +129,7 @@ public class FormServlet extends HttpServlet {
 
         //add entry to database
         impl.insertIntoEntries();
-        logg.info("Successfully added entries to database.");
-        //TODO: Tav: info -> debug
+        logg.debug("Successfully added entries to database.");
 
         //add file name to entriesDetail object
         res.entriesDetail.setFileName(res.entry.getFileName());
