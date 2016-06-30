@@ -4,6 +4,8 @@ import com.varentech.deploya.form.Resource;
 import com.varentech.deploya.dao.DatabaseInterface;
 import com.varentech.deploya.entities.EntriesDetail;
 import com.varentech.deploya.util.ConnectionConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
@@ -17,6 +19,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
      * This method inserts into the Entries table.
      * This table holds data from user input.
      */
+     Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
   public void insertIntoEntries() {
 
     Resource res = new Resource();
