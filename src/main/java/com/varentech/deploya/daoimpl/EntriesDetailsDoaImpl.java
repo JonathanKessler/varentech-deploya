@@ -40,6 +40,10 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
       preparedStatement.setString(7, res.entry.getExecuteArguments());
       preparedStatement.setString(8, res.entry.getArchive());
       preparedStatement.executeUpdate();
+      
+        preparedStatement.close();
+        connection.close();
+            
     } catch (SQLException e) {
      logg.error("Exception while inserting entries into database: ", e);
     }
@@ -74,6 +78,11 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
       preparedStatement.setString(4, String.valueOf(entriesDetail.getOutput()));
       preparedStatement.setString(5, String.valueOf(entriesDetail.getError()));
       preparedStatement.executeUpdate();
+      
+      preparedStatement.close();
+      resultSet.close();
+      statement.close();
+      connection.close();
 
     } catch (SQLException e) {
     logg.error("Exception while inserting entries details into database: ", e);
