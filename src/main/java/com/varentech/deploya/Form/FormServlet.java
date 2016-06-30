@@ -110,7 +110,7 @@ public class FormServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        //fomat data for timestamp
+        //format data for timestamp
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");//format the date to have no spaces
         String formatted_time = formatter.format(date);
