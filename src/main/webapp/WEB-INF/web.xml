@@ -3,7 +3,7 @@
     <servlet>
         <servlet-name>loginServlet</servlet-name>
         <servlet-class>
-            com.varentech.deploya.Form.LoginServlet
+            com.varentech.deploya.form.LoginServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>
@@ -13,7 +13,7 @@
     <servlet>
         <servlet-name>formServlet</servlet-name>
         <servlet-class>
-            com.varentech.deploya.Form.FormServlet
+            com.varentech.deploya.form.FormServlet
         </servlet-class>
     </servlet>
     <servlet-mapping>
