@@ -2,9 +2,7 @@ package com.varentech.deploya.entities;
 
 /**
  * Entries class that holds all information for the Entries table.
- * @author VarenTech
  */
-
 public class Entries {
 
     private String userName;
