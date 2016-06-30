@@ -47,12 +47,6 @@ public class Driver {
         }catch (Exception e){
            logg.error("Exception while connecting to the server: ", e);
         }
-
-
-
-
-
-
     }
 
 }
