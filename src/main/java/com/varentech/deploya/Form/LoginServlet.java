@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 
 public class LoginServlet extends HttpServlet {
-    private Logger logger = LoggerFactory.getLogger(LoginServlet.class);
+    private Logger logg = LoggerFactory.getLogger(LoginServlet.class);
     /**
      * This method runs when the login submit button is clicked.
      */
@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
-        logger.info("Successfully connected to login servlet.");
+        logg.debug("Successfully connected to login servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
         ResourceBundle resource = ResourceBundle.getBundle("config");
         String port = resource.getString("port_number");
@@ -44,7 +44,7 @@ public class LoginServlet extends HttpServlet {
         session.setAttribute("Username", username);
 
         //redirect to the main form
-        logger.info("Now redirecting to file upload page.");
+        logg.debug("Now redirecting to file upload page.");
         response.sendRedirect("http://"+request.getServerName()+":" + port + "/" + context_path + "/form.jsp");
         return;
 
