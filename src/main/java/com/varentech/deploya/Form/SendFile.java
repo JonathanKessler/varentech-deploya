@@ -8,19 +8,16 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.ResourceBundle;
 
-/*
-*This class saves a file in the destination directory and archive if necessary
-*
+/**
+ * This class contains methods to send the file to the destination directory and archive directory (if applicable).
  */
-// TODO: Tav: This header comment looks funky.
 public class SendFile {
 
     private Logger logger = LoggerFactory.getLogger(SendFile.class);
 
-    /*
-    *Takes the InputStream of the file from the form and saves it into a file in the destination directory
-    * @param Part from the HTTP request containing the file information
-    */
+     /**
+      * This method saves the file into the destination directory
+      */
     void sendToDestination(FileItem fileItem, String file_name){
 
         Resource res = new Resource();
@@ -33,6 +30,9 @@ public class SendFile {
         }
     }
 
+    /**
+     * This method saves the file to the default archive directory is the user checked the box for archive.
+     */
     void sendToArchive(String file_name){
 
         Resource res = new Resource();
