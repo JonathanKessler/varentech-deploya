@@ -1,36 +1,22 @@
-package com.varentech.deploya.doaimpl;
+package com.varentech.deploya.daoimpl;
 
-import com.varentech.deploya.Form.Resource;
-import com.varentech.deploya.doa.DatabaseInterface;
+import com.varentech.deploya.form.Resource;
+import com.varentech.deploya.dao.DatabaseInterface;
 import com.varentech.deploya.entities.EntriesDetail;
 import com.varentech.deploya.util.ConnectionConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import java.sql.*;
-import java.util.List;
+
 
 /**
- *
- * This class first connects to our db, then with the given methods, enters specific parameters into different columns in
- * either the Entries table or Entries_Details table.
- * Note: The Entries Table is information that the client provides via web app.
- * The Entries_Details Table is information that this program does on the backend.
- *
- * @author VarenTech
- *
- * @see com.varentech.deploya.util.ConnectionConfiguration
- * @see List
- * @see java.sql.PreparedStatement
- * @see java.sql.Connection
+ * Connects to Deploya.db in order to add to the data tables
  */
+public class EntriesDetailsDaoImpl implements DatabaseInterface {
 
-public class EntriesDetailsDoaImpl implements DatabaseInterface {
-
-  /**
-   * This method inserts into the Entries table. It calls upon the Resource class
-   * to insert easily into the table.
-   */
-  Logger logg = LoggerFactory.getLogger(EntriesDetailsDoaImpl.class);
+    /**
+     * This method inserts into the Entries table.
+     * This table holds data from user input.
+     */
   public void insertIntoEntries() {
 
     Resource res = new Resource();
@@ -58,10 +44,8 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
 
     /**
      * This method inserts into the Entries_Details table using a parameter of an EntriesDetail object.
-     * @param entriesDetail
-     *
+     * This table holds the data found about the files.
      */
-
   public void insertIntoEntriesDetail(EntriesDetail entriesDetail) {
 
     Resource res = new Resource();
@@ -93,17 +77,5 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
     }
   }
 
-    /**
-     * Auto-generated from interface.
-     *
-     */
-    public void insert(EntriesDetail entriesDetail) {
-        // TODO: Tav: What's going on here? Even a "no code" comment is useful for
-        // indicating that this was intentionally left blank.
-    }
-
-  //TODO: Perhaps add a prepared statement that lists all of the data in the entire database.
-  public List<EntriesDetail> listEntries() {
-      return null;
-  }
+  
 }
