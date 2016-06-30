@@ -18,23 +18,19 @@ import java.util.concurrent.*;
 
 /**
  * This class manages the given Linux shell commands and prints the stdOutput and stdErr of both.
- *
- * @author Varen Technologies
- * @see java.lang.Process
+ * Contains methods to executes, unpack, and find the md5 hash of all files.
  */
+
 // TODO: Tav: lots of info logging should be changed to debug in this class.
 public class ProcessFile {
 
     private Logger logg = LoggerFactory.getLogger(ProcessFile.class);
 
-    /**
-     * Execute a some sort of program with the given execute command and arguments.
-     * Also prints the standard output and standard error if such are produced from this given
-     * program.
-     *
-     * @throws Exception if an invalid execute command is given.
+  /**
+     * Executes a file in the terminal using the execute command given by the user.
+     * Prints the standard output and standard error and adds them to the database.
+     * Time outs after time given by user in config.properties file.
      */
-
     public void executeArguments() {
 
         ResourceBundle resource = ResourceBundle.getBundle("config");
@@ -97,10 +93,8 @@ public class ProcessFile {
     }
 
     /**
-     * Unpack some given archive file with the given unpacking arguments.
-     * Also prints the standard error if such error occurred.
-     *
-     * @throws Exception if an invalid unpacking argument is given.
+     * Unpacks all files into a temporary directory.
+     * Prints the standard output and standard error and adds them to the database.
      */
     public File unpack(File current) {
 
@@ -112,7 +106,7 @@ public class ProcessFile {
 
 
         try {
-            logger.info("Unpack to the temporary directory");
+            logger.debug("Unpack to the temporary directory");
 
 
             if (fileExtension.equals(".tar")) {
@@ -149,10 +143,8 @@ public class ProcessFile {
     }
 
 
-    /**
+  /**
      * This method finds the hash value of each individual file in an array, and it is then inserted into our database.
-     *
-     * @param fileList
      */
     public void hashFiles(File[] fileList, File current) {
         Resource res = new Resource();
@@ -171,7 +163,7 @@ public class ProcessFile {
 
                 if (file.equals(current)) {
                     res.entriesDetail.setHashValue(hashCode.toString());
-                    logger.info("Hash code was found for {}.", fileName);
+                    logger.debug("Hash code was found for {}.", fileName);
                 } else {
 
                     EntriesDetail subentry = new EntriesDetail();
@@ -185,7 +177,7 @@ public class ProcessFile {
                     }
 
                     imp.insertIntoEntriesDetail(subentry);
-                    logger.info("{} was added to the database.", fileName);
+                    logger.debug("{} was added to the database.", fileName);
 
                 }
 
