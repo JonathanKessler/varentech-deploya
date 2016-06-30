@@ -4,22 +4,10 @@ import com.varentech.deploya.entities.Entries;
 import com.varentech.deploya.entities.EntriesDetail;
 
 /**
- * This class creates a resource object that creates objects the two different tables.
- * @author VarenTech
- * @see com.varentech.deploya.Driver;
- * @see com.varentech.deploya.directories.LocalDirectories;
- * @see com.varentech.deploya.doaimpl.EntriesDetailsDoaImpl;
- * @see com.varentech.deploya.entities.Entries;
- * @see com.varentech.deploya.entities.EntriesDetail;
- * @see javax.ws.rs.core.MediaType;
- * @see java.io.File;
- * @see java.text.SimpleDateFormat;
- * @see java.util.Date;
+ * This class creates objects of the two different tables.
  */
-
 public class Resource {
 
-    //create objects for the database
     public static Entries entry = new Entries();
     public static EntriesDetail entriesDetail = new EntriesDetail();
 
