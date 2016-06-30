@@ -46,7 +46,7 @@ public class FormServlet extends HttpServlet {
         response.setStatus(HttpServletResponse.SC_OK);
 
 
-        EntriesDetailsDoaImpl impl = new EntriesDetailsDoaImpl();
+        EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         SendFile send = new SendFile();
         ResourceBundle resource = ResourceBundle.getBundle("config");
         String default_directory = resource.getString("default_directory");
