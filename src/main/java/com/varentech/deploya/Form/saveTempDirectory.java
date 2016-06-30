@@ -6,12 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
 
-// TODO: Tav: classnames start with a capital letter!
-// TODO: Tav: why is this package capitalized? It's cool if there is a valid
-// reason. Just wondering.
-// TODO: Tav: Potentially can be broken down into smaller methods to improve
-// readability, but not necessary.
-
 /**
  *This class has methods to save all files into a temporary directory and the move those files out to the temporary directory.
  */
