@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 // TODO: Tav: lots of info logging should be changed to debug in this class.
 public class ProcessFile {
 
-    private Logger logger = LoggerFactory.getLogger(ProcessFile.class);
+    private Logger logg = LoggerFactory.getLogger(ProcessFile.class);
 
     /**
      * Execute a some sort of program with the given execute command and arguments.
@@ -71,8 +71,7 @@ public class ProcessFile {
                         res.entriesDetail.setOutput(output);
                         res.entriesDetail.setError(stdErr);
                     } catch (IOException e) {
-                        // TODO: Tav: logger.error();
-                        e.printStackTrace();
+                       logg.error("Exception while executing the file: ", e);
                     }
 
                 }
@@ -84,14 +83,13 @@ public class ProcessFile {
                 f.get(timeout, TimeUnit.MINUTES);     // attempt the task for one minute
             }
         } catch (final InterruptedException e) {
-            // The thread was interrupted during sleep, wait or join
+            logg.error("Thread interrupted during sleep: ", e);
         } catch (final TimeoutException e) {
-            // Took too long!
-            logger.error("Execution timed out after" + timeout + " minute(s)");
+           logg.error("Execution timed out: ", e);
             Resource res = new Resource();
             res.entriesDetail.setError("Execute command timed out after" + timeout + " minute(s)." + res.entriesDetail.getError());
         } catch (final ExecutionException e) {
-            // An exception from within the Runnable task
+            logg.error("Exception from within Runnable task: ", e);
             // TODO: Tav: Do we not care about this exception? Its ok if we
             // don't, but its a good idea to say why we don't. Otherwise it
             // looks like we are ignoring a potentially important exception.
@@ -129,7 +127,7 @@ public class ProcessFile {
             } else {
                 // TODO: Tav: would be useful to add the file extension the user
                 // passed to cause this error.
-                logger.error("Incorrect file extension");
+                logg.error("Incorrect file extension: ", fileExtension);
             }
 
             String stdErr = "";
@@ -144,8 +142,7 @@ public class ProcessFile {
             res.entriesDetail.setError(stdErr);
 
         } catch (IOException e) {
-            // TODO: Tav: logger.error();
-            e.printStackTrace();
+            logg.error("Exception while unpacking to temporary directory: ", e);
         }
 
         return current.getParentFile();
@@ -193,13 +190,7 @@ public class ProcessFile {
                 }
 
             } catch (IOException e) {
-                // TODO: Tav: What's going on here? Why print the stack trace
-                // and then do a debug? Maybe log the stack trace as debug too?
-                // Also, the debug logging here makes me think this exception
-                // isn't important, and it might not be, but a comment here
-                // saying why we can ignore this exception would be good.
-                e.printStackTrace();
-                logger.debug("Unable to find the hash value of {}", file.getName());
+             logg.error("Exception while finding the hash of file {} : ", file.getName(), e);
                 continue;
             }
         }
