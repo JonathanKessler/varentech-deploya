@@ -21,7 +21,6 @@ import java.util.concurrent.*;
  * Contains methods to executes, unpack, and find the md5 hash of all files.
  */
 
-// TODO: Tav: lots of info logging should be changed to debug in this class.
 public class ProcessFile {
 
     private Logger logg = LoggerFactory.getLogger(ProcessFile.class);
@@ -69,7 +68,6 @@ public class ProcessFile {
                     } catch (IOException e) {
                        logg.error("Exception while executing the file: ", e);
                     }
-
                 }
             };
 
@@ -104,10 +102,8 @@ public class ProcessFile {
         String fileExtension = file_name.substring(dot);
         Process p = null;
 
-
         try {
             logger.debug("Unpack to the temporary directory");
-
 
             if (fileExtension.equals(".tar")) {
                 p = Runtime.getRuntime().exec("tar -xf " + current + " -C " + current.getParent());
@@ -119,8 +115,6 @@ public class ProcessFile {
                 p = Runtime.getRuntime().exec("unzip " + current + " -d " + current.getParent());
 
             } else {
-                // TODO: Tav: would be useful to add the file extension the user
-                // passed to cause this error.
                 logg.error("Incorrect file extension: ", fileExtension);
             }
 
@@ -141,7 +135,6 @@ public class ProcessFile {
 
         return current.getParentFile();
     }
-
 
   /**
      * This method finds the hash value of each individual file in an array, and it is then inserted into our database.
