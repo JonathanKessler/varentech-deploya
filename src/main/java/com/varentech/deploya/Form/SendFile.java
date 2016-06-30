@@ -12,6 +12,9 @@ import java.util.ResourceBundle;
 *This class saves a file in the destination directory and archive if necessary
 *
  */
+// TODO: Tav: This header comment looks funky.
+// TODO: Tav: lots of info logging needs to be debug logging.
+// TODO: Tav: several e.printStackTrace()s that need to be logg.error()s.
 public class SendFile {
 
     private Logger logger = LoggerFactory.getLogger(SendFile.class);

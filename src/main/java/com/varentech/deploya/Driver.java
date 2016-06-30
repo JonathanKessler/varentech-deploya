@@ -40,6 +40,7 @@ public class Driver {
             server.start();
             server.join();
         }catch (Exception e){
+            //TODO: Tav: logger.error()
             e.printStackTrace();
         }
 

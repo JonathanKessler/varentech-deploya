@@ -6,10 +6,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.io.*;
 
+// TODO: Tav: lots of info logging needs to be debug logging.
+// TODO: Tav: classnames start with a capital letter!
+// TODO: Tav: several e.printStackTrace()s that need to be logg.error()s.
+// TODO: Tav: why is this package capitalized? It's cool if there is a valid
+// reason. Just wondering.
+// TODO: Tav: Potentially can be broken down into smaller methods to improve
+// readability, but not necessary.
 public class saveTempDirectory {
 
     private Logger logg = LoggerFactory.getLogger(saveTempDirectory.class);
 
+    // TODO: Tav: header comment. The name of this method isn't very descriptive
     void directory(String file_name){
         Resource res = new Resource();
 

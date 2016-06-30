@@ -22,7 +22,7 @@ import java.util.concurrent.*;
  * @author Varen Technologies
  * @see java.lang.Process
  */
-
+// TODO: Tav: lots of info logging should be changed to debug in this class.
 public class ProcessFile {
 
     private Logger logger = LoggerFactory.getLogger(ProcessFile.class);
@@ -71,6 +71,7 @@ public class ProcessFile {
                         res.entriesDetail.setOutput(output);
                         res.entriesDetail.setError(stdErr);
                     } catch (IOException e) {
+                        // TODO: Tav: logger.error();
                         e.printStackTrace();
                     }
 
@@ -91,6 +92,9 @@ public class ProcessFile {
             res.entriesDetail.setError("Execute command timed out after" + timeout + " minute(s)." + res.entriesDetail.getError());
         } catch (final ExecutionException e) {
             // An exception from within the Runnable task
+            // TODO: Tav: Do we not care about this exception? Its ok if we
+            // don't, but its a good idea to say why we don't. Otherwise it
+            // looks like we are ignoring a potentially important exception.
         }
     }
 
@@ -110,7 +114,6 @@ public class ProcessFile {
 
 
         try {
-
             logger.info("Unpack to the temporary directory");
 
 
@@ -124,6 +127,8 @@ public class ProcessFile {
                 p = Runtime.getRuntime().exec("unzip " + current + " -d " + current.getParent());
 
             } else {
+                // TODO: Tav: would be useful to add the file extension the user
+                // passed to cause this error.
                 logger.error("Incorrect file extension");
             }
 
@@ -139,6 +144,7 @@ public class ProcessFile {
             res.entriesDetail.setError(stdErr);
 
         } catch (IOException e) {
+            // TODO: Tav: logger.error();
             e.printStackTrace();
         }
 
@@ -187,6 +193,11 @@ public class ProcessFile {
                 }
 
             } catch (IOException e) {
+                // TODO: Tav: What's going on here? Why print the stack trace
+                // and then do a debug? Maybe log the stack trace as debug too?
+                // Also, the debug logging here makes me think this exception
+                // isn't important, and it might not be, but a comment here
+                // saying why we can ignore this exception would be good.
                 e.printStackTrace();
                 logger.debug("Unable to find the hash value of {}", file.getName());
                 continue;

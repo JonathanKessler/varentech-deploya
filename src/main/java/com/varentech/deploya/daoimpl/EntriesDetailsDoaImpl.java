@@ -87,6 +87,8 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
       preparedStatement.executeUpdate();
 
     } catch (SQLException e) {
+      // FIXME: Tav: dont print stack traces using standard out, setup and use a logger.
+      // logger.error("Exception while inserting entries into db: ", e);
       e.printStackTrace();
     }
   }
@@ -96,7 +98,8 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
      *
      */
     public void insert(EntriesDetail entriesDetail) {
-
+        // TODO: Tav: What's going on here? Even a "no code" comment is useful for
+        // indicating that this was intentionally left blank.
     }
 
   //TODO: Perhaps add a prepared statement that lists all of the data in the entire database.

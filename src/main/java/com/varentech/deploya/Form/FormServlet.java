@@ -44,6 +44,9 @@ public class FormServlet extends HttpServlet {
     Resource res = new Resource();
     private final Logger logg = LoggerFactory.getLogger(FormServlet.class);
 
+    // TODO: Tav: Without really diving into it, this method looks like it can
+    // be broken down into multiple smaller methods.
+    // Tav: I really like the quick-n-simple progress comments!
     //this method runs when the submit button is clicked on the main form
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -51,6 +54,12 @@ public class FormServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         response.setContentType("text/html");
+        // TODO: Tav: This is going to print this info message every single time
+        // This is executed... which is not terribly useful. However, this looks
+        // to be a great progress message for debugging, so changing it to the
+        // debug log level allow you to turn it on when you need it without
+        // leaving it on for normal operations where it can spam a log with its
+        // obvious success message.
         logg.info("Successfully connected to form servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
 
@@ -97,6 +106,7 @@ public class FormServlet extends HttpServlet {
                 }
             }
         } catch (FileUploadException e) {
+            //TODO: Tav: use the logger here.
             e.printStackTrace();
         }
 
@@ -121,6 +131,7 @@ public class FormServlet extends HttpServlet {
         //add entry to database
         impl.insertIntoEntries();
         logg.info("Successfully added entries to database.");
+        //TODO: Tav: info -> debug
 
         //add file name to entriesDetail object
         res.entriesDetail.setFileName(res.entry.getFileName());
