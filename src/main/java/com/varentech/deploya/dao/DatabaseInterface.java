@@ -1,4 +1,4 @@
-package com.varentech.deploya.doa;
+package com.varentech.deploya.dao;
 
 import com.varentech.deploya.entities.EntriesDetail;
 
