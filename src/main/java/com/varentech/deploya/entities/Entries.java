@@ -15,12 +15,12 @@ public class Entries {
     private String archive;
 
     //Default Constructor
-    public Entries(){}
+    public Entries() {}
 
     //Constructor
     public Entries(
             String userName, String fileName, String time, String pathToLocalFile,
-            String pathToDestination, String unpackArguments, String executeArguments, String archive){
+            String pathToDestination, String unpackArguments, String executeArguments, String archive) {
         this.userName = userName;
         this.fileName = fileName;
         this.time = time;
@@ -28,55 +28,59 @@ public class Entries {
         this.pathToDestination = pathToDestination;
         this.unpackArguments = unpackArguments;
         this.executeArguments = executeArguments;
-        this.archive=archive;
+        this.archive = archive;
     }
 
     //Setters
-    public void setUserName(String userName){
+    public void setUserName(String userName) {
         this.userName = userName;
     }
-    public void setFileName(String fileName){
+    public void setFileName(String fileName) {
         this.fileName = fileName;
     }
-    public void setTime(String time){
+    public void setTime(String time) {
         this.time = time;
     }
-    public void setPathToLocalFile(String pathToLocalFile){
+    public void setPathToLocalFile(String pathToLocalFile) {
         this.pathToLocalFile = pathToLocalFile;
     }
-    public void setPathToDestination(String pathToDestination){
+    public void setPathToDestination(String pathToDestination) {
         this.pathToDestination = pathToDestination;
     }
-    public void setUnpackArguments(String unpackArguments){
+    public void setUnpackArguments(String unpackArguments) {
         this.unpackArguments = unpackArguments;
     }
-    public void setExecuteArguments(String executeArguments){
+    public void setExecuteArguments(String executeArguments) {
         this.executeArguments = executeArguments;
     }
-    public void setArchive(String archive){this.archive = archive;}
+    public void setArchive(String archive) {
+        this.archive = archive;
+    }
 
     //Getters
-    public String getUserName(){
+    public String getUserName() {
         return userName;
     }
-    public String getFileName(){
+    public String getFileName() {
         return fileName;
     }
-    public String getTime(){
+    public String getTime() {
         return time;
     }
-    public String getPathToLocalFile(){
+    public String getPathToLocalFile() {
         return pathToLocalFile;
     }
-    public String getPathToDestination(){
+    public String getPathToDestination() {
         return pathToDestination;
     }
-    public String getUnpackArguments(){
+    public String getUnpackArguments() {
         return unpackArguments;
     }
-    public String getExecuteArguments(){
+    public String getExecuteArguments() {
         return executeArguments;
     }
-    public String getArchive() { return archive; }
+    public String getArchive() { 
+        return archive;
+    }
 
 }
