@@ -73,7 +73,7 @@ public class ProcessFile {
 
             Future<?> f = service.submit(r);
 
-            if(timeout!=-1) {
+            if (timeout != -1) {
                 f.get(timeout, TimeUnit.MINUTES);     // attempt the task for one minute
             }
         } catch (final InterruptedException e) {
@@ -84,9 +84,6 @@ public class ProcessFile {
             res.entriesDetail.setError("Execute command timed out after" + timeout + " minute(s)." + res.entriesDetail.getError());
         } catch (final ExecutionException e) {
             logg.error("Exception from within Runnable task: ", e);
-            // TODO: Tav: Do we not care about this exception? Its ok if we
-            // don't, but its a good idea to say why we don't. Otherwise it
-            // looks like we are ignoring a potentially important exception.
         }
     }
 
