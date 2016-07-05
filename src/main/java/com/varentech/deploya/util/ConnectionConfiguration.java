@@ -17,10 +17,10 @@ public class ConnectionConfiguration {
   public static Connection getConnection(){
     Connection connection = null;
 
-    try{
+    try {
       Class.forName("org.sqlite.JDBC");
       connection = DriverManager.getConnection("jdbc:sqlite:Deploya.db");
-    }catch (Exception e){
+    } catch (Exception e){
      logg.error("Exception while connecting to database: ", e);
     }
     return connection;
