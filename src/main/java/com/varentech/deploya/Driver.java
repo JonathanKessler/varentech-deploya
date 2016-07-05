@@ -40,10 +40,9 @@ public class Driver {
         //5. Setting the handler and starting the Server
         server.setHandler(ctx);
         try {
-
             server.start();
             server.join();
-        }catch (Exception e){
+        } catch (Exception e){
            logg.error("Exception while connecting to the server: ", e);
         }
     }
