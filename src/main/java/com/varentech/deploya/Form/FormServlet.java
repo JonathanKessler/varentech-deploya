@@ -38,19 +38,17 @@ public class FormServlet extends HttpServlet {
       */
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-
         HttpSession session = request.getSession();
 
         response.setContentType("text/html");
         logg.debug("Successfully connected to form servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
 
-
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         SendFile send = new SendFile();
         ResourceBundle resource = ResourceBundle.getBundle("config");
         String default_directory = resource.getString("default_directory");
-        String context_path= resource.getString("context_path");
+        String context_path = resource.getString("context_path");
         String port = resource.getString("port_number");
 
 
@@ -157,7 +155,7 @@ public class FormServlet extends HttpServlet {
             out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
         }
         out.println(
-                " <center> <a href=\"http://"+request.getServerName()+":" + port + "/" + context_path + "/history.jsp\">Click to see history</a> </center>\n"
+                " <center> <a href=\"http://" + request.getServerName() + ":" + port + "/" + context_path + "/history.jsp\">Click to see history</a> </center>\n"
         );
         out.println("</body>");
         out.println("</html>");
