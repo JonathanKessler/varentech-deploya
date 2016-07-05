@@ -18,7 +18,7 @@ public class SendFile {
      /**
       * This method saves the file into the destination directory
       */
-    void sendToDestination(FileItem fileItem, String file_name){
+    void sendToDestination(FileItem fileItem, String file_name) {
 
         Resource res = new Resource();
 
@@ -33,7 +33,7 @@ public class SendFile {
     /**
      * This method saves the file to the default archive directory is the user checked the box for archive.
      */
-    void sendToArchive(String file_name){
+    void sendToArchive(String file_name) {
 
         Resource res = new Resource();
         ResourceBundle reso = ResourceBundle.getBundle("config");
