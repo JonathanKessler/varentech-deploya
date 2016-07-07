@@ -25,11 +25,6 @@ import org.slf4j.LoggerFactory;
 public class FormServlet extends HttpServlet {
     Resource res = new Resource();
     private final Logger logg = LoggerFactory.getLogger(FormServlet.class);
-
-    // TODO: Tav: Without really diving into it, this method looks like it can
-    // be broken down into multiple smaller methods.
-    // Tav: I really like the quick-n-simple progress comments!
-    
     
      /**
       * This method runs when the submit button is clicked on the form.jsp.
@@ -50,7 +45,6 @@ public class FormServlet extends HttpServlet {
         String default_directory = resource.getString("default_directory");
         String context_path = resource.getString("context_path");
         String port = resource.getString("port_number");
-
 
         String file_name = null;
         String path_to_destination = null;
@@ -134,7 +128,6 @@ public class FormServlet extends HttpServlet {
         SaveTempDirectory un = new SaveTempDirectory();
         un.directory(file_name);
 
-
         //add entriesDetail to database
         impl.insertIntoEntriesDetail(res.entriesDetail);
 
@@ -161,7 +154,6 @@ public class FormServlet extends HttpServlet {
         out.println("</html>");
 
     }
-
 
       /**
        * Returns a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
