@@ -1,4 +1,4 @@
-package com.varentech.deploya.Form;
+package com.varentech.deploya.form;
 
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
