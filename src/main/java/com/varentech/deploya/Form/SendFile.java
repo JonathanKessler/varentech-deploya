@@ -1,4 +1,4 @@
-package com.varentech.deploya.Form;
+package com.varentech.deploya.form;
 
 import org.apache.commons.compress.utils.IOUtils;
 import org.apache.commons.fileupload.FileItem;
