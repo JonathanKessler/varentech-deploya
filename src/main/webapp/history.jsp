@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="com.varentech.deploya.util.ConnectionConfiguration" %>
+
 <%--@include file="compare.jsp"--%>
 
 <!DOCTYPE html>
@@ -11,12 +12,10 @@
     String page_title = resource.getString("page_title");
     String context_path = resource.getString("context_path");
     String port_number = resource.getString("port_number");
-
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port_number + "/" + context_path + "/login.jsp");
         return;
     }
-
 %>
 <html lang="en">
 <head>
@@ -33,6 +32,8 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
+
+    <script type="text/javascript" src=" https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
 
 
 </head>
@@ -78,7 +79,7 @@ var rowData;</script>
                 </tr>
                 </thead>
 
-                <!--<tfoot>
+                <tfoot>
                 <th>ID:</th>
                 <th>Time Stamp:</th>
                 <th>User Name:</th>
@@ -89,23 +90,18 @@ var rowData;</script>
                 <th>Execute Arguments:</th>
                 <th>Archive:</th>
                 </tfoot>
--->
+
                 <tbody>
                 <script>
                     $(document).ready(function () {
                         $("a").on('click', function (event) {
                             $('#myTab a[href="#entriesDetails"]').tab('show');
                             refid = $(this).attr("href").substring(1);
-
                             if (!isNaN(refid)) {
                                 table2.fnFilter("^" + refid + "$", 1, true);
                             }
-
                         });
-
                     });
-
-
                 </script>
 
                 <%
@@ -113,7 +109,6 @@ var rowData;</script>
                     Connection connection = ConnectionConfiguration.getConnection();
                     Statement statement = connection.createStatement();
                     ResultSet resultSet = statement.executeQuery("SELECT * FROM Entries order by id DESC");
-
                     while (resultSet.next()) {
                         String ref = resultSet.getString(1);
                 %>
@@ -148,6 +143,7 @@ var rowData;</script>
             </table>
 
 
+
             <script>
                 $(document).ready(function () {
                     table = $('#table1').DataTable({
@@ -163,9 +159,7 @@ var rowData;</script>
                                     var rowData = dt.rows({selected: true}).data();
                                     //send rowData into compare in order to show one table with only files that have changed
                                     //alert('There are ' + rowData[0] + '(s) selected in the table');
-                                   //compareFile(rowData);
-
-
+                                    //compareFile(rowData);
                                 }
                             },
                             {
@@ -177,10 +171,31 @@ var rowData;</script>
                                 }
                             }
                         ]
-
                     });
-
                 });
+            </script>
+            <script>
+                $(document).ready(function() {
+                    // Setup - add a text input to each footer cell
+                    $('#table1 tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    } );
+
+
+                    // Apply the search
+                    table.columns().every( function () {
+                        var that = this;
+
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                            if ( that.search() !== this.value ) {
+                                that
+                                        .search( this.value )
+                                        .draw();
+                            }
+                        } );
+                    } );
+                } );
             </script>
             <form method="post" action="compare.jsp">
                 <input type="hidden" name="rowData" value= >
@@ -231,26 +246,26 @@ var rowData;</script>
                 </tbody>
             </table>
 
+
+
             <script>
                 $(document).ready(function () {
-
                     table2 = $('#table2').dataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
-
                     $('#detail').on('click', function (event) {
                         table2.fnFilter("", 1);
                     });
-
                 });
-
             </script>
+
+
+
         </div>
     </div>
 </div>
 
 </body>
 </html>
-
 
