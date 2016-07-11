@@ -1,5 +1,5 @@
 
-package com.varentech.deploya.form;
+package com.varentech.deploya.Form;
 
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
