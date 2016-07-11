@@ -1,4 +1,4 @@
-package com.varentech.deploya.form;
+package com.varentech.deploya.Form;
 
 import com.varentech.deploya.entities.Entries;
 import com.varentech.deploya.entities.EntriesDetail;
