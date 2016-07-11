@@ -1,4 +1,4 @@
-package com.varentech.deploya.Form;
+package com.varentech.deploya.form;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
