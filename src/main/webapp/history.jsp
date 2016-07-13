@@ -2,12 +2,10 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="com.varentech.deploya.util.ConnectionConfiguration" %>
 
-<%--@include file="compare.jsp"--%>
-
 <!DOCTYPE html>
 <%@ page import="java.util.ResourceBundle" %>
 
-<%  ResourceBundle resource = ResourceBundle.getBundle("config");
+<% ResourceBundle resource = ResourceBundle.getBundle("config");
     String tab_name_history = resource.getString("tab_name_history");
     String page_title = resource.getString("page_title");
     String context_path = resource.getString("context_path");
@@ -33,8 +31,6 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
 
-    <script type="text/javascript" src=" https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-
 
 </head>
 <body>
@@ -51,9 +47,7 @@
 </div>
 
 <script>var refid = -1;
-var table2;
-var table;
-var rowData;</script>
+var table2;</script>
 
 <div class="container">
     <ul class="nav nav-tabs" id="myTab">
@@ -78,7 +72,7 @@ var rowData;</script>
                     <th>Archive:</th>
                 </tr>
                 </thead>
-
+<!--
                 <tfoot>
                 <th>ID:</th>
                 <th>Time Stamp:</th>
@@ -90,7 +84,7 @@ var rowData;</script>
                 <th>Execute Arguments:</th>
                 <th>Archive:</th>
                 </tfoot>
-
+-->
                 <tbody>
                 <script>
                     $(document).ready(function () {
@@ -98,7 +92,7 @@ var rowData;</script>
                             $('#myTab a[href="#entriesDetails"]').tab('show');
                             refid = $(this).attr("href").substring(1);
                             if (!isNaN(refid)) {
-                                table2.fnFilter("^" + refid + "$", 1, true);
+                                table2.fnFilter("^"+refid+"$", 1, true);
                             }
                         });
                     });
@@ -115,7 +109,7 @@ var rowData;</script>
 
 
                 <tr>
-                    <td class="nr"><a href="#<%=ref%>"><%=resultSet.getString(1)%>
+                    <td><a href="#<%=ref%>"><%=resultSet.getString(1)%>
                     </a></td>
                     <td><%= resultSet.getString(2)%>
                     </td>
@@ -141,9 +135,6 @@ var rowData;</script>
                 %>
                 </tbody>
             </table>
-
-
-
             <script>
                 $(document).ready(function () {
                     table = $('#table1').DataTable({
@@ -174,32 +165,8 @@ var rowData;</script>
                     });
                 });
             </script>
-            <script>
-                $(document).ready(function() {
-                    // Setup - add a text input to each footer cell
-                    $('#table1 tfoot th').each( function () {
-                        var title = $(this).text();
-                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                    } );
 
 
-                    // Apply the search
-                    table.columns().every( function () {
-                        var that = this;
-
-                        $( 'input', this.footer() ).on( 'keyup change', function () {
-                            if ( that.search() !== this.value ) {
-                                that
-                                        .search( this.value )
-                                        .draw();
-                            }
-                        } );
-                    } );
-                } );
-            </script>
-            <form method="post" action="compare.jsp">
-                <input type="hidden" name="rowData" value= >
-            </form>
         </div>
         <div id="entriesDetails" class="tab-pane fade">
             <table id="table2" class="table table-striped">
@@ -246,8 +213,6 @@ var rowData;</script>
                 </tbody>
             </table>
 
-
-
             <script>
                 $(document).ready(function () {
                     table2 = $('#table2').dataTable({
@@ -255,17 +220,15 @@ var rowData;</script>
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
                     $('#detail').on('click', function (event) {
-                        table2.fnFilter("", 1);
+                        table2.fnFilter("",1);
                     });
                 });
             </script>
-
-
-
         </div>
     </div>
 </div>
 
 </body>
 </html>
+
 
