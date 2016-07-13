@@ -168,6 +168,7 @@ var table2;</script>
                     });
                 });
             </script>
+            <!--allow multi-column searches-->
             <script>
                 $(document).ready(function() {
                     // Setup - add a text input to each footer cell
