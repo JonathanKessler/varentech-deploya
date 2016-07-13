@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
+   
+
 
 
 </head>
@@ -72,7 +74,8 @@ var table2;</script>
                     <th>Archive:</th>
                 </tr>
                 </thead>
-<!--
+
+
                 <tfoot>
                 <th>ID:</th>
                 <th>Time Stamp:</th>
@@ -84,7 +87,7 @@ var table2;</script>
                 <th>Execute Arguments:</th>
                 <th>Archive:</th>
                 </tfoot>
--->
+
                 <tbody>
                 <script>
                     $(document).ready(function () {
@@ -165,7 +168,25 @@ var table2;</script>
                     });
                 });
             </script>
+            <script>
+                $(document).ready(function() {
+                    // Setup - add a text input to each footer cell
+                    $('#table1 tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    } );
 
+                    // Apply the search
+                    table.columns().every( function () {
+                        var that = this;
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                            if ( that.search() !== this.value ) {
+                                that.search( this.value ).draw();
+                            }
+                        } );
+                    } );
+                } );
+            </script>
 
         </div>
         <div id="entriesDetails" class="tab-pane fade">
@@ -230,5 +251,3 @@ var table2;</script>
 
 </body>
 </html>
-
-
