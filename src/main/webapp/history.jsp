@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
-   
+
 
 
 
@@ -151,9 +151,17 @@ var table2;</script>
                                 text: 'Compare Files',
                                 action: function (e, dt, node, config) {
                                     var rowData = dt.rows({selected: true}).data();
-                                    //send rowData into compare in order to show one table with only files that have changed
-                                    //alert('There are ' + rowData[0] + '(s) selected in the table');
-                                    //compareFile(rowData);
+                                    if(table.rows('.selected').data().length != 2){
+                                        alert('Please select 2 runs');
+                                    }else{
+                                        //send rowData into compare in order to show one table with only files that have changed
+                                           // $(this).siblings().hide();
+                                        //table.rows('.selected').hide();
+                                        $('#myTab a[href="#entriesDetails"]').tab('show');
+                                            //columns([1, 2, 4, 5, 7]).visible(false);
+                                        //compareFile(rowData);
+                                    }
+
                                 }
                             },
                             {
@@ -161,7 +169,7 @@ var table2;</script>
                                 text: 'Compare Output',
                                 action: function (e, dt, node, config) {
                                     rowData = dt.rows({selected: true}).data();
-                                    alert('There are ' + rowData[1] + '(s) selected in the table');
+                                    alert('There are ' + table.rows('.selected').data().length + '(s) selected in the table');
                                 }
                             }
                         ]
