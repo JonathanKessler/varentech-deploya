@@ -8,6 +8,11 @@
   - *Java 1.8*
 
 ###STEPS TO ACTUALLY RUN THE APP
+<<<<<<< HEAD
 
 
   Execute the jar using the commanad java -jar deploya-1.0-SNAPSHOT.jar. Then go to the login page (currently: localhost:8080/ProjectThunder/login.jsp)  in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url), which includes the information stored in the database. *The user can override log level using logback and slf4j.*
+=======
+  
+  Execute the jar file (java -jar deploya.jar) and go to the login page (currently: localhost:8080/ProjectThunder/login.jsp)  in their web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url), which includes the information stored in the database. *The user can override log level using logback and slf4j.*
+>>>>>>> origin/Develop
