@@ -1,6 +1,5 @@
 package com.varentech.deploya;
 
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
@@ -9,11 +8,16 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.ResourceBundle;
 
-
+/**
+ * This class contains the main method that will connect to the server
+ */
 public class Driver {
 
     static Logger logg = LoggerFactory.getLogger(Driver.class);
 
+    /**
+     * This main method connects to a server with a port number and context path that can be configured.
+     */
     public static void main(String[] args) throws IOException {
 
         ResourceBundle resource = ResourceBundle.getBundle("config");
@@ -22,7 +26,7 @@ public class Driver {
 
         //connect to server
         Server server = new Server(Integer.valueOf(port));
-        logg.info("Successfully connected to Server.");
+        logg.debug("Successfully connected to Server.");
 
         WebAppContext ctx = new WebAppContext();
         ctx.setResourceBase("src/main/webapp");
@@ -36,18 +40,11 @@ public class Driver {
         //5. Setting the handler and starting the Server
         server.setHandler(ctx);
         try {
-
             server.start();
             server.join();
-        }catch (Exception e){
-            e.printStackTrace();
+        } catch (Exception e){
+           logg.error("Exception while connecting to the server: ", e);
         }
-
-
-
-
-
-
     }
 
 }

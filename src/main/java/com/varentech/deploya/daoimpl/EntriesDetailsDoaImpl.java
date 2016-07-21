@@ -1,34 +1,25 @@
-package com.varentech.deploya.doaimpl;
+package com.varentech.deploya.daoimpl;
 
-import com.varentech.deploya.Form.Resource;
-import com.varentech.deploya.doa.DatabaseInterface;
+import com.varentech.deploya.form.Resource;
+import com.varentech.deploya.dao.DatabaseInterface;
 import com.varentech.deploya.entities.EntriesDetail;
 import com.varentech.deploya.util.ConnectionConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.*;
-import java.util.List;
+
 
 /**
- *
- * This class first connects to our db, then with the given methods, enters specific parameters into different columns in
- * either the Entries table or Entries_Details table.
- * Note: The Entries Table is information that the client provides via web app.
- * The Entries_Details Table is information that this program does on the backend.
- *
- * @author VarenTech
- *
- * @see com.varentech.deploya.util.ConnectionConfiguration
- * @see List
- * @see java.sql.PreparedStatement
- * @see java.sql.Connection
+ * Connects to Deploya.db in order to add to the data tables
  */
+public class EntriesDetailsDaoImpl implements DatabaseInterface {
 
-public class EntriesDetailsDoaImpl implements DatabaseInterface {
-
-  /**
-   * This method inserts into the Entries table. It calls upon the Resource class
-   * to insert easily into the table.
-   */
-
+    /**
+     * This method inserts into the Entries table.
+     * This table holds data from user input.
+     */
+     Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
   public void insertIntoEntries() {
 
     Resource res = new Resource();
@@ -49,17 +40,19 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
       preparedStatement.setString(7, res.entry.getExecuteArguments());
       preparedStatement.setString(8, res.entry.getArchive());
       preparedStatement.executeUpdate();
-    } catch (SQLException se) {
-      se.printStackTrace();
+      
+        preparedStatement.close();
+        connection.close();
+            
+    } catch (SQLException e) {
+     logg.error("Exception while inserting entries into database: ", e);
     }
   }
 
     /**
      * This method inserts into the Entries_Details table using a parameter of an EntriesDetail object.
-     * @param entriesDetail
-     *
+     * This table holds the data found about the files.
      */
-
   public void insertIntoEntriesDetail(EntriesDetail entriesDetail) {
 
     Resource res = new Resource();
@@ -85,22 +78,16 @@ public class EntriesDetailsDoaImpl implements DatabaseInterface {
       preparedStatement.setString(4, String.valueOf(entriesDetail.getOutput()));
       preparedStatement.setString(5, String.valueOf(entriesDetail.getError()));
       preparedStatement.executeUpdate();
+      
+      preparedStatement.close();
+      resultSet.close();
+      statement.close();
+      connection.close();
 
     } catch (SQLException e) {
-      e.printStackTrace();
+    logg.error("Exception while inserting entries details into database: ", e);
     }
   }
 
-    /**
-     * Auto-generated from interface.
-     *
-     */
-    public void insert(EntriesDetail entriesDetail) {
-
-    }
-
-  //TODO: Perhaps add a prepared statement that lists all of the data in the entire database.
-  public List<EntriesDetail> listEntries() {
-      return null;
-  }
+  
 }
