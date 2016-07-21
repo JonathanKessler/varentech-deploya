@@ -15,18 +15,18 @@ public class SendFile {
 
     private Logger logg = LoggerFactory.getLogger(SendFile.class);
 
-     /**
-      * This method saves the file into the destination directory
-      */
+    /**
+     * This method saves the file into the destination directory.
+     */
     void sendToDestination(FileItem fileItem, String file_name) {
 
         Resource res = new Resource();
 
         try {
-            fileItem.write( new File(res.entry.getPathToDestination() + File.separator + file_name));
+            fileItem.write(new File(res.entry.getPathToDestination() + File.separator + file_name));
             logg.debug("Successfully sent file to destination");
         } catch (Exception e) {
-           logg.error("Exception while sending file to destination: ", e);
+            logg.error("Exception while sending file to destination: ", e);
         }
     }
 
