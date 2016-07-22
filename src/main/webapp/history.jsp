@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
-
+   
 
 
 
@@ -42,8 +42,8 @@
     <nav class="navbar navbar-inverse">
 
         <div class="navbar-header">
-            <p class="navbar-brand" href="#"><%=page_title%>
-            </p>
+            <a class="navbar-brand" href="#"><%=page_title%>
+            </a>
         </div>
     </nav>
 </div>
@@ -92,8 +92,6 @@ var table2;</script>
                 <script>
                     $(document).ready(function () {
                         $("a").on('click', function (event) {
-                            <!-- Need to show EntriesDetails and hide Entries -->
-                            $('#myTab a[href="#entries"]').tab('hide');
                             $('#myTab a[href="#entriesDetails"]').tab('show');
                             refid = $(this).attr("href").substring(1);
                             if (!isNaN(refid)) {
@@ -140,8 +138,6 @@ var table2;</script>
                 %>
                 </tbody>
             </table>
-
-
             <script>
                 $(document).ready(function () {
                     table = $('#table1').DataTable({
@@ -155,9 +151,7 @@ var table2;</script>
                                 text: 'Compare Files',
                                 action: function (e, dt, node, config) {
                                     var rowData = dt.rows({selected: true}).data();
-                                    //send rowData into compare in order to show one table with only files that have changed
-                                    //alert('There are ' + rowData[0] + '(s) selected in the table');
-                                    //compareFile(rowData);
+
                                 }
                             },
                             {
@@ -192,6 +186,7 @@ var table2;</script>
                     } );
                 } );
             </script>
+
         </div>
         <div id="entriesDetails" class="tab-pane fade">
             <table id="table2" class="table table-striped">
@@ -205,17 +200,6 @@ var table2;</script>
                     <th>Error:</th>
                 </tr>
                 </thead>
-
-                <tfoot>
-                <th>ID:</th>
-                <th>Entries Table ID:</th>
-                <th>File Name:</th>
-                <th>Hash Value:</th>
-                <th>Output:</th>
-                <th>Error:</th>
-                </tfoot>
-
-
                 <tbody>
 
                 <%
@@ -251,7 +235,7 @@ var table2;</script>
 
             <script>
                 $(document).ready(function () {
-                    table = $('#table2').DataTable({
+                    table2 = $('#table2').dataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
@@ -259,26 +243,6 @@ var table2;</script>
                         table2.fnFilter("",1);
                     });
                 });
-            </script>
-            <!--allow multi-column searches-->
-            <script>
-                $(document).ready(function() {
-                    // Setup - add a text input to each footer cell
-                    $('#table2 tfoot th').each( function () {
-                        var title = $(this).text();
-                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                    } );
-
-                    // Apply the search
-                    table.columns().every( function () {
-                        var that = this;
-                        $( 'input', this.footer() ).on( 'keyup change', function () {
-                            if ( that.search() !== this.value ) {
-                                that.search( this.value ).draw();
-                            }
-                        } );
-                    } );
-                } );
             </script>
         </div>
     </div>
