@@ -30,9 +30,6 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
-   
-
-
 
 </head>
 <body>
@@ -42,21 +39,25 @@
     <nav class="navbar navbar-inverse">
 
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"><%=page_title%>
+            <a class="navbar-brand"><%=page_title%>
             </a>
         </div>
     </nav>
 </div>
 
 <script>var refid = -1;
-var table2;</script>
+var table2;
+var table3;
+var table4;
+var table5;</script>
 
 <div class="container">
     <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a data-toggle="tab" href="#entries">Entries</a></li>
+        <li class="active"><a id="entry" data-toggle="tab" href="#entries">Entries</a></li>
         <li><a id="detail" data-toggle="tab" href="#entriesDetails">EntriesDetails</a></li>
+        <li><a id="comparing" data-toggle="tab" href="#compare" class="hidden">Compare</a></li>
+        <li><a id="compareFile" data-toggle="tab" href="#compareByFile" class="hidden">CompareFile</a></li>
     </ul>
-
 
     <div class="tab-content">
         <div id="entries" class="tab-pane fade in active">
@@ -75,7 +76,6 @@ var table2;</script>
                 </tr>
                 </thead>
 
-
                 <tfoot>
                 <th>ID:</th>
                 <th>Time Stamp:</th>
@@ -89,15 +89,17 @@ var table2;</script>
                 </tfoot>
 
                 <tbody>
+
                 <script>
                     $(document).ready(function () {
                         $("a").on('click', function (event) {
                             $('#myTab a[href="#entriesDetails"]').tab('show');
                             refid = $(this).attr("href").substring(1);
                             if (!isNaN(refid)) {
-                                table2.fnFilter("^"+refid+"$", 1, true);
+                                table2.fnFilter("^" + refid + "$", 1, true);
                             }
                         });
+
                     });
                 </script>
 
@@ -105,13 +107,12 @@ var table2;</script>
                     Class.forName("org.sqlite.JDBC");
                     Connection connection = ConnectionConfiguration.getConnection();
                     Statement statement = connection.createStatement();
-                    ResultSet resultSet = statement.executeQuery("SELECT * FROM Entries order by id DESC");
+                    ResultSet resultSet = statement.executeQuery("SELECT * FROM Entries ORDER BY id DESC");
                     while (resultSet.next()) {
                         String ref = resultSet.getString(1);
                 %>
 
-
-                <tr>
+                <tr id="<%=ref%>">
                     <td><a href="#<%=ref%>"><%=resultSet.getString(1)%>
                     </a></td>
                     <td><%= resultSet.getString(2)%>
@@ -138,6 +139,7 @@ var table2;</script>
                 %>
                 </tbody>
             </table>
+
             <script>
                 $(document).ready(function () {
                     table = $('#table1').DataTable({
@@ -148,43 +150,140 @@ var table2;</script>
                         buttons: [
                             {
                                 extend: 'selected',
-                                text: 'Compare Files',
+                                text: 'Compare Output',
                                 action: function (e, dt, node, config) {
                                     var rowData = dt.rows({selected: true}).data();
+                                    if (table.rows('.selected').data().length != 2) {
+                                        alert('Please select 2 runs');
+                                    } else {
+                                        //I WANT TO SHOW TAB HEADER WHEN CLicK ON
+
+                                        $('#myTab a[href="#compare"]').tab('show');
+
+                                        var compare1 = table.rows('.selected').ids().toArray()[0];
+                                        var compare2 = table.rows('.selected').ids().toArray()[1];
+
+                                        table3.columns(1).search("^" + compare1.toString() + "$", true).draw();
+                                        table4.columns(1).search("^" + compare2.toString() + "$", true).draw();
+
+                                        table3.rows({search: 'applied'}).data().each(function (value1, index) {
+                                            var underscore = value1[2].lastIndexOf("_");
+                                            var fileName1 = value1[2].substring(0, underscore) + value1[2].substring(underscore + 20);
+
+                                            table4.rows({search: 'applied'}).data().each(function (value2, index) {
+                                                var underscore = value2[2].lastIndexOf("_");
+                                                var fileName2 = value2[2].substring(0, underscore) + value2[2].substring(underscore + 20);
+
+                                                if (fileName1 == fileName2) {
+                                                    if (value1[4] != value2[4]) {
+                                                        $('#c1' + value1[0][0] + value1[0][1] + value1[0][2]).css('background-color', '#ffe680');
+                                                        $('#c2' + value2[0][0] + value2[0][1] + value2[0][2]).css('background-color', '#ffe680');
+                                                    } else if (value1[5] != value2[5]) {
+                                                        $('#c1' + value1[0][0] + value1[0][1] + value1[0][2]).css('background-color', '#ff8c66');
+                                                        $('#c2' + value2[0][0] + value2[0][1] + value2[0][2]).css('background-color', '#ff8c66');
+
+                                                    }
+                                                }
+                                            });
+
+                                        });
+                                    }
 
                                 }
                             },
                             {
                                 extend: 'selected',
-                                text: 'Compare Output',
+                                text: 'Compare Files',
                                 action: function (e, dt, node, config) {
-                                    rowData = dt.rows({selected: true}).data();
-                                    alert('There are ' + rowData[1] + '(s) selected in the table');
+                                    if (table.rows('.selected').data().length != 2) {
+                                        alert('Please select 2 runs');
+                                    } else {
+
+                                        $('#myTab a[href="#compareByFile"]').tab('show');
+
+                                        var compare1 = table.rows('.selected').ids().toArray()[0];
+                                        var compare2 = table.rows('.selected').ids().toArray()[1];
+
+
+                                        table3.columns(1).search("^" + compare1.toString() + "$", true);
+                                        table4.columns(1).search("^" + compare2.toString() + "$", true);
+
+                                        var fileName1Array=[];
+
+                                        table3.rows({search: 'applied'}).data().each(function (value1, index) {
+                                            var underscore = value1[2].lastIndexOf("_");
+                                            var fileName1 = value1[2].substring(0, underscore) + value1[2].substring(underscore + 20);
+                                            var rownode;
+
+                                            fileName1Array.push(fileName1);
+
+                                            var fileName2Array = [];
+
+                                            table4.rows({search: 'applied'}).data().each(function (value2, index) {
+                                                var underscore = value2[2].lastIndexOf("_");
+                                                var fileName2 = value2[2].substring(0, underscore) + value2[2].substring(underscore + 20);
+                                                var flag = false;
+
+                                                if (fileName1 == fileName2) {
+                                                    flag = true;
+                                                    if (value1[3] != value2[3]) {
+
+                                                        rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
+                                                        $(rownode).css('background-color', '#e0ccff');
+                                                    }
+                                                }
+
+                                                fileName2Array.push([fileName2,flag]);
+
+                                            });
+
+                                            alert(fileName1);
+
+                                            for(var i=0;i<fileName2Array.length;i++){
+                                                var checkForFile1;
+                                                var file1Flag=true;
+
+                                                checkForFile1 = $.inArray(fileName1,fileName2Array[i]);
+
+                                                if(checkForFile1==-1){
+                                                    file1Flag=false;
+                                                }
+                                                if(file1Flag==false){
+                                                    rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
+                                                    $(rownode).css('background-color', '#99ff99');
+                                                }
+                                            }
+
+
+                                        });
+
+
+                                    }
+
                                 }
                             }
                         ]
                     });
                 });
             </script>
-            <!--allow multi-column searches-->
             <script>
-                $(document).ready(function() {
+                $(document).ready(function () {
                     // Setup - add a text input to each footer cell
-                    $('#table1 tfoot th').each( function () {
+                    $('#table1 tfoot th').each(function () {
                         var title = $(this).text();
-                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
-                    } );
+                        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                    });
 
                     // Apply the search
-                    table.columns().every( function () {
+                    table.columns().every(function () {
                         var that = this;
-                        $( 'input', this.footer() ).on( 'keyup change', function () {
-                            if ( that.search() !== this.value ) {
-                                that.search( this.value ).draw();
+                        $('input', this.footer()).on('keyup change', function () {
+                            if (that.search() !== this.value) {
+                                that.search(this.value).draw();
                             }
-                        } );
-                    } );
-                } );
+                        });
+                    });
+                });
             </script>
 
         </div>
@@ -206,7 +305,7 @@ var table2;</script>
                     Class.forName("org.sqlite.JDBC");
                     Connection entriesDetailsConnection = ConnectionConfiguration.getConnection();
                     Statement entriesDetailsStatement = entriesDetailsConnection.createStatement();
-                    ResultSet entriesDetailsResultSet = entriesDetailsStatement.executeQuery("SELECT * FROM Entries_Details order by id DESC");
+                    ResultSet entriesDetailsResultSet = entriesDetailsStatement.executeQuery("SELECT * FROM Entries_Details ORDER BY id DESC");
                     while (entriesDetailsResultSet.next()) {
                         String ref = entriesDetailsResultSet.getString(2);
                 %>
@@ -240,9 +339,142 @@ var table2;</script>
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
                     $('#detail').on('click', function (event) {
-                        table2.fnFilter("",1);
+                        table2.fnFilter("", 1);
                     });
                 });
+            </script>
+        </div>
+        <div id="compare" class="tab-pane fade">
+
+
+            <div class="col-md-6">
+                <table id="table3" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID:</th>
+                        <th>Entries Table ID:</th>
+                        <th>File Name:</th>
+                        <th>Hash Value:</th>
+                        <th>Output:</th>
+                        <th>Error:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <%
+                        Class.forName("org.sqlite.JDBC");
+                        entriesDetailsConnection = ConnectionConfiguration.getConnection();
+                        entriesDetailsStatement = entriesDetailsConnection.createStatement();
+                        entriesDetailsResultSet = entriesDetailsStatement.executeQuery("SELECT * FROM Entries_Details ORDER BY id DESC");
+                        while (entriesDetailsResultSet.next()) {
+                            String ref = "c1" + entriesDetailsResultSet.getString(1);
+                    %>
+                    <tr id="<%=ref%>">
+                        <td><%= entriesDetailsResultSet.getString(1) %>
+                            <div id=<%=ref%>></div>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(2) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(3) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(4) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(5) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(6) %>
+                        </td>
+                    </tr>
+                    <% }
+                        entriesDetailsResultSet.close();
+                        entriesDetailsStatement.close();
+                        entriesDetailsConnection.close();
+                    %>
+                    </tbody>
+                </table>
+                <script>
+                    $(document).ready(function () {
+                        table3 = $('#table3').DataTable();
+                        table3.columns([0, 3]).visible(false);
+                    });
+
+
+                </script>
+            </div>
+
+            <div class="col-md-6">
+                <table id="table4" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID:</th>
+                        <th>Entries Table ID:</th>
+                        <th>File Name:</th>
+                        <th>Hash Value:</th>
+                        <th>Output:</th>
+                        <th>Error:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <%
+                        Class.forName("org.sqlite.JDBC");
+                        entriesDetailsConnection = ConnectionConfiguration.getConnection();
+                        entriesDetailsStatement = entriesDetailsConnection.createStatement();
+                        entriesDetailsResultSet = entriesDetailsStatement.executeQuery("SELECT * FROM Entries_Details ORDER BY id DESC");
+                        while (entriesDetailsResultSet.next()) {
+                            String ref = "c2" + entriesDetailsResultSet.getString(1);
+                    %>
+                    <tr id="<%=ref%>">
+                        <td><%= entriesDetailsResultSet.getString(1) %>
+                            <div id=<%=ref%>></div>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(2) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(3) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(4) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(5) %>
+                        </td>
+                        <td><%= entriesDetailsResultSet.getString(6) %>
+                        </td>
+                    </tr>
+                    <% }
+                        entriesDetailsResultSet.close();
+                        entriesDetailsStatement.close();
+                        entriesDetailsConnection.close();
+                    %>
+                    </tbody>
+                </table>
+                <script>
+                    $(document).ready(function () {
+                        table4 = $('#table4').DataTable();
+                        table4.columns([0, 3]).visible(false);
+
+                    });
+
+                </script>
+            </div>
+        </div>
+        <div id="compareByFile" class="tab-pane fade">
+            <table id="table5" class="table table-striped">
+                <thead>
+                <tr>
+                    <th>File Name:</th>
+                    <th>Output:</th>
+                    <th>Error:</th>
+                </tr>
+                </thead>
+                <tbody>
+
+
+                </tbody>
+            </table>
+            <script>
+                $(document).ready(function () {
+                    table5 = $('#table5').DataTable();
+
+                });
+
             </script>
         </div>
     </div>
