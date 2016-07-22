@@ -25,7 +25,7 @@
     <nav class="navbar navbar-inverse">
 
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"><%=page_title%></a>
+            <p class="navbar-brand" href="#"><%=page_title%></p>
         </div>
     </nav>
 </div>
