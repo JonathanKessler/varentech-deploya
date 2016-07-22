@@ -92,6 +92,8 @@ var table2;</script>
                 <script>
                     $(document).ready(function () {
                         $("a").on('click', function (event) {
+                            <!-- Need to show EntriesDetails and hide Entries -->
+                            $('#myTab a[href="#entries"]').tab('hide');
                             $('#myTab a[href="#entriesDetails"]').tab('show');
                             refid = $(this).attr("href").substring(1);
                             if (!isNaN(refid)) {
