@@ -6,7 +6,7 @@
         </encoder>
     </appender>
 
-    <logger name="com.varentech.deploya" level="info"/>
+    <logger name="com.varentech.deploya" level="debug"/>
 
     <root level="error" >
         <appender-ref ref="STDOUT" />
