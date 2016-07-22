@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
-   
+
 
 
 
@@ -42,7 +42,8 @@
     <nav class="navbar navbar-inverse">
 
         <div class="navbar-header">
-            <p class="navbar-brand" href="#"><%=page_title%></p>
+            <p class="navbar-brand" href="#"><%=page_title%>
+            </p>
         </div>
     </nav>
 </div>
@@ -137,6 +138,8 @@ var table2;</script>
                 %>
                 </tbody>
             </table>
+
+
             <script>
                 $(document).ready(function () {
                     table = $('#table1').DataTable({
@@ -187,7 +190,6 @@ var table2;</script>
                     } );
                 } );
             </script>
-
         </div>
         <div id="entriesDetails" class="tab-pane fade">
             <table id="table2" class="table table-striped">
@@ -201,6 +203,17 @@ var table2;</script>
                     <th>Error:</th>
                 </tr>
                 </thead>
+
+                <tfoot>
+                <th>ID:</th>
+                <th>Entries Table ID:</th>
+                <th>File Name:</th>
+                <th>Hash Value:</th>
+                <th>Output:</th>
+                <th>Error:</th>
+                </tfoot>
+
+
                 <tbody>
 
                 <%
@@ -236,7 +249,7 @@ var table2;</script>
 
             <script>
                 $(document).ready(function () {
-                    table2 = $('#table2').dataTable({
+                    table = $('#table2').DataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
@@ -244,6 +257,26 @@ var table2;</script>
                         table2.fnFilter("",1);
                     });
                 });
+            </script>
+            <!--allow multi-column searches-->
+            <script>
+                $(document).ready(function() {
+                    // Setup - add a text input to each footer cell
+                    $('#table2 tfoot th').each( function () {
+                        var title = $(this).text();
+                        $(this).html( '<input type="text" placeholder="Search '+title+'" />' );
+                    } );
+
+                    // Apply the search
+                    table.columns().every( function () {
+                        var that = this;
+                        $( 'input', this.footer() ).on( 'keyup change', function () {
+                            if ( that.search() !== this.value ) {
+                                that.search( this.value ).draw();
+                            }
+                        } );
+                    } );
+                } );
             </script>
         </div>
     </div>
