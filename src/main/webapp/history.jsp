@@ -39,8 +39,8 @@
     <nav class="navbar navbar-inverse">
 
         <div class="navbar-header">
-            <p class="navbar-brand"><%=page_title%>
-            </p>
+            <a class="navbar-brand"><%=page_title%>
+            </a>
         </div>
     </nav>
 </div>
@@ -93,7 +93,7 @@ var table5;</script>
                 <script>
                     $(document).ready(function () {
                         $("a").on('click', function (event) {
-                            $('#myTab a[href="#entries"]').tab('hide');
+                            //$('#myTab a[href="#entries"]').tab('hide');
                             $('#myTab a[href="#entriesDetails"]').tab('show');
                             refid = $(this).attr("href").substring(1);
                             if (!isNaN(refid)) {
@@ -300,16 +300,7 @@ var table5;</script>
                     <th>Error:</th>
                 </tr>
                 </thead>
-                
-                 <tfoot>
-                <th>ID:</th>
-                <th>Entries Table ID:</th>
-                <th>File Name:</th>
-                <th>Hash Value:</th>
-                <th>Output:</th>
-                <th>Error:</th>
-                </tfoot>
-                
+
                 <tbody>
 
                 <%
@@ -345,7 +336,7 @@ var table5;</script>
 
              <script>
                 $(document).ready(function () {
-                    table = $('#table2').DataTable({
+                    table2 = $('#table2').DataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
@@ -354,41 +345,9 @@ var table5;</script>
                     });
                 });
             </script>
-            <!--allow multi-column searches-->
-            <script>
-                $(document).ready(function () {
-                    // Setup - add a text input to each footer cell
-                    $('#table2 tfoot th').each(function () {
-                        var title = $(this).text();
-                        $(this).html('<input type="text" placeholder="Search ' + title + '" />');
-                    });
 
-                    // Apply the search
-                    table.columns().every(function () {
-                        var that = this;
-                        $('input', this.footer()).on('keyup change', function () {
-                            if (that.search() !== this.value) {
-                                that.search(this.value).draw();
-                            }
-                        });
-                    });
-                });
-            </script>
-            <script>
-                $(document).ready(function () {
-                    table = $('#table2').DataTable({
-                        "order": [[0, "desc"]],
-                        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
-                    });
-                    $('#detail').on('click', function (event) {
-                        table2.fnFilter("", 1);
-                    });
-                });
-            </script>
         </div>
         <div id="compare" class="tab-pane fade">
-
-
             <div class="col-md-6">
                 <table id="table3" class="table table-striped">
                     <thead>
