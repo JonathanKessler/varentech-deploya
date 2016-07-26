@@ -30,6 +30,8 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/1.2.0/css/select.dataTables.min.css">
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 
 </head>
 <body>
@@ -201,61 +203,122 @@ var table5;</script>
 
                                         $('#myTab a[href="#compareByFile"]').tab('show');
 
+
+                                        var run1UserName = table.rows('.selected').data()[0][2];
+                                        var run1FileName = table.rows('.selected').data()[0][3];
+                                        var run2UserName = table.rows('.selected').data()[1][2];
+                                        var run2FileName = table.rows('.selected').data()[1][3];
+
+
+                                        $("#here").replaceWith('<h4 id="here"> Comparing run <a href="#">' + run1FileName + '</a>, ' + run1UserName + ' to run <a href="#">' + run2FileName + '</a>, ' + run2UserName + '.</h4>');
+
+
+                                        table5.clear();
+
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
 
+                                        table2.columns(1).search("^" + compare1.toString() + "$", true);
 
-                                        table3.columns(1).search("^" + compare1.toString() + "$", true);
-                                        table4.columns(1).search("^" + compare2.toString() + "$", true);
+                                        var run1Array = [];
+                                        var run2Array = [];
 
-                                        var fileName1Array=[];
+                                        table2.rows({search: 'applied'}).data().each(function (value, index) {
+                                            var underscore = value[2].lastIndexOf("_");
+                                            var fileName = value[2].substring(0, underscore) + value[2].substring(underscore + 20);
 
-                                        table3.rows({search: 'applied'}).data().each(function (value1, index) {
-                                            var underscore = value1[2].lastIndexOf("_");
-                                            var fileName1 = value1[2].substring(0, underscore) + value1[2].substring(underscore + 20);
-                                            var rownode;
+                                            run1Array.push([value[0][0] + value[0][1] + value[0][2], fileName, value[3], value[4], value[5]]);
 
-                                            fileName1Array.push(fileName1);
+                                        });
 
-                                            var fileName2Array = [];
+                                        table2.columns(1).search("^" + compare2.toString() + "$", true);
 
-                                            table4.rows({search: 'applied'}).data().each(function (value2, index) {
-                                                var underscore = value2[2].lastIndexOf("_");
-                                                var fileName2 = value2[2].substring(0, underscore) + value2[2].substring(underscore + 20);
-                                                var flag = false;
+                                        table2.rows({search: 'applied'}).data().each(function (value, index) {
+                                            var underscore = value[2].lastIndexOf("_");
+                                            var fileName1 = value[2].substring(0, underscore) + value[2].substring(underscore + 20);
 
-                                                if (fileName1 == fileName2) {
-                                                    flag = true;
-                                                    if (value1[3] != value2[3]) {
+                                            run2Array.push([value[0][0] + value[0][1] + value[0][2], fileName1, value[3], value[4], value[5], false]);
 
-                                                        rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
-                                                        $(rownode).css('background-color', '#e0ccff');
+                                        });
+
+                                        var rownode;
+                                        var hide = [];
+
+                                        for (var i = 0; i < run1Array.length; i++) {
+
+                                            var flag=false;
+                                            for (var j = 0; j < run2Array.length; j++) {
+                                                if (run1Array[i][1] == run2Array[j][1]) {
+                                                    run2Array[j][5] = true;
+                                                    flag=true;
+                                                    if (run1Array[i][2] != run2Array[j][2]) {
+                                                        rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
+                                                        $(rownode).css('background-color', '#e0ccff'); //purple changed file
+                                                    } else {
+                                                        rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
+                                                        //rownode.setAttribute("id", "c2" + run1Array[i][0]);
+                                                        $(rownode).css('background-color', '#dadcd6'); //grey unchanged file
+                                                        //hide.append("c2" + run1Array[i][0]);
                                                     }
-                                                }
-
-                                                fileName2Array.push([fileName2,flag]);
-
-                                            });
-
-                                            alert(fileName1);
-
-                                            for(var i=0;i<fileName2Array.length;i++){
-                                                var checkForFile1;
-                                                var file1Flag=true;
-
-                                                checkForFile1 = $.inArray(fileName1,fileName2Array[i]);
-
-                                                if(checkForFile1==-1){
-                                                    file1Flag=false;
-                                                }
-                                                if(file1Flag==false){
-                                                    rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
-                                                    $(rownode).css('background-color', '#99ff99');
                                                 }
                                             }
 
+                                            if(flag==false){
+                                                rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
+                                                $(rownode).css('background-color', '#99ff99'); //green new file
+                                            }
 
-                                        });
+
+                                        }
+
+                                        for (var k = 0; k < run2Array.length; k++) {
+
+                                            if(run2Array[k][5]==false){
+                                                rownode = table5.row.add([run2Array[k][1], run2Array[k][3], run2Array[k][4]]).draw().node();
+                                                $(rownode).css('background-color', '#ff8c66'); //red deleted file
+                                            }
+                                        }
+
+
+                                        /*table4.rows({search: 'applied'}).data().each(function (value2, index) {
+                                         var underscore = value2[2].lastIndexOf("_");
+                                         var fileName2 = value2[2].substring(0, underscore) + value2[2].substring(underscore + 20);
+                                         var flag = false;
+
+                                         if (fileName1 == fileName2) {
+                                         flag = true;
+                                         if (value1[3] != value2[3]) {
+
+                                         rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
+                                         $(rownode).css('background-color', '#e0ccff');
+                                         }
+                                         }
+
+                                         fileName2Array.push([fileName2,flag]);
+
+
+
+                                         for(var i=0;i<fileName2Array.length;i++){
+                                         var checkForFile1;
+                                         var file1Flag=true;
+
+                                         checkForFile1 = $.inArray(fileName1,fileName2Array[i]);
+
+                                         if(checkForFile1==-1){
+                                         file1Flag=false;
+                                         }
+                                         if(file1Flag==false){
+                                         rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
+                                         $(rownode).css('background-color', '#99ff99');
+                                         }
+                                         }
+
+
+                                         });*/
+
+
+
+
                                     }
                                 }
                             }
@@ -481,26 +544,44 @@ var table5;</script>
             </div>
         </div>
         <div id="compareByFile" class="tab-pane fade">
-            <table id="table5" class="table table-striped">
-                <thead>
-                <tr>
-                    <th>File Name:</th>
-                    <th>Output:</th>
-                    <th>Error:</th>
-                </tr>
-                </thead>
-                <tbody>
+            <div class="row">
+                <div class="col-sm-10">
+                    <h4 id="here"></h4>
+
+                </div>
+                <div class="col-sm-2" id="hide">
+                    <!--<input id="toggle-event" type="checkbox" data-toggle="toggle" data-on="Show Unchanged Files"
+                           data-off="Hide Unchanged Files" data-width="175">-->
+                </div>
+            </div>
+            <div class="row">
+                <table id="table5" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>File Name:</th>
+                        <th>Output:</th>
+                        <th>Error:</th>
+                    </tr>
+                    </thead>
+                    <tbody>
 
 
-                </tbody>
-            </table>
-            <script>
-                $(document).ready(function () {
-                    table5 = $('#table5').DataTable();
+                    </tbody>
+                </table>
+                <script>
+                    $(document).ready(function () {
+                        table5 = $('#table5').DataTable();
 
-                });
+                       /* $('#toggle-event').change(function () {
+                            var state = $(this).prop('checked');
+                            alert(state);
+                        });*/
 
-            </script>
+                    });
+
+                </script>
+
+            </div>
         </div>
     </div>
 </div>
