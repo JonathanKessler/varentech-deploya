@@ -99,10 +99,8 @@ var table5;</script>
                             refid = $(this).attr("href").substring(1);
                             if (!isNaN(refid)) {
                                 table2.columns(1).search("^" + refid + "$", true).draw();
-
                             }
                         });
-
                     });
                 </script>
 
@@ -159,38 +157,29 @@ var table5;</script>
                                         alert('Please select 2 runs');
                                     } else {
                                         //I WANT TO SHOW TAB HEADER WHEN CLicK ON
-
                                         $('#myTab a[href="#compare"]').tab('show');
-
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
-
                                         table3.columns(1).search("^" + compare1.toString() + "$", true).draw();
                                         table4.columns(1).search("^" + compare2.toString() + "$", true).draw();
-
                                         table3.rows({search: 'applied'}).data().each(function (value1, index) {
                                             var underscore = value1[2].lastIndexOf("_");
                                             var fileName1 = value1[2].substring(0, underscore) + value1[2].substring(underscore + 20);
-
                                             table4.rows({search: 'applied'}).data().each(function (value2, index) {
                                                 var underscore = value2[2].lastIndexOf("_");
                                                 var fileName2 = value2[2].substring(0, underscore) + value2[2].substring(underscore + 20);
-
                                                 if (fileName1 == fileName2) {
-                                                    if (value1[4] != value2[4]) {
-                                                        $('#c1' + value1[0][0] + value1[0][1] + value1[0][2]).css('background-color', '#ffe680');
-                                                        $('#c2' + value2[0][0] + value2[0][1] + value2[0][2]).css('background-color', '#ffe680');
-                                                    } else if (value1[5] != value2[5]) {
+                                                    if (value1[5] != value2[5]) {
                                                         $('#c1' + value1[0][0] + value1[0][1] + value1[0][2]).css('background-color', '#ff8c66');
                                                         $('#c2' + value2[0][0] + value2[0][1] + value2[0][2]).css('background-color', '#ff8c66');
-
+                                                    } else if (value1[4] != value2[4]) {
+                                                        $('#c1' + value1[0][0] + value1[0][1] + value1[0][2]).css('background-color', '#ffe680');
+                                                        $('#c2' + value2[0][0] + value2[0][1] + value2[0][2]).css('background-color', '#ffe680');
                                                     }
                                                 }
                                             });
-
                                         });
                                     }
-
                                 }
                             },
                             {
@@ -200,52 +189,32 @@ var table5;</script>
                                     if (table.rows('.selected').data().length != 2) {
                                         alert('Please select 2 runs');
                                     } else {
-
                                         $('#myTab a[href="#compareByFile"]').tab('show');
-
-
                                         var run1UserName = table.rows('.selected').data()[0][2];
                                         var run1FileName = table.rows('.selected').data()[0][3];
                                         var run2UserName = table.rows('.selected').data()[1][2];
                                         var run2FileName = table.rows('.selected').data()[1][3];
-
-
                                         $("#here").replaceWith('<h4 id="here"> Comparing run <a href="#">' + run1FileName + '</a>, ' + run1UserName + ' to run <a href="#">' + run2FileName + '</a>, ' + run2UserName + '.</h4>');
-
-
                                         table5.clear();
-
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
-
                                         table2.columns(1).search("^" + compare1.toString() + "$", true);
-
                                         var run1Array = [];
                                         var run2Array = [];
-
                                         table2.rows({search: 'applied'}).data().each(function (value, index) {
                                             var underscore = value[2].lastIndexOf("_");
                                             var fileName = value[2].substring(0, underscore) + value[2].substring(underscore + 20);
-
                                             run1Array.push([value[0][0] + value[0][1] + value[0][2], fileName, value[3], value[4], value[5]]);
-
                                         });
-
                                         table2.columns(1).search("^" + compare2.toString() + "$", true);
-
                                         table2.rows({search: 'applied'}).data().each(function (value, index) {
                                             var underscore = value[2].lastIndexOf("_");
                                             var fileName1 = value[2].substring(0, underscore) + value[2].substring(underscore + 20);
-
                                             run2Array.push([value[0][0] + value[0][1] + value[0][2], fileName1, value[3], value[4], value[5], false]);
-
                                         });
-
                                         var rownode;
                                         var hide = [];
-
                                         for (var i = 0; i < run1Array.length; i++) {
-
                                             var flag=false;
                                             for (var j = 0; j < run2Array.length; j++) {
                                                 if (run1Array[i][1] == run2Array[j][1]) {
@@ -262,63 +231,17 @@ var table5;</script>
                                                     }
                                                 }
                                             }
-
                                             if(flag==false){
                                                 rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
                                                 $(rownode).css('background-color', '#99ff99'); //green new file
                                             }
-
-
                                         }
-
                                         for (var k = 0; k < run2Array.length; k++) {
-
                                             if(run2Array[k][5]==false){
                                                 rownode = table5.row.add([run2Array[k][1], run2Array[k][3], run2Array[k][4]]).draw().node();
                                                 $(rownode).css('background-color', '#ff8c66'); //red deleted file
                                             }
                                         }
-
-
-                                        /*table4.rows({search: 'applied'}).data().each(function (value2, index) {
-                                         var underscore = value2[2].lastIndexOf("_");
-                                         var fileName2 = value2[2].substring(0, underscore) + value2[2].substring(underscore + 20);
-                                         var flag = false;
-
-                                         if (fileName1 == fileName2) {
-                                         flag = true;
-                                         if (value1[3] != value2[3]) {
-
-                                         rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
-                                         $(rownode).css('background-color', '#e0ccff');
-                                         }
-                                         }
-
-                                         fileName2Array.push([fileName2,flag]);
-
-
-
-                                         for(var i=0;i<fileName2Array.length;i++){
-                                         var checkForFile1;
-                                         var file1Flag=true;
-
-                                         checkForFile1 = $.inArray(fileName1,fileName2Array[i]);
-
-                                         if(checkForFile1==-1){
-                                         file1Flag=false;
-                                         }
-                                         if(file1Flag==false){
-                                         rownode = table5.row.add([value1[2], value1[4], value1[5]]).draw().node();
-                                         $(rownode).css('background-color', '#99ff99');
-                                         }
-                                         }
-
-
-                                         });*/
-
-
-
-
                                     }
                                 }
                             }
@@ -334,7 +257,6 @@ var table5;</script>
                         var title = $(this).text();
                         $(this).html('<input type="text" placeholder="Search ' + title + '" />');
                     });
-
                     // Apply the search
                     table.columns().every(function () {
                         var that = this;
@@ -420,7 +342,6 @@ var table5;</script>
                         var title = $(this).text();
                         $(this).html('<input type="text" placeholder="Search ' + title + '" />');
                     });
-
                     // Apply the search
                     table2.columns().every(function () {
                         var that = this;
@@ -484,8 +405,6 @@ var table5;</script>
                         table3 = $('#table3').DataTable();
                         table3.columns([0, 3]).visible(false);
                     });
-
-
                 </script>
             </div>
 
@@ -537,9 +456,7 @@ var table5;</script>
                     $(document).ready(function () {
                         table4 = $('#table4').DataTable();
                         table4.columns([0, 3]).visible(false);
-
                     });
-
                 </script>
             </div>
         </div>
@@ -571,14 +488,11 @@ var table5;</script>
                 <script>
                     $(document).ready(function () {
                         table5 = $('#table5').DataTable();
-
-                       /* $('#toggle-event').change(function () {
-                            var state = $(this).prop('checked');
-                            alert(state);
-                        });*/
-
+                        /* $('#toggle-event').change(function () {
+                         var state = $(this).prop('checked');
+                         alert(state);
+                         });*/
                     });
-
                 </script>
 
             </div>
