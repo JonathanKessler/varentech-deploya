@@ -200,7 +200,7 @@
             <type>maven-plugin</type>
         </dependency>
     </dependencies>
-     <profiles>
+    <profiles>
     <profile>
     <id>uberJar</id>
     <activation>
@@ -284,14 +284,47 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
+
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>rpm-maven-plugin</artifactId>
                         <version>2.1.5</version>
+                        <executions>
+                            <execution>
+                                <id>generate-rpm</id>
+                                <goals>
+                                    <goal>rpm</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <license>GPL</license>
+                            <version>1.0</version>
+                            <release>1%{?dist}</release>
+                            <group>Varen</group>
+                            <description>The user will upload a file along with
+                                execute instructions, a desired location, and
+                                options to unpack and archive as well. The app
+                                will first store the file in the desired location
+                                and archive if necessary. Then it will unpack,
+                                if selected, and execute the file, which will
+                                produce standard output and/or standard error.
+                                A hash of the file, and all files contained
+                                in an archive, will be computed. All data will
+                                be stored in a database. </description>
+                            <url>https://github.com/VarenTechInternship/varentech-deploya</url>
+                            <mappings>
+
+                            </mappings>
+                            <preinstallScriptlet>
+                                <script>echo "installing now"</script>
+                            </preinstallScriptlet>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
         </profile>
         </profiles>
+
 </project>
