@@ -302,7 +302,8 @@
                             <license>GPL</license>
                             <version>1.0</version>
                             <release>1%{?dist}</release>
-                            <group>Varen</group>
+                            <group>Development/Tools</group>
+                            <packager>Varen Technologies</packager>
                             <description>The user will upload a file along with
                                 execute instructions, a desired location, and
                                 options to unpack and archive as well. The app
