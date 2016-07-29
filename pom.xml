@@ -200,8 +200,14 @@
             <type>maven-plugin</type>
         </dependency>
     </dependencies>
+     <profiles>
+    <profile>
+    <id>uberJar</id>
+    <activation>
+        <activeByDefault>true</activeByDefault>
+    </activation>
     <build>
-
+        <finalName>deploya</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -270,5 +276,22 @@
             </plugin>
 
         </plugins>
-    </build>
+        </build>
+        </profile>
+        <profile>
+            <id>rpm</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>rpm-maven-plugin</artifactId>
+                        <version>2.1.5</version>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        </profiles>
 </project>
