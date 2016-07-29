@@ -120,14 +120,21 @@ var hide = [];
 
         //clears unecessary parameters from the url when the entries tab is clicked
         function entriesTabClick() {
+
             replaceUrlParam(window.location.toString(), 'tab', 'entries');
             replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
+            replaceUrlParam(window.location.toString(), 'size', (table.page.len()).toString());
+            replaceUrlParam(window.location.toString(), 'colOrder', table.order());
 
             replaceUrlParam(window.location.toString(), 'entryClick');
             replaceUrlParam(window.location.toString(), 'compare1');
             replaceUrlParam(window.location.toString(), 'compare2');
             replaceUrlParam(window.location.toString(), 'page3');
             replaceUrlParam(window.location.toString(), 'page4');
+            replaceUrlParam(window.location.toString(), 'size3');
+            replaceUrlParam(window.location.toString(), 'size4');
+            replaceUrlParam(window.location.toString(), 'colOrder3');
+            replaceUrlParam(window.location.toString(), 'colOrder4');
 
             table.columns().every(function () {
                 if (this.search() != "") {
@@ -137,18 +144,31 @@ var hide = [];
                 }
             });
 
+            if($('#table1_filter input').val()!=""){
+                replaceUrlParam(window.location.toString(), 'search', $('#table1_filter input').val());
+            }else{
+                replaceUrlParam(window.location.toString(), 'search');
+            }
+
         }
 
         //clears unecessary parameters from the url when the entries details tab is clicked
         function entriesDetailsTabClick() {
+            table2.columns(1).search("", true).draw();
             replaceUrlParam(window.location.toString(), 'tab', 'entriesDetails');
             replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+            replaceUrlParam(window.location.toString(), 'size', (table2.page.len()).toString());
+            replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
 
             replaceUrlParam(window.location.toString(), 'entryClick');
             replaceUrlParam(window.location.toString(), 'compare1');
             replaceUrlParam(window.location.toString(), 'compare2');
             replaceUrlParam(window.location.toString(), 'page3');
             replaceUrlParam(window.location.toString(), 'page4');
+            replaceUrlParam(window.location.toString(), 'size3');
+            replaceUrlParam(window.location.toString(), 'size4');
+            replaceUrlParam(window.location.toString(), 'colOrder3');
+            replaceUrlParam(window.location.toString(), 'colOrder4');
 
             table2.columns().every(function () {
                 if (this.search() != "") {
@@ -158,16 +178,31 @@ var hide = [];
                 }
             });
 
+            if($('#table2_filter input').val()!=""){
+                replaceUrlParam(window.location.toString(), 'search', $('#table2_filter input').val());
+            }else{
+                replaceUrlParam(window.location.toString(), 'search');
+            }
+
         }
 
         //occurs when an entry id is clicked on the entries tab. Takes you to entries details tab and filters data
         function entryClick(href) {
             $('#myTab a[href="#entriesDetails"]').tab('show');
             replaceUrlParam(window.location.toString(), 'tab', 'entriesDetails');
+            replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+            replaceUrlParam(window.location.toString(), 'size', (table2.page.len()).toString());
+            replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
             refid = href;
             if (!isNaN(refid)) {
                 table2.columns(1).search("^" + refid + "$", true).draw();
                 replaceUrlParam(window.location.toString(), 'entryClick', refid);
+            }
+
+            if($('#table2_filter input').val()!=""){
+                replaceUrlParam(window.location.toString(), 'search', $('#table2_filter input').val());
+            }else{
+                replaceUrlParam(window.location.toString(), 'search');
             }
 
         }
@@ -329,11 +364,12 @@ var hide = [];
                     clearParams(window.location.toString());
                     replaceUrlParam(window.location.toString(), 'tab', 'entries');
 
+
                     table = $('#table1').DataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                         select: 'multi',
-                        dom: 'Bfrtip',
+                        dom: 'lBfrtip',
                         buttons: [
                             {
                                 extend: 'selected',
@@ -343,6 +379,33 @@ var hide = [];
                                         alert('Please select 2 runs');
                                     } else {
                                         replaceUrlParam(window.location.toString(), 'tab', 'compareOutput');
+                                        replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
+                                        replaceUrlParam(window.location.toString(), 'size3', (table3.page.len()).toString());
+                                        replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
+                                        replaceUrlParam(window.location.toString(), 'size4', (table4.page.len()).toString());
+                                        replaceUrlParam(window.location.toString(), 'colOrder3', table3.order());
+                                        replaceUrlParam(window.location.toString(), 'colOrder4', table4.order());
+
+                                        if($('#table3_filter input').val()!=""){
+                                            replaceUrlParam(window.location.toString(), 'search3', $('#table3_filter input').val());
+                                        }else{
+                                            replaceUrlParam(window.location.toString(), 'search3');
+                                        }
+
+                                        if($('#table4_filter input').val()!=""){
+                                            replaceUrlParam(window.location.toString(), 'search4', $('#table4_filter input').val());
+                                        }else{
+                                            replaceUrlParam(window.location.toString(), 'search4');
+                                        }
+
+                                        replaceUrlParam(window.location.toString(), 'size');
+                                        replaceUrlParam(window.location.toString(), 'page');
+                                        replaceUrlParam(window.location.toString(), 'colOrder');
+                                        replaceUrlParam(window.location.toString(), 'search');
+
+                                        for(var i=0;i<9;i++){
+                                            replaceUrlParam(window.location.toString(), 'col'+i);
+                                        }
 
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
@@ -361,6 +424,19 @@ var hide = [];
                                         alert('Please select 2 runs');
                                     } else {
                                         replaceUrlParam(window.location.toString(), 'tab', 'compareFile');
+                                        replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
+                                        replaceUrlParam(window.location.toString(), 'size', (table5.page.len()).toString());
+                                        replaceUrlParam(window.location.toString(), 'colOrder', table5.order());
+
+                                        if($('#table5_filter input').val()!=""){
+                                            replaceUrlParam(window.location.toString(), 'search', $('#table5_filter input').val());
+                                        }else{
+                                            replaceUrlParam(window.location.toString(), 'search');
+                                        }
+
+                                        for(var i=0;i<9;i++){
+                                            replaceUrlParam(window.location.toString(), 'col'+i);
+                                        }
 
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
@@ -386,8 +462,32 @@ var hide = [];
                     });
 
                     replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
+                    replaceUrlParam(window.location.toString(), 'size', (table.page.len()).toString());
+                    replaceUrlParam(window.location.toString(), 'colOrder', table.order());
+
                     table.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
+                    });
+
+                    table.on('length.dt',function (e, settings, len) {
+                        replaceUrlParam(window.location.toString(), 'size', (len).toString());
+                    });
+
+                    table.on('order.dt',function () {
+                        replaceUrlParam(window.location.toString(), 'colOrder', table.order());
+                        replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
+                    });
+
+
+                    $('#table1_filter input').unbind().keyup(function() {
+                        var value =$(this).val();
+                        table.search(value).draw();
+
+                        if(value!="") {
+                            replaceUrlParam(window.location.toString(), 'search', value.toString());
+                        }else{
+                            replaceUrlParam(window.location.toString(), 'search');
+                        }
                     });
                 });
 
@@ -412,10 +512,6 @@ var hide = [];
                                 }
                             }
                         });
-                    });
-
-                    table.on('search.dt', function(){
-                        alert("yay");
                     });
                 });
             </script>
@@ -481,12 +577,29 @@ var hide = [];
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
-                    $('#detail').on('click', function (event) {
-                        table2.columns(1).search("", true).draw();
-                    });
 
                     table2.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+                    });
+
+                    table2.on('length.dt',function (e, settings, len) {
+                        replaceUrlParam(window.location.toString(), 'size', (len).toString());
+                    });
+
+                    table2.on('order.dt',function () {
+                        replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
+                        replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+                    });
+
+                    $('#table2_filter input').unbind().keyup(function() {
+                        var value =$(this).val();
+                        table2.search(value).draw();
+
+                        if(value!="") {
+                            replaceUrlParam(window.location.toString(), 'search', value.toString());
+                        }else{
+                            replaceUrlParam(window.location.toString(), 'search');
+                        }
                     });
                 });
             </script>
@@ -568,6 +681,26 @@ var hide = [];
                         table3.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
                         });
+
+                        table3.on('length.dt',function (e, settings, len) {
+                            replaceUrlParam(window.location.toString(), 'size3', (len).toString());
+                        });
+
+                        table3.on('order.dt',function () {
+                            replaceUrlParam(window.location.toString(), 'colOrder3', table3.order());
+                            replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
+                        });
+
+                        $('#table3_filter input').unbind().keyup(function() {
+                            var value =$(this).val();
+                            table3.search(value).draw();
+
+                            if(value!="") {
+                                replaceUrlParam(window.location.toString(), 'search3', value.toString());
+                            }else{
+                                replaceUrlParam(window.location.toString(), 'search3');
+                            }
+                        });
                     });
                 </script>
             </div>
@@ -624,6 +757,26 @@ var hide = [];
                         table4.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
                         });
+
+                        table4.on('length.dt',function (e, settings, len) {
+                            replaceUrlParam(window.location.toString(), 'size4', (len).toString());
+                        });
+
+                        table4.on('order.dt',function () {
+                            replaceUrlParam(window.location.toString(), 'colOrder4', table4.order());
+                            replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
+                        });
+
+                        $('#table4_filter input').unbind().keyup(function() {
+                            var value =$(this).val();
+                            table4.search(value).draw();
+
+                            if(value!="") {
+                                replaceUrlParam(window.location.toString(), 'search4', value.toString());
+                            }else{
+                                replaceUrlParam(window.location.toString(), 'search4');
+                            }
+                        });
                     });
                 </script>
             </div>
@@ -656,8 +809,29 @@ var hide = [];
                 <script>
                     $(document).ready(function () {
                         table5 = $('#table5').DataTable();
+
                         table5.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
+                        });
+
+                        table5.on('length.dt',function (e, settings, len) {
+                            replaceUrlParam(window.location.toString(), 'size', (len).toString());
+                        });
+
+                        table5.on('order.dt',function () {
+                            replaceUrlParam(window.location.toString(), 'colOrder', table5.order());
+                            replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
+                        });
+
+                        $('#table5_filter input').unbind().keyup(function() {
+                            var value =$(this).val();
+                            table5.search(value).draw();
+
+                            if(value!="") {
+                                replaceUrlParam(window.location.toString(), 'search', value.toString());
+                            }else{
+                                replaceUrlParam(window.location.toString(), 'search');
+                            }
                         });
                     });
                 </script>
