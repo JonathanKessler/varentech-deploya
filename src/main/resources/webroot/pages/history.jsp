@@ -336,6 +336,7 @@ var hide = [];
                         dom: 'Bfrtip',
                         buttons: [
                             {
+                                //compare files by output
                                 extend: 'selected',
                                 text: 'Compare Output',
                                 action: function (e, dt, node, config) {
@@ -354,6 +355,7 @@ var hide = [];
                                 }
                             },
                             {
+                                //compare files by files they contain
                                 extend: 'selected',
                                 text: 'Compare Files',
                                 action: function (e, dt, node, config) {
@@ -374,14 +376,13 @@ var hide = [];
                         ]
                     });
 
-
                     $('#toggle-event').change(function () {
                         var state = $(this).prop('checked');
                         alert(state);
                         for (var i = 0; i < hide.length; i++) {
                             var row = table5.rows(hide[i]);
                             //row.hide();
-                            alert(table5.rows(hide[i]).data().length);
+                            alert(row.data().length);
                         }
                     });
 
@@ -648,11 +649,20 @@ var hide = [];
                         <th>Error:</th>
                     </tr>
                     </thead>
+
+                    <tfoot>
+                    <th>File Name:</th>
+                    <th>Output:</th>
+                    <th>Error:</th>
+                    </tfoot>
                     <tbody>
+
 
 
                     </tbody>
                 </table>
+
+
                 <script>
                     $(document).ready(function () {
                         table5 = $('#table5').DataTable();
@@ -661,7 +671,32 @@ var hide = [];
                         });
                     });
                 </script>
+                <script>
+                    $(document).ready(function () {
+                        // Setup - add a text input to each footer cell
+                        $('#table5 tfoot th').each(function () {
+                            var title = $(this).text();
+                            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+                        });
+                        // Apply the search
+                        table.columns().every(function () {
+                            var that = this;
+                            $('input', this.footer()).on('keyup change', function () {
+                                if (that.search() !== this.value) {
+                                    alert('inside search');
+                                    that.search(this.value).draw();
+                                    replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
 
+
+                                    if (that.search() == "") {
+                                        replaceUrlParam(window.location.toString(), 'col' + that.index());
+                                    }
+                                }
+                            });
+                        });
+
+                    });
+                </script>
             </div>
         </div>
     </div>
