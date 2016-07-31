@@ -10,9 +10,12 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.form.LoginServlet;
+import com.varentech.deploya.util.ConfigurationFileManipulation;
 import org.eclipse.jetty.jsp.JettyJspServlet;
 import org.apache.tomcat.InstanceManager;
 import org.apache.tomcat.SimpleInstanceManager;
@@ -31,16 +34,36 @@ public class Main
 {
     // Resource path pointing to where the WEBROOT is
     private static final String WEBROOT_INDEX = "/webroot/";
+    static Logger logg = LoggerFactory.getLogger(Main.class);
+
 
     public static void main(String[] args) throws Exception
     {
-        ResourceBundle resource = ResourceBundle.getBundle("config");
-        int port = Integer.valueOf(resource.getString("port_number"));
-        String context_path=resource.getString("context_path");
+        if (args.length == 0) {
+            ResourceBundle resource = ResourceBundle.getBundle("config");
+            int port = Integer.valueOf(resource.getString("port_number"));
+            String context_path=resource.getString("context_path");
 
-        Main main = new Main(port,context_path);
-        main.start();
-        main.waitForInterrupt();
+            Main main = new Main(port,context_path);
+            main.start();
+            main.waitForInterrupt();
+            printHelp();
+        }
+        else if (args[0].equals("-h") || args[0].equals("--help")){
+            printHelp();
+        }
+        else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".properties")){
+            ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
+            fileManip.exportConfigFile();
+        }
+        else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".properties")){
+            ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
+            fileManip.importConfigFile();
+        }
+        else{
+            System.out.println("Illegal Expression(s) given.");
+            printHelp();
+        }
     }
 
     private int port;
@@ -76,6 +99,7 @@ public class Main
 
         // Start Server
         server.start();
+        logg.debug("Successfully connected to the server");
 
         this.serverURI = getServerUri(connector);
     }
@@ -92,7 +116,7 @@ public class Main
         URL indexUri = this.getClass().getResource(WEBROOT_INDEX);
         if (indexUri == null)
         {
-            throw new FileNotFoundException("Unable to find resource " + WEBROOT_INDEX);
+            logg.error("Unable to find resource ", WEBROOT_INDEX);
         }
         // Points to wherever /webroot/ (the resource) is
         return indexUri.toURI();
@@ -110,7 +134,7 @@ public class Main
         {
             if (!scratchDir.mkdirs())
             {
-                throw new IOException("Unable to create scratch directory: " + scratchDir);
+                logg.error("Unable to create scratch directory: ", scratchDir);
             }
         }
         return scratchDir;
@@ -230,8 +254,25 @@ public class Main
      * Interrupt Signal, or SIGINT (Unix Signal), is typically seen as a result of a kill -TERM {pid} or Ctrl+C
      * @throws InterruptedException if interrupted
      */
-    public void waitForInterrupt() throws InterruptedException
+    public void waitForInterrupt()
     {
-        server.join();
+        try {
+            server.join();
+        } catch (InterruptedException e) {
+            logg.error("Interrupted signal: ", e);
+        }
+    }
+
+    public static void printHelp(){
+        System.out.println("Options: ");
+        System.out.println("\t --export-config {path/to/export/config.properties} \t to export the config file in the jar.");
+        System.out.println("\t -c {path/to/config/to/use/config.properties} \t to use a config other than the default config with the jar.");
+        System.out.println("Note:\t the external properties must be moved to the same working directory as the jar file and must be called \"config.properties\"");
+        System.out.println("\t -h or --help \t for help");
+        System.out.println("Example: ");
+        System.out.println("\t java -jar path/to/deploya.jar \t opens on port 8080 with context path of \"ProjectThunder\"");
+        System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/config.conf");
+        System.out.println("\t java -jar path/to/deploya.jar -c path/to/config/config.properties");
+        System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
     }
 }
