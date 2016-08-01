@@ -11,7 +11,7 @@
     String context_path = resource.getString("context_path");
     String port_number = resource.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + "/" + context_path + "/pages/login.jsp");
+        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/pages/login.jsp");
         return;
     }
 %>
@@ -68,15 +68,12 @@ var hide = [];
         //adds a parameter to the url if it does not exist or replaces it if it does exist. If called with null paramValue it will delete the param
         function replaceUrlParam(url, paramName, paramValue) {
             var pattern = new RegExp('\\b(' + paramName + '=).*?(&|$)');
-
             if (url.search(pattern) >= 0) {
                 if (paramValue == null) {
                     var urlparts = url.split('?');
                     if (urlparts.length >= 2) {
-
                         var prefix = encodeURIComponent(paramName) + '=';
                         var pars = urlparts[1].split(/[&;]/g);
-
                         //reverse iteration as may be destructive
                         for (var i = pars.length; i-- > 0;) {
                             //idiom for string.startsWith
@@ -95,15 +92,12 @@ var hide = [];
                     window.history.pushState("", "", (url.replace(pattern, '$1' + paramValue + '$2')).toString());
                     return url.replace(pattern, '$1' + paramValue + '$2');
                 }
-
             }
-
             if (paramValue != null) {
                 window.history.pushState("", "", (url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue).toString());
                 return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue;
             }
         }
-
         //clears all parameters from the url
         function clearParams(url) {
             var index = 0;
@@ -117,18 +111,21 @@ var hide = [];
             }
             window.history.pushState("", "", newURL);
         }
-
         //clears unecessary parameters from the url when the entries tab is clicked
         function entriesTabClick() {
             replaceUrlParam(window.location.toString(), 'tab', 'entries');
             replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
-
+            replaceUrlParam(window.location.toString(), 'size', (table.page.len()).toString());
+            replaceUrlParam(window.location.toString(), 'colOrder', table.order());
             replaceUrlParam(window.location.toString(), 'entryClick');
             replaceUrlParam(window.location.toString(), 'compare1');
             replaceUrlParam(window.location.toString(), 'compare2');
             replaceUrlParam(window.location.toString(), 'page3');
             replaceUrlParam(window.location.toString(), 'page4');
-
+            replaceUrlParam(window.location.toString(), 'size3');
+            replaceUrlParam(window.location.toString(), 'size4');
+            replaceUrlParam(window.location.toString(), 'colOrder3');
+            replaceUrlParam(window.location.toString(), 'colOrder4');
             table.columns().every(function () {
                 if (this.search() != "") {
                     replaceUrlParam(window.location.toString(), 'col' + this.index(), this.search());
@@ -136,20 +133,28 @@ var hide = [];
                     replaceUrlParam(window.location.toString(), 'col' + this.index());
                 }
             });
-
+            if($('#table1_filter input').val()!=""){
+                replaceUrlParam(window.location.toString(), 'search', $('#table1_filter input').val());
+            }else{
+                replaceUrlParam(window.location.toString(), 'search');
+            }
         }
-
         //clears unecessary parameters from the url when the entries details tab is clicked
         function entriesDetailsTabClick() {
+            table2.columns(1).search("", true).draw();
             replaceUrlParam(window.location.toString(), 'tab', 'entriesDetails');
             replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
-
+            replaceUrlParam(window.location.toString(), 'size', (table2.page.len()).toString());
+            replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
             replaceUrlParam(window.location.toString(), 'entryClick');
             replaceUrlParam(window.location.toString(), 'compare1');
             replaceUrlParam(window.location.toString(), 'compare2');
             replaceUrlParam(window.location.toString(), 'page3');
             replaceUrlParam(window.location.toString(), 'page4');
-
+            replaceUrlParam(window.location.toString(), 'size3');
+            replaceUrlParam(window.location.toString(), 'size4');
+            replaceUrlParam(window.location.toString(), 'colOrder3');
+            replaceUrlParam(window.location.toString(), 'colOrder4');
             table2.columns().every(function () {
                 if (this.search() != "") {
                     replaceUrlParam(window.location.toString(), 'col' + this.index(), this.search());
@@ -157,19 +162,29 @@ var hide = [];
                     replaceUrlParam(window.location.toString(), 'col' + this.index());
                 }
             });
-
+            if($('#table2_filter input').val()!=""){
+                replaceUrlParam(window.location.toString(), 'search', $('#table2_filter input').val());
+            }else{
+                replaceUrlParam(window.location.toString(), 'search');
+            }
         }
-
         //occurs when an entry id is clicked on the entries tab. Takes you to entries details tab and filters data
         function entryClick(href) {
             $('#myTab a[href="#entriesDetails"]').tab('show');
             replaceUrlParam(window.location.toString(), 'tab', 'entriesDetails');
+            replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+            replaceUrlParam(window.location.toString(), 'size', (table2.page.len()).toString());
+            replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
             refid = href;
             if (!isNaN(refid)) {
                 table2.columns(1).search("^" + refid + "$", true).draw();
                 replaceUrlParam(window.location.toString(), 'entryClick', refid);
             }
-
+            if($('#table2_filter input').val()!=""){
+                replaceUrlParam(window.location.toString(), 'search', $('#table2_filter input').val());
+            }else{
+                replaceUrlParam(window.location.toString(), 'search');
+            }
         }
     </script>
 
@@ -242,10 +257,8 @@ var hide = [];
             </table>
 
             <script>
-
                 function compareOutput(compare1, compare2) {
                     $('#myTab a[href="#compareOutput"]').tab('show');
-
                     table3.columns(1).search("^" + compare1.toString() + "$", true).draw();
                     table4.columns(1).search("^" + compare2.toString() + "$", true).draw();
                     table3.rows({search: 'applied'}).data().each(function (value1, index) {
@@ -266,18 +279,14 @@ var hide = [];
                         });
                     });
                 }
-
                 function compareFile(compare1, compare2) {
                     $('#myTab a[href="#compareFile"]').tab('show');
-
                     var run1UserName = table.row('#' + compare1).data()[2];
                     var run1FileName = table.row('#' + compare1).data()[3];
                     var run2UserName = table.row('#' + compare2).data()[2];
                     var run2FileName = table.row('#' + compare2).data()[3];
                     $("#here").replaceWith('<h4 id="here"> Comparing run <a onclick="compare();">' + run1FileName + '</a>, ' + run1UserName + ' to run <a href="#" onclick="compare();">' + run2FileName + '</a>, ' + run2UserName + '.</h4>');
-
                     table5.clear();
-
                     table2.columns(1).search("^" + compare1.toString() + "$", true);
                     var run1Array = [];
                     var run2Array = [];
@@ -324,19 +333,16 @@ var hide = [];
                         }
                     }
                 }
-
                 $(document).ready(function () {
                     clearParams(window.location.toString());
                     replaceUrlParam(window.location.toString(), 'tab', 'entries');
-
                     table = $('#table1').DataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
                         select: 'multi',
-                        dom: 'Bfrtip',
+                        dom: 'lBfrtip',
                         buttons: [
                             {
-                                //compare files by output
                                 extend: 'selected',
                                 text: 'Compare Output',
                                 action: function (e, dt, node, config) {
@@ -344,18 +350,38 @@ var hide = [];
                                         alert('Please select 2 runs');
                                     } else {
                                         replaceUrlParam(window.location.toString(), 'tab', 'compareOutput');
-
+                                        replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
+                                        replaceUrlParam(window.location.toString(), 'size3', (table3.page.len()).toString());
+                                        replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
+                                        replaceUrlParam(window.location.toString(), 'size4', (table4.page.len()).toString());
+                                        replaceUrlParam(window.location.toString(), 'colOrder3', table3.order());
+                                        replaceUrlParam(window.location.toString(), 'colOrder4', table4.order());
+                                        if($('#table3_filter input').val()!=""){
+                                            replaceUrlParam(window.location.toString(), 'search3', $('#table3_filter input').val());
+                                        }else{
+                                            replaceUrlParam(window.location.toString(), 'search3');
+                                        }
+                                        if($('#table4_filter input').val()!=""){
+                                            replaceUrlParam(window.location.toString(), 'search4', $('#table4_filter input').val());
+                                        }else{
+                                            replaceUrlParam(window.location.toString(), 'search4');
+                                        }
+                                        replaceUrlParam(window.location.toString(), 'size');
+                                        replaceUrlParam(window.location.toString(), 'page');
+                                        replaceUrlParam(window.location.toString(), 'colOrder');
+                                        replaceUrlParam(window.location.toString(), 'search');
+                                        for(var i=0;i<9;i++){
+                                            replaceUrlParam(window.location.toString(), 'col'+i);
+                                        }
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
                                         replaceUrlParam(window.location.toString(), 'compare1', compare1);
                                         replaceUrlParam(window.location.toString(), 'compare2', compare2);
-
                                         compareOutput(compare1, compare2);
                                     }
                                 }
                             },
                             {
-                                //compare files by files they contain
                                 extend: 'selected',
                                 text: 'Compare Files',
                                 action: function (e, dt, node, config) {
@@ -363,12 +389,21 @@ var hide = [];
                                         alert('Please select 2 runs');
                                     } else {
                                         replaceUrlParam(window.location.toString(), 'tab', 'compareFile');
-
+                                        replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
+                                        replaceUrlParam(window.location.toString(), 'size', (table5.page.len()).toString());
+                                        replaceUrlParam(window.location.toString(), 'colOrder', table5.order());
+                                        if($('#table5_filter input').val()!=""){
+                                            replaceUrlParam(window.location.toString(), 'search', $('#table5_filter input').val());
+                                        }else{
+                                            replaceUrlParam(window.location.toString(), 'search');
+                                        }
+                                        for(var i=0;i<9;i++){
+                                            replaceUrlParam(window.location.toString(), 'col'+i);
+                                        }
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
                                         replaceUrlParam(window.location.toString(), 'compare1', compare1);
                                         replaceUrlParam(window.location.toString(), 'compare2', compare2);
-
                                         compareFile(compare1, compare2);
                                     }
                                 }
@@ -376,22 +411,29 @@ var hide = [];
                         ]
                     });
 
-                    $('#toggle-event').change(function () {
-                        var state = $(this).prop('checked');
-                        alert(state);
-                        for (var i = 0; i < hide.length; i++) {
-                            var row = table5.rows(hide[i]);
-                            //row.hide();
-                            alert(row.data().length);
-                        }
-                    });
-
                     replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
+                    replaceUrlParam(window.location.toString(), 'size', (table.page.len()).toString());
+                    replaceUrlParam(window.location.toString(), 'colOrder', table.order());
                     table.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
                     });
+                    table.on('length.dt',function (e, settings, len) {
+                        replaceUrlParam(window.location.toString(), 'size', (len).toString());
+                    });
+                    table.on('order.dt',function () {
+                        replaceUrlParam(window.location.toString(), 'colOrder', table.order());
+                        replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
+                    });
+                    $('#table1_filter input').unbind().keyup(function() {
+                        var value =$(this).val();
+                        table.search(value).draw();
+                        if(value!="") {
+                            replaceUrlParam(window.location.toString(), 'search', value.toString());
+                        }else{
+                            replaceUrlParam(window.location.toString(), 'search');
+                        }
+                    });
                 });
-
             </script>
             <script>
                 $(document).ready(function () {
@@ -407,16 +449,11 @@ var hide = [];
                             if (that.search() !== this.value) {
                                 replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
                                 that.search(this.value).draw();
-
                                 if (that.search() == "") {
                                     replaceUrlParam(window.location.toString(), 'col' + that.index());
                                 }
                             }
                         });
-                    });
-
-                    table.on('search.dt', function(){
-                        alert("yay");
                     });
                 });
             </script>
@@ -482,12 +519,24 @@ var hide = [];
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
-                    $('#detail').on('click', function (event) {
-                        table2.columns(1).search("", true).draw();
-                    });
-
                     table2.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+                    });
+                    table2.on('length.dt',function (e, settings, len) {
+                        replaceUrlParam(window.location.toString(), 'size', (len).toString());
+                    });
+                    table2.on('order.dt',function () {
+                        replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
+                        replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
+                    });
+                    $('#table2_filter input').unbind().keyup(function() {
+                        var value =$(this).val();
+                        table2.search(value).draw();
+                        if(value!="") {
+                            replaceUrlParam(window.location.toString(), 'search', value.toString());
+                        }else{
+                            replaceUrlParam(window.location.toString(), 'search');
+                        }
                     });
                 });
             </script>
@@ -505,7 +554,6 @@ var hide = [];
                             if (that.search() !== this.value) {
                                 replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
                                 that.search(this.value).draw();
-
                                 if (that.search() == "") {
                                     replaceUrlParam(window.location.toString(), 'col' + that.index());
                                 }
@@ -565,9 +613,24 @@ var hide = [];
                     $(document).ready(function () {
                         table3 = $('#table3').DataTable();
                         table3.columns([0, 3]).visible(false);
-
                         table3.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
+                        });
+                        table3.on('length.dt',function (e, settings, len) {
+                            replaceUrlParam(window.location.toString(), 'size3', (len).toString());
+                        });
+                        table3.on('order.dt',function () {
+                            replaceUrlParam(window.location.toString(), 'colOrder3', table3.order());
+                            replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
+                        });
+                        $('#table3_filter input').unbind().keyup(function() {
+                            var value =$(this).val();
+                            table3.search(value).draw();
+                            if(value!="") {
+                                replaceUrlParam(window.location.toString(), 'search3', value.toString());
+                            }else{
+                                replaceUrlParam(window.location.toString(), 'search3');
+                            }
                         });
                     });
                 </script>
@@ -621,9 +684,24 @@ var hide = [];
                     $(document).ready(function () {
                         table4 = $('#table4').DataTable();
                         table4.columns([0, 3]).visible(false);
-
                         table4.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
+                        });
+                        table4.on('length.dt',function (e, settings, len) {
+                            replaceUrlParam(window.location.toString(), 'size4', (len).toString());
+                        });
+                        table4.on('order.dt',function () {
+                            replaceUrlParam(window.location.toString(), 'colOrder4', table4.order());
+                            replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
+                        });
+                        $('#table4_filter input').unbind().keyup(function() {
+                            var value =$(this).val();
+                            table4.search(value).draw();
+                            if(value!="") {
+                                replaceUrlParam(window.location.toString(), 'search4', value.toString());
+                            }else{
+                                replaceUrlParam(window.location.toString(), 'search4');
+                            }
                         });
                     });
                 </script>
@@ -655,13 +733,12 @@ var hide = [];
                     <th>Output:</th>
                     <th>Error:</th>
                     </tfoot>
-                    <tbody>
 
+                    <tbody>
 
 
                     </tbody>
                 </table>
-
 
                 <script>
                     $(document).ready(function () {
@@ -669,37 +746,60 @@ var hide = [];
                         table5.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
                         });
-                    });
-                </script>
-                <script>
-                    $(document).ready(function () {
+                        table5.on('length.dt',function (e, settings, len) {
+                            replaceUrlParam(window.location.toString(), 'size', (len).toString());
+                        });
+                        table5.on('order.dt',function () {
+                            replaceUrlParam(window.location.toString(), 'colOrder', table5.order());
+                            replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
+                        });
+                        $('#table5_filter input').unbind().keyup(function() {
+                            var value =$(this).val();
+                            table5.search(value).draw();
+                            if(value!="") {
+                                replaceUrlParam(window.location.toString(), 'search', value.toString());
+                            }else{
+                                replaceUrlParam(window.location.toString(), 'search');
+                            }
+                        });
                         // Setup - add a text input to each footer cell
                         $('#table5 tfoot th').each(function () {
                             var title = $(this).text();
                             $(this).html('<input type="text" placeholder="Search ' + title + '" />');
                         });
                         // Apply the search
-                        table.columns().every(function () {
+                        table5.columns().every(function () {
                             var that = this;
                             $('input', this.footer()).on('keyup change', function () {
                                 if (that.search() !== this.value) {
-                                    alert('inside search');
+
                                     that.search(this.value).draw();
                                     replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
-
-
                                     if (that.search() == "") {
                                         replaceUrlParam(window.location.toString(), 'col' + that.index());
                                     }
                                 }
                             });
                         });
-
                     });
                 </script>
+                <script>
+                    $(document).ready(function(){
+
+                        $('#toggle-click').on('click',function(){
+
+                            alert("maybe?");
+
+                        });
+
+                    });
+
+                </script>
+
             </div>
         </div>
     </div>
 </div>
 </body>
 </html>
+
