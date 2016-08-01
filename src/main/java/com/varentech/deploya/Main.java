@@ -29,12 +29,15 @@ import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
+/**
+ * This class contains the main method that will connect to the server
+ */
 
 public class Main
 {
     // Resource path pointing to where the WEBROOT is
     private static final String WEBROOT_INDEX = "/webroot/";
-    static Logger logg = LoggerFactory.getLogger(Main.class);
+    private static Logger logg = LoggerFactory.getLogger(Main.class);
 
 
     public static void main(String[] args) throws Exception
@@ -146,8 +149,10 @@ public class Main
      */
     private WebAppContext getWebAppContext(URI baseUri, File scratchDir)
     {
+
+
         WebAppContext context = new WebAppContext();
-        context.setContextPath("/ProjectThunder");
+        context.setContextPath(context_path);
         context.setAttribute("javax.servlet.context.tempdir", scratchDir);
         context.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
           ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$");
@@ -158,7 +163,7 @@ public class Main
         context.setClassLoader(getUrlClassLoader());
 
         context.addServlet(jspServletHolder(), "*.jsp");
-        context.addServlet(defaultServletHolder(baseUri), "/ProjectThunder");
+        context.addServlet(defaultServletHolder(baseUri), context_path);
         context.addServlet(FormServlet.class, "/upload");
         context.addServlet(LoginServlet.class, "/login");
 
@@ -252,7 +257,6 @@ public class Main
      * Cause server to keep running until it receives a Interrupt.
      * <p>
      * Interrupt Signal, or SIGINT (Unix Signal), is typically seen as a result of a kill -TERM {pid} or Ctrl+C
-     * @throws InterruptedException if interrupted
      */
     public void waitForInterrupt()
     {
