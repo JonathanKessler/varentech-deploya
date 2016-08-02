@@ -336,7 +336,7 @@
                                     </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/target/bin</directory>
+                                    <directory>/target/lib</directory>
                                     <dependency></dependency>
                                 </mapping>
 
