@@ -193,13 +193,16 @@
             <version>2.4</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
             <version>2.4.3</version>
             <type>maven-plugin</type>
         </dependency>
+
     </dependencies>
+
     <profiles>
     <profile>
     <id>uberJar</id>
@@ -274,7 +277,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
         </build>
         </profile>
@@ -284,7 +286,6 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <build>
-
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -316,6 +317,28 @@
                                 be stored in a database. </description>
                             <url>https://github.com/VarenTechInternship/varentech-deploya</url>
                             <mappings>
+                                <!-- configuration files -->
+                                <mapping>
+                                    <directory>/target/config</directory>
+                                    <configuration>true</configuration>
+                                    <sources>
+                                        <source>
+                                            <location>src/main/resources/</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory> /target/classes</directory>
+                                    <sources>
+                                        <source>
+                                            <location> src/main/java/com/varentech/deploya/</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/target/bin</directory>
+                                    <dependency></dependency>
+                                </mapping>
 
                             </mappings>
                             <preinstallScriptlet>
@@ -327,5 +350,4 @@
             </build>
         </profile>
         </profiles>
-
 </project>
