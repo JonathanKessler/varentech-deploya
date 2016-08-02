@@ -9,9 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
-/**
- * Created by ParksW on 7/19/2016.
- */
 public class ConfigurationFileManipulation {
     static Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
     String path;
@@ -38,7 +35,6 @@ public class ConfigurationFileManipulation {
 
             File exportedPropertiesFile = new File(path);
             //exportedPropertiesFile.createNewFile();
-
 
             String text = Resources.toString(url, Charsets.UTF_8);
             System.out.println(text);
@@ -81,4 +77,3 @@ public class ConfigurationFileManipulation {
         logg.info(output.toString());
     }
 }
-
