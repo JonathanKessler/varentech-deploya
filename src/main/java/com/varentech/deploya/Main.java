@@ -1,7 +1,6 @@
 package com.varentech.deploya;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,40 +29,37 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 /**
- * This class contains the main method that will connect to the server
+ * This class contains the main method that will connect to the server.
  */
 
-public class Main
-{
-    // Resource path pointing to where the WEBROOT is
+public class Main {
+    // Resource path pointing to where the WEBROOT is.
     private static final String WEBROOT_INDEX = "/webroot/";
     private static Logger logg = LoggerFactory.getLogger(Main.class);
 
 
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) {
         if (args.length == 0) {
             ResourceBundle resource = ResourceBundle.getBundle("config");
             int port = Integer.valueOf(resource.getString("port_number"));
-            String context_path=resource.getString("context_path");
-
+            String context_path = resource.getString("context_path");
             Main main = new Main(port,context_path);
             main.start();
             main.waitForInterrupt();
             printHelp();
-        }
-        else if (args[0].equals("-h") || args[0].equals("--help")){
+        } else if (args[0].equals("-h") || args[0].equals("--help")) {
             printHelp();
-        }
-        else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".properties")){
+        } else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".properties")) {
             ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
             fileManip.exportConfigFile();
-        }
-        else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".properties")){
+        } else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".properties")) {
             ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
-            fileManip.importConfigFile();
-        }
-        else{
+            try {
+                fileManip.importConfigFile();
+            } catch (IOException e) {
+                logg.error("Exception while importing config file: ", e);
+            }
+        } else {
             System.out.println("Illegal Expression(s) given.");
             printHelp();
         }
@@ -74,19 +70,12 @@ public class Main
     private URI serverURI;
     private String context_path;
 
-    public Main(int port, String context_path)
-    {
+    public Main(int port, String context_path) {
         this.port = port;
         this.context_path = context_path;
     }
 
-    public URI getServerURI()
-    {
-        return serverURI;
-    }
-
-    public void start() throws Exception
-    {
+    public void start() {
         server = new Server();
         ServerConnector connector = connector();
         server.addConnector(connector);
@@ -101,42 +90,45 @@ public class Main
         server.setHandler(webAppContext);
 
         // Start Server
-        server.start();
+        try {
+            server.start();
+        } catch (Exception e) {
+            logg.error("Exception while starting server: ", e);
+        }
         logg.debug("Successfully connected to the server");
 
         this.serverURI = getServerUri(connector);
     }
 
-    private ServerConnector connector()
-    {
+    private ServerConnector connector() {
         ServerConnector connector = new ServerConnector(server);
         connector.setPort(port);
         return connector;
     }
 
-    private URI getWebRootResourceUri() throws FileNotFoundException, URISyntaxException
-    {
+    private URI getWebRootResourceUri() {
         URL indexUri = this.getClass().getResource(WEBROOT_INDEX);
-        if (indexUri == null)
-        {
+        if (indexUri == null) {
             logg.error("Unable to find resource ", WEBROOT_INDEX);
         }
         // Points to wherever /webroot/ (the resource) is
-        return indexUri.toURI();
+        try {
+            return indexUri.toURI();
+        } catch (URISyntaxException e) {
+            logg.error("URI Syntax Error: ", e);
+            return null;
+        }
     }
 
     /**
-     * Establish Scratch directory for the servlet context (used by JSP compilation)
+     * Establish Scratch directory for the servlet context (used by JSP compilation).
      */
-    private File getScratchDir() throws IOException
-    {
+    private File getScratchDir() {
         File tempDir = new File(System.getProperty("java.io.tmpdir"));
         File scratchDir = new File(tempDir.toString(), "embedded-jetty-jsp");
 
-        if (!scratchDir.exists())
-        {
-            if (!scratchDir.mkdirs())
-            {
+        if (!scratchDir.exists()) {
+            if (!scratchDir.mkdirs()) {
                 logg.error("Unable to create scratch directory: ", scratchDir);
             }
         }
@@ -144,13 +136,10 @@ public class Main
     }
 
     /**
-     * Setup the basic application "context" for this application at "/"
-     * This is also known as the handler tree (in jetty speak)
+     * Setup the basic application "context" for this application at "/".
+     * This is also known as the handler tree (in jetty speak).
      */
-    private WebAppContext getWebAppContext(URI baseUri, File scratchDir)
-    {
-
-
+    private WebAppContext getWebAppContext(URI baseUri, File scratchDir) {
         WebAppContext context = new WebAppContext();
         context.setContextPath(context_path);
         context.setAttribute("javax.servlet.context.tempdir", scratchDir);
@@ -167,16 +156,14 @@ public class Main
         context.addServlet(FormServlet.class, "/upload");
         context.addServlet(LoginServlet.class, "/login");
 
-
         context.addServlet(defaultServletHolder(baseUri), "/");
         return context;
     }
 
     /**
-     * Ensure the jsp engine is initialized correctly
+     * Ensure the jsp engine is initialized correctly.
      */
-    private List<ContainerInitializer> jspInitializers()
-    {
+    private List<ContainerInitializer> jspInitializers() {
         JettyJasperInitializer sci = new JettyJasperInitializer();
         ContainerInitializer initializer = new ContainerInitializer(sci, null);
         List<ContainerInitializer> initializers = new ArrayList<ContainerInitializer>();
@@ -185,22 +172,20 @@ public class Main
     }
 
     /**
-     * Set Classloader of Context to be sane (needed for JSTL)
+     * Set Classloader of Context to be sane (needed for JSTL).
      * JSP requires a non-System classloader, this simply wraps the
      * embedded System classloader in a way that makes it suitable
-     * for JSP to use
+     * for JSP to use.
      */
-    private ClassLoader getUrlClassLoader()
-    {
+    private ClassLoader getUrlClassLoader() {
         ClassLoader jspClassLoader = new URLClassLoader(new URL[0], this.getClass().getClassLoader());
         return jspClassLoader;
     }
 
     /**
-     * Create JSP Servlet (must be named "jsp")
+     * Create JSP Servlet (must be named "jsp").
      */
-    private ServletHolder jspServletHolder()
-    {
+    private ServletHolder jspServletHolder() {
         ServletHolder holderJsp = new ServletHolder("jsp", JettyJspServlet.class);
         holderJsp.setInitOrder(0);
         holderJsp.setInitParameter("logVerbosityLevel", "DEBUG");
@@ -212,13 +197,10 @@ public class Main
         return holderJsp;
     }
 
-
-
     /**
-     * Create Default Servlet (must be named "default")
+     * Create Default Servlet (must be named "default").
      */
-    private ServletHolder defaultServletHolder(URI baseUri)
-    {
+    private ServletHolder defaultServletHolder(URI baseUri) {
         ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
         holderDefault.setInitParameter("resourceBase", baseUri.toASCIIString());
         holderDefault.setInitParameter("dirAllowed", "true");
@@ -226,40 +208,35 @@ public class Main
     }
 
     /**
-     * Establish the Server URI
+     * Establish the Server URI.
      */
-    private URI getServerUri(ServerConnector connector) throws URISyntaxException
-    {
+    private URI getServerUri(ServerConnector connector) {
         String scheme = "http";
-        for (ConnectionFactory connectFactory : connector.getConnectionFactories())
-        {
-            if (connectFactory.getProtocol().equals("SSL-http"))
-            {
+        for (ConnectionFactory connectFactory : connector.getConnectionFactories()) {
+            if (connectFactory.getProtocol().equals("SSL-http")) {
                 scheme = "https";
             }
         }
         String host = connector.getHost();
-        if (host == null)
-        {
+        if (host == null) {
             host = "localhost";
         }
         int port = connector.getLocalPort();
-        serverURI = new URI(String.format("%s://%s:%d/", scheme, host, port));
+        try {
+            serverURI = new URI(String.format("%s://%s:%d/", scheme, host, port));
+        } catch (URISyntaxException e) {
+            logg.error("URI Syntax Exception: ", e);
+        }
         return serverURI;
     }
 
-    public void stop() throws Exception
-    {
-        server.stop();
-    }
 
     /**
      * Cause server to keep running until it receives a Interrupt.
      * <p>
      * Interrupt Signal, or SIGINT (Unix Signal), is typically seen as a result of a kill -TERM {pid} or Ctrl+C
      */
-    public void waitForInterrupt()
-    {
+    public void waitForInterrupt() {
         try {
             server.join();
         } catch (InterruptedException e) {
@@ -267,7 +244,7 @@ public class Main
         }
     }
 
-    public static void printHelp(){
+    public static void printHelp() {
         System.out.println("Options: ");
         System.out.println("\t --export-config {path/to/export/config.properties} \t to export the config file in the jar.");
         System.out.println("\t -c {path/to/config/to/use/config.properties} \t to use a config other than the default config with the jar.");
