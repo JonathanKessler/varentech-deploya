@@ -11,7 +11,7 @@
     String context_path = resource.getString("context_path");
     String port_number = resource.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + "/" + context_path + "/login.jsp");
+        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/pages/login.jsp");
         return;
     }
 %>
@@ -55,7 +55,7 @@
     var table3;
     var table4;
     var table5;
-    var hide = [];
+    var unchange = [];
 </script>
 
 <div class="container">
@@ -71,15 +71,12 @@
         //adds a parameter to the url if it does not exist or replaces it if it does exist. If called with null paramValue it will delete the parameter from the url
         function replaceUrlParam(url, paramName, paramValue) {
             var pattern = new RegExp('\\b(' + paramName + '=).*?(&|$)');
-
             if (url.search(pattern) >= 0) {
                 if (paramValue == null) {
                     var urlparts = url.split('?');
                     if (urlparts.length >= 2) {
-
                         var prefix = encodeURIComponent(paramName) + '=';
                         var pars = urlparts[1].split(/[&;]/g);
-
                         //reverse iteration as may be destructive
                         for (var i = pars.length; i-- > 0;) {
                             //idiom for string.startsWith
@@ -98,15 +95,12 @@
                     window.history.pushState("", "", (url.replace(pattern, '$1' + paramValue + '$2')).toString());
                     return url.replace(pattern, '$1' + paramValue + '$2');
                 }
-
             }
-
             if (paramValue != null) {
                 window.history.pushState("", "", (url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue).toString());
                 return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue;
             }
         }
-
         //clears all parameters from the url
         function clearParams(url) {
             var index = 0;
@@ -120,31 +114,24 @@
             }
             window.history.pushState("", "", newURL);
         }
-
         //clears unnecessary parameters from the url when the entries tab is clicked. Adds the appropriate parameters
         function entriesTabClick() {
-
             table2.search("").draw();
             table3.search("").draw();
             table4.search("").draw();
             table5.search("").draw();
-
             for(var i=0; i<8;i++){
                 table2.columns(i).search("", true).draw();
                 document.getElementById("t2" + i).value="";
-
                 if(i<3){
                     table5.columns(i).search("", true).draw();
                     document.getElementById("t5" + i).value="";
                 }
             }
-
-
             replaceUrlParam(window.location.toString(), 'tab', 'entries');
             replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
             replaceUrlParam(window.location.toString(), 'size', (table.page.len()).toString());
             replaceUrlParam(window.location.toString(), 'colOrder', table.order());
-
             replaceUrlParam(window.location.toString(), 'entryClick');
             replaceUrlParam(window.location.toString(), 'compare1');
             replaceUrlParam(window.location.toString(), 'compare2');
@@ -154,7 +141,6 @@
             replaceUrlParam(window.location.toString(), 'size4');
             replaceUrlParam(window.location.toString(), 'colOrder3');
             replaceUrlParam(window.location.toString(), 'colOrder4');
-
             table.columns().every(function () {
                 if (this.search() != "") {
                     replaceUrlParam(window.location.toString(), 'col' + this.index(), this.search());
@@ -162,15 +148,12 @@
                     replaceUrlParam(window.location.toString(), 'col' + this.index());
                 }
             });
-
             if ($('#table1_filter input').val() != "") {
                 replaceUrlParam(window.location.toString(), 'search', $('#table1_filter input').val());
             } else {
                 replaceUrlParam(window.location.toString(), 'search');
             }
-
         }
-
         //clears unecessary parameters from the url when the entries details tab is clicked. Adds the appropriate parameters
         function entriesDetailsTabClick() {
             table2.columns(1).search("", true).draw();
@@ -178,7 +161,6 @@
             replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
             replaceUrlParam(window.location.toString(), 'size', (table2.page.len()).toString());
             replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
-
             replaceUrlParam(window.location.toString(), 'entryClick');
             replaceUrlParam(window.location.toString(), 'compare1');
             replaceUrlParam(window.location.toString(), 'compare2');
@@ -188,7 +170,6 @@
             replaceUrlParam(window.location.toString(), 'size4');
             replaceUrlParam(window.location.toString(), 'colOrder3');
             replaceUrlParam(window.location.toString(), 'colOrder4');
-
             table2.columns().every(function () {
                 if (this.search() != "") {
                     replaceUrlParam(window.location.toString(), 'col' + this.index(), this.search());
@@ -196,15 +177,12 @@
                     replaceUrlParam(window.location.toString(), 'col' + this.index());
                 }
             });
-
             if ($('#table2_filter input').val() != "") {
                 replaceUrlParam(window.location.toString(), 'search', $('#table2_filter input').val());
             } else {
                 replaceUrlParam(window.location.toString(), 'search');
             }
-
         }
-
         //occurs when an entry id is clicked on the entries tab. Takes you to entries details tab and filters data. Adds the appropriate parameters to the url
         function entryClick(href) {
             $('#myTab a[href="#entriesDetails"]').tab('show');
@@ -217,11 +195,9 @@
                 table2.columns(1).search("^" + refid + "$", true).draw();
                 replaceUrlParam(window.location.toString(), 'entryClick', refid);
             }
-
             if ($('#table2_filter input').val() != "") {
                 replaceUrlParam(window.location.toString(), 'search', $('#table2_filter input').val());
             }
-
         }
     </script>
 
@@ -294,11 +270,9 @@
             </table>
 
             <script>
-
                 //occurs when two runs are compared by output
                 function compareOutput(compare1, compare2) {
                     $('#myTab a[href="#compareOutput"]').tab('show');
-
                     table3.columns(1).search("^" + compare1.toString() + "$", true).draw();
                     table4.columns(1).search("^" + compare2.toString() + "$", true).draw();
                     table3.rows({search: 'applied'}).data().each(function (value1, index) {
@@ -319,19 +293,16 @@
                         });
                     });
                 }
-
                 //occurs when two runs are compared by file
                 function compareFile(compare1, compare2) {
+                    unchange = [];
                     $('#myTab a[href="#compareFile"]').tab('show');
-
                     var run1UserName = table.row('#' + compare1).data()[2];
                     var run1FileName = table.row('#' + compare1).data()[3];
                     var run2UserName = table.row('#' + compare2).data()[2];
                     var run2FileName = table.row('#' + compare2).data()[3];
                     $("#here").replaceWith('<h4 id="here"> Comparing run <a onclick="compare();">' + run1FileName + '</a>, ' + run1UserName + ' to run <a href="#" onclick="compare();">' + run2FileName + '</a>, ' + run2UserName + '.</h4>');
-
                     table5.clear();
-
                     table2.columns(1).search("^" + compare1.toString() + "$", true);
                     var run1Array = [];
                     var run2Array = [];
@@ -355,15 +326,14 @@
                                 flag = true;
                                 if (run1Array[i][2] != run2Array[j][2]) {
                                     rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
-                                    $(rownode).css('background-color', '#e0ccff'); //purple changed file
+                                    $(rownode).css('background-color', '#cc99ff'); //purple changed file
+
                                 } else {
                                     rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
-                                    //rownode.setAttribute("id", "c2" + run1Array[i][0]);
-                                    //rownode.to$().attr('id', 'c2' + run1Array[i][0]);
                                     $(rownode).css('background-color', '#dadcd6'); //grey unchanged file
-                                    hide.push("c2" + run1Array[i][0]);
-                                    //hide.push(run1Array[i][1]);
+                                    unchange.push(rownode);
                                 }
+
                             }
                         }
                         if (flag == false) {
@@ -377,10 +347,9 @@
                             $(rownode).css('background-color', '#ff8c66'); //red deleted file
                         }
                     }
+
                 }
-
                 $(document).ready(function () {
-
                     table = $('#table1').DataTable({
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -402,33 +371,27 @@
                                         replaceUrlParam(window.location.toString(), 'size4', (table4.page.len()).toString());
                                         replaceUrlParam(window.location.toString(), 'colOrder3', table3.order());
                                         replaceUrlParam(window.location.toString(), 'colOrder4', table4.order());
-
                                         if ($('#table3_filter input').val() != "") {
                                             replaceUrlParam(window.location.toString(), 'search3', $('#table3_filter input').val());
                                         } else {
                                             replaceUrlParam(window.location.toString(), 'search3');
                                         }
-
                                         if ($('#table4_filter input').val() != "") {
                                             replaceUrlParam(window.location.toString(), 'search4', $('#table4_filter input').val());
                                         } else {
                                             replaceUrlParam(window.location.toString(), 'search4');
                                         }
-
                                         replaceUrlParam(window.location.toString(), 'size');
                                         replaceUrlParam(window.location.toString(), 'page');
                                         replaceUrlParam(window.location.toString(), 'colOrder');
                                         replaceUrlParam(window.location.toString(), 'search');
-
                                         for (var i = 0; i < 9; i++) {
                                             replaceUrlParam(window.location.toString(), 'col' + i);
                                         }
-
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
                                         replaceUrlParam(window.location.toString(), 'compare1', compare1);
                                         replaceUrlParam(window.location.toString(), 'compare2', compare2);
-
                                         compareOutput(compare1, compare2);
                                     }
                                 }
@@ -445,22 +408,18 @@
                                         replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
                                         replaceUrlParam(window.location.toString(), 'size', (table5.page.len()).toString());
                                         replaceUrlParam(window.location.toString(), 'colOrder', table5.order());
-
                                         if ($('#table5_filter input').val() != "") {
                                             replaceUrlParam(window.location.toString(), 'search', $('#table5_filter input').val());
                                         } else {
                                             replaceUrlParam(window.location.toString(), 'search');
                                         }
-
                                         for (var i = 0; i < 9; i++) {
                                             replaceUrlParam(window.location.toString(), 'col' + i);
                                         }
-
                                         var compare1 = table.rows('.selected').ids().toArray()[0];
                                         var compare2 = table.rows('.selected').ids().toArray()[1];
                                         replaceUrlParam(window.location.toString(), 'compare1', compare1);
                                         replaceUrlParam(window.location.toString(), 'compare2', compare2);
-
                                         compareFile(compare1, compare2);
                                     }
                                 }
@@ -468,96 +427,71 @@
                         ]
                     });
 
-                    //detects a change in compare file toggle hide files button
-                    /*$('#toggle-event').change(function () {
-                     var state = $(this).prop('checked');
-                     alert(state);
-                     for (var i = 0; i < hide.length; i++) {
-                     var row = table5.rows(hide[i]);
-                     //row.hide();
-                     alert(table5.rows(hide[i]).data().length);
-                     }
-                     });*/
-
                     //detects a change in page number
                     table.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
                     });
-
                     //detects a change in table length
                     table.on('length.dt', function (e, settings, len) {
                         replaceUrlParam(window.location.toString(), 'size', (len).toString());
                         replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
                     });
-
                     //detects a change in column order
                     table.on('order.dt', function () {
                         replaceUrlParam(window.location.toString(), 'colOrder', table.order());
                         replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
                     });
-
                     //detects a change in table search value
                     $('#table1_filter input').unbind().keyup(function () {
                         var value = $(this).val();
                         table.search(value).draw();
-
                         if (value != "") {
                             replaceUrlParam(window.location.toString(), 'search', value.toString());
                         } else {
                             replaceUrlParam(window.location.toString(), 'search');
                         }
                     });
-
                     // Setup - add a text input to each footer cell
                     $('#table1 tfoot th').each(function () {
                         var title = $(this).text();
-
                         if ($(this).index() != 1) {
                             $(this).html('<input type="text" placeholder="Search ' + title + '" id="t1' + $(this).index() + '" />');
                         } else {
                             //$(this).html('<div class="col-md-1"><input type="text" placeholder="To" id="to"/></div><div class="col-md-1"><input type="text" placeholder="From" id="from"/></div> ');
                             $(this).html('<input type="text" placeholder="Start Date" id="start"/><input type="text" placeholder="End Date" id="end"/> ');
-
                         }
                     });
-
                     var start = "";
                     var end = "";
-
                     $("#start").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
                         start = $(this).val();
                         dateRange(start, end);
-
                     });
                     $("#end").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
                         end = $(this).val();
                         dateRange(start, end);
                     });
-
-
                     function dateRange(start, end) {
                         if (start != "" && end != "") {
                             var startInt = start.substring(0, 4) + start.substring(5, 7) + start.substring(8);
                             var endInt = end.substring(0, 4) + end.substring(5, 7) + end.substring(8);
-
                             if(startInt>endInt){
                                 alert("Please select start date before end date.");
                             }else{
                                 /*var regex="";
-                                for(var i=0; i<start.length; i++){
-                                    if(start[i]==end[i] && start[i]!='-'){
-                                        regex+=start[i];
-                                    }else if(start[i]==end[i] && start[i]=='-'){
-                                        regex+='-';
-                                    }else{
-                                        regex
-                                    }
-                                }
-                                alert(regex);*/
+                                 for(var i=0; i<start.length; i++){
+                                 if(start[i]==end[i] && start[i]!='-'){
+                                 regex+=start[i];
+                                 }else if(start[i]==end[i] && start[i]=='-'){
+                                 regex+='-';
+                                 }else{
+                                 regex
+                                 }
+                                 }
+                                 alert(regex);*/
                             }
                         }
                     }
-
                     // Apply the column search
                     table.columns().every(function () {
                         var that = this;
@@ -565,7 +499,6 @@
                             if (that.search() !== this.value) {
                                 replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
                                 that.search(this.value).draw();
-
                                 if (that.search() == "") {
                                     replaceUrlParam(window.location.toString(), 'col' + that.index());
                                 }
@@ -636,29 +569,24 @@
                         "order": [[0, "desc"]],
                         "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
                     });
-
                     //detects a change in page number
                     table2.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
                     });
-
                     //detects a change in table length
                     table2.on('length.dt', function (e, settings, len) {
                         replaceUrlParam(window.location.toString(), 'size', (len).toString());
                         replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
                     });
-
                     //detects a change in column order
                     table2.on('order.dt', function () {
                         replaceUrlParam(window.location.toString(), 'colOrder', table2.order());
                         replaceUrlParam(window.location.toString(), 'page', (table2.page.info().page + 1).toString());
                     });
-
                     //detects a change in table search
                     $('#table2_filter input').unbind().keyup(function () {
                         var value = $(this).val();
                         table2.search(value).draw();
-
                         if (value != "") {
                             replaceUrlParam(window.location.toString(), 'search', value.toString());
                         } else {
@@ -674,7 +602,6 @@
                         var title = $(this).text();
                         $(this).html('<input type="text" placeholder="Search ' + title + '" id="t2' + $(this).index() + '" />');
                     });
-
                     // Apply the column search
                     table2.columns().every(function () {
                         var that = this;
@@ -682,8 +609,6 @@
                             if (that.search() !== this.value) {
                                 replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
                                 that.search(this.value).draw();
-
-
                                 if (that.search() == "") {
                                     replaceUrlParam(window.location.toString(), 'col' + that.index());
                                 }
@@ -743,29 +668,24 @@
                     $(document).ready(function () {
                         table3 = $('#table3').DataTable();
                         table3.columns([0, 3]).visible(false);
-
                         //detects a change in page number
                         table3.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
                         });
-
                         //detects a change in table length
                         table3.on('length.dt', function (e, settings, len) {
                             replaceUrlParam(window.location.toString(), 'size3', (len).toString());
                             replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
                         });
-
                         //detects a change in column order
                         table3.on('order.dt', function () {
                             replaceUrlParam(window.location.toString(), 'colOrder3', table3.order());
                             replaceUrlParam(window.location.toString(), 'page3', (table3.page.info().page + 1).toString());
                         });
-
                         //detects a change in table search value
                         $('#table3_filter input').unbind().keyup(function () {
                             var value = $(this).val();
                             table3.search(value).draw();
-
                             if (value != "") {
                                 replaceUrlParam(window.location.toString(), 'search3', value.toString());
                             } else {
@@ -824,29 +744,24 @@
                     $(document).ready(function () {
                         table4 = $('#table4').DataTable();
                         table4.columns([0, 3]).visible(false);
-
                         //detects a change in page number
                         table4.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
                         });
-
                         //detects a change in page length
                         table4.on('length.dt', function (e, settings, len) {
                             replaceUrlParam(window.location.toString(), 'size4', (len).toString());
                             replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
                         });
-
                         //detects a change in column order
                         table4.on('order.dt', function () {
                             replaceUrlParam(window.location.toString(), 'colOrder4', table4.order());
                             replaceUrlParam(window.location.toString(), 'page4', (table4.page.info().page + 1).toString());
                         });
-
                         //detects a change in search value
                         $('#table4_filter input').unbind().keyup(function () {
                             var value = $(this).val();
                             table4.search(value).draw();
-
                             if (value != "") {
                                 replaceUrlParam(window.location.toString(), 'search4', value.toString());
                             } else {
@@ -865,7 +780,7 @@
 
                 </div>
                 <div class="col-sm-2" id="hide">
-                    <!--creates the hide unchanged files toggle button-->
+                    <!--creates the unchange unchanged files toggle button-->
                     <input id="toggle-event" type="checkbox" data-toggle="toggle" data-on="Show Unchanged Files"
                            data-off="Hide Unchanged Files" data-width="175">
                 </div>
@@ -891,48 +806,40 @@
                 <script>
                     $(document).ready(function () {
                         table5 = $('#table5').DataTable();
-
                         //detects a change in page number
                         table5.on('page', function () {
                             replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
                         });
-
                         //detects a change in table length
                         table5.on('length.dt', function (e, settings, len) {
                             replaceUrlParam(window.location.toString(), 'size', (len).toString());
                             replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
                         });
-
                         //detects a change in column order
                         table5.on('order.dt', function () {
                             replaceUrlParam(window.location.toString(), 'colOrder', table5.order());
                             replaceUrlParam(window.location.toString(), 'page', (table5.page.info().page + 1).toString());
                         });
-
                         //detects a change in table search value
                         $('#table5_filter input').unbind().keyup(function () {
                             var value = $(this).val();
                             table5.search(value).draw();
-
                             if (value != "") {
                                 replaceUrlParam(window.location.toString(), 'search', value.toString());
                             } else {
                                 replaceUrlParam(window.location.toString(), 'search');
                             }
                         });
-
                         // Setup - add a text input to each footer cell
                         $('#table5 tfoot th').each(function () {
                             var title = $(this).text();
                             $(this).html('<input type="text" placeholder="Search ' + title + '" id="t5' + $(this).index() + '"  />');
                         });
-
                         // Apply the column search
                         table5.columns().every(function () {
                             var that = this;
                             $('input', this.footer()).on('keyup change', function () {
                                 if (that.search() !== this.value) {
-
                                     that.search(this.value).draw();
                                     replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
                                     if (that.search() == "") {
@@ -941,7 +848,20 @@
                                 }
                             });
                         });
+                    });
+                </script>
 
+                //function to hide unchanged files based on toggle bar
+                <script>
+                    $('#toggle-event').change(function () {
+                        var state = $(this).prop('checked');
+                        for(var i = 0; i<unchange.length; i++) {
+                            if (state == true) {
+                                unchange[i].style.display='none';
+                            } else {
+                                unchange[i].style.display='';
+                            }
+                        }
                     });
                 </script>
 
@@ -950,7 +870,6 @@
         </div>
 
         <script>
-
             //parses through search parameters in url and creates two arrays. (names holds the names of the parameters and values holds the vaules of the parameters
             function parseSearchParameters() {
                 var search = window.location.search.toString();
@@ -960,15 +879,12 @@
                 var value;
                 var names = [];
                 var values = [];
-
                 if (search.length == 0) {
                     entriesTabClick();
                 }
-
                 while (search.length != 0) {
                     search = search.substring(1);
                     index = search.indexOf('&');
-
                     if (search.indexOf('&') != -1) {
                         current = search.substring(0, index);
                         search = search.substring(index);
@@ -976,16 +892,13 @@
                         current = search;
                         search = "";
                     }
-
                     var split = current.indexOf('=');
                     name = current.substring(0, split);
                     names.push(name);
                     value = current.substring(split + 1);
                     values.push(value);
                 }
-
                 var tab = values[names.indexOf('tab')];
-
                 if (tab == 'entries') {
                     entriesOnLoad(names, values);
                 } else if (tab == 'entriesDetails') {
@@ -996,11 +909,9 @@
                     compareOutputOnLoad(names, values);
                 }
             }
-
             //occurs if the tab being loaded is the entries tab
             function entriesOnLoad(names, values) {
                 $('#myTab a[href="#entries"]').tab('show');
-
                 if (names.indexOf('size') != -1) {
                     var size = values[names.indexOf('size')];
                 }
@@ -1010,19 +921,15 @@
                 if (names.indexOf('page') != -1) {
                     page = values[names.indexOf('page')] - 1;
                 }
-
                 if (names.indexOf('search') != -1) {
                     searchBar = values[names.indexOf('search')];
                 }
-
                 if (names.indexOf('colOrder') != -1) {
                     colOrder = values[names.indexOf('colOrder')].toString();
                     split = colOrder.indexOf(',');
                     var colNumber = colOrder.substring(0, split);
                     var col = colOrder.substring(split + 1).toString();
-
                 }
-
                 if (size != "") {
                     table.page.len(size).draw();
                 }
@@ -1032,7 +939,6 @@
                 if (colOrder != "") {
                     table.order([colNumber, col]).draw();
                 }
-
                 for (var i = 0; i < 8; i++) {
                     if (names.indexOf('col' + i) != -1) {
                         document.getElementById("t1" + i).value = values[names.indexOf('col' + i)];
@@ -1042,18 +948,14 @@
                 if (page != "") {
                     table.page(page).draw('page');
                 }
-
             }
-
             //occurs when the EntriesDetails tab is loaded
             function entriesDetailsOnLoad(names, values) {
                 $('#myTab a[href="#entriesDetails"]').tab('show');
-
                 //entry click
                 if (names.indexOf('entryClick') != -1) {
                     entryClick(values[names.indexOf('entryClick')]);
                 }
-
                 if (names.indexOf('size') != -1) {
                     var size = values[names.indexOf('size')];
                 }
@@ -1063,11 +965,9 @@
                 if (names.indexOf('page') != -1) {
                     page = values[names.indexOf('page')] - 1;
                 }
-
                 if (names.indexOf('search') != -1) {
                     searchBar = values[names.indexOf('search')];
                 }
-
                 if (names.indexOf('colOrder') != -1) {
                     colOrder = values[names.indexOf('colOrder')].toString();
                     split = colOrder.indexOf(',');
@@ -1093,14 +993,11 @@
                     table2.page(page).draw('page');
                 }
             }
-
             //occurs when the compare file tab is loaded
             function compareFileOnLoad(names, values) {
                 var compare1 = values[names.indexOf('compare1')];
                 var compare2 = values[names.indexOf('compare2')];
-
                 compareFile(compare1, compare2);
-
                 if (names.indexOf('size') != -1) {
                     var size = values[names.indexOf('size')];
                 }
@@ -1110,19 +1007,15 @@
                 if (names.indexOf('page') != -1) {
                     page = values[names.indexOf('page')] - 1;
                 }
-
                 if (names.indexOf('search') != -1) {
                     searchBar = values[names.indexOf('search')];
                 }
-
                 if (names.indexOf('colOrder') != -1) {
                     colOrder = values[names.indexOf('colOrder')].toString();
                     split = colOrder.indexOf(',');
                     var colNumber = colOrder.substring(0, split);
                     var col = colOrder.substring(split + 1).toString();
-
                 }
-
                 if (size != "") {
                     table5.page.len(size).draw();
                 }
@@ -1138,19 +1031,15 @@
                         table5.column(i).search(values[names.indexOf('col' + i)]).draw();
                     }
                 }
-
                 if (page != "") {
                     table5.page(page).draw('page');
                 }
             }
-
             //occurs when the compare output tab is loaded
             function compareOutputOnLoad(names, values) {
                 var compare1 = values[names.indexOf('compare1')];
                 var compare2 = values[names.indexOf('compare2')];
-
                 compareOutput(compare1, compare2);
-
                 var page3 = values[names.indexOf('page3')] - 1;
                 var page4 = values[names.indexOf('page4')] - 1;
                 var size3 = values[names.indexOf('size3')];
@@ -1159,54 +1048,42 @@
                 var search4 = "";
                 var colOrder3 = "";
                 var colOrder4 = "";
-
-
                 if (names.indexOf('colOrder3') != -1) {
                     colOrder3 = values[names.indexOf('colOrder3')].toString();
                     var split3 = colOrder3.indexOf(',');
                     var colNumber3 = colOrder3.substring(0, split3);
                     var col3 = colOrder3.substring(split3 + 1).toString();
-
                 }
                 if (names.indexOf('colOrder4') != -1) {
                     colOrder4 = values[names.indexOf('colOrder4')].toString();
                     var split4 = colOrder4.indexOf(',');
                     var colNumber4 = colOrder4.substring(0, split4);
                     var col4 = colOrder4.substring(split4 + 1).toString();
-
                 }
                 if (names.indexOf('search3') != -1) {
                     search3 = values[names.indexOf('search3')];
                 }
-
-
                 if (names.indexOf('search4') != -1) {
                     search4 = values[names.indexOf('search4')];
-
                 }
-
                 if (size3 != "") {
                     table3.page.len(size3);
                 }
                 if (size4 != "") {
                     table4.page.len(size4).draw();
                 }
-
                 if (search3 != "") {
                     table3.search(search3).draw();
                 }
-
                 if (search4 != "") {
                     table4.search(search4).draw();
                 }
-
                 if (colOrder3 != "") {
                     table3.order([colNumber3, col3]).draw();
                 }
                 if (colOrder4 != "") {
                     table4.order([colNumber4, col4]).draw();
                 }
-
                 if (page3 != "") {
                     table3.page(page3).draw('page');
                 }
@@ -1214,11 +1091,9 @@
                     table4.page(page4).draw('page');
                 }
             }
-
             //give the parameters in the url functionality. Go to appropriate page on load
             $(document).ready(function () {
                 parseSearchParameters();
-
             });
         </script>
     </div>
