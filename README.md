@@ -13,4 +13,15 @@
   
   
   *The user can override log level using logback and slf4j.*
+  *The configuration file can be overriden as well. To update this file, create a application.conf file and add updated parameters.*
+  - port_number
+  - default_directory
+  - tab_name_form
+  - tab_name_histroy
+  - tab_name_login
+  - page_title
+  - context_path
+  - execute_timeout (-1 if no timeout for executing the file)
+  - path_to_DB
+    
 
