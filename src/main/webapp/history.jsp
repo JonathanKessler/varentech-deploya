@@ -32,6 +32,11 @@
     <link rel="stylesheet" href="http://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css">
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+
 </head>
 <body>
 
@@ -46,17 +51,18 @@
 
 <script>
     var refid = -1;//stands from reference ID
-var table2;
-var table3;
-var table4;
-var table5;
-var hide = [];
+    var table2;
+    var table3;
+    var table4;
+    var table5;
+    var hide = [];
 </script>
 
 <div class="container">
     <ul class="nav nav-tabs" id="myTab">
         <li class="active"><a id="entry" data-toggle="tab" href="#entries" onclick="entriesTabClick();">Entries</a></li>
-        <li><a id="detail" data-toggle="tab" href="#entriesDetails" onclick="entriesDetailsTabClick();">EntriesDetails</a></li>
+        <li><a id="detail" data-toggle="tab" href="#entriesDetails"
+               onclick="entriesDetailsTabClick();">EntriesDetails</a></li>
         <li><a id="compareByOutput" data-toggle="tab" href="#compareOutput" class="hidden">CompareOutput</a></li>
         <li><a id="compareByFile" data-toggle="tab" href="#compareFile" class="hidden">CompareFile</a></li>
     </ul>
@@ -118,9 +124,20 @@ var hide = [];
         //clears unnecessary parameters from the url when the entries tab is clicked. Adds the appropriate parameters
         function entriesTabClick() {
 
+            table2.search("").draw();
             table3.search("").draw();
             table4.search("").draw();
             table5.search("").draw();
+
+            for(var i=0; i<8;i++){
+                table2.columns(i).search("", true).draw();
+                document.getElementById("t2" + i).value="";
+
+                if(i<3){
+                    table5.columns(i).search("", true).draw();
+                    document.getElementById("t5" + i).value="";
+                }
+            }
 
 
             replaceUrlParam(window.location.toString(), 'tab', 'entries');
@@ -490,16 +507,56 @@ var hide = [];
                             replaceUrlParam(window.location.toString(), 'search');
                         }
                     });
-                });
 
-            </script>
-            <script>
-                $(document).ready(function () {
                     // Setup - add a text input to each footer cell
                     $('#table1 tfoot th').each(function () {
                         var title = $(this).text();
-                        $(this).html('<input type="text" placeholder="Search ' + title + '" id="t1' + $(this).index() + '" />');
+
+                        if ($(this).index() != 1) {
+                            $(this).html('<input type="text" placeholder="Search ' + title + '" id="t1' + $(this).index() + '" />');
+                        } else {
+                            //$(this).html('<div class="col-md-1"><input type="text" placeholder="To" id="to"/></div><div class="col-md-1"><input type="text" placeholder="From" id="from"/></div> ');
+                            $(this).html('<input type="text" placeholder="Start Date" id="start"/><input type="text" placeholder="End Date" id="end"/> ');
+
+                        }
                     });
+
+                    var start = "";
+                    var end = "";
+
+                    $("#start").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
+                        start = $(this).val();
+                        dateRange(start, end);
+
+                    });
+                    $("#end").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
+                        end = $(this).val();
+                        dateRange(start, end);
+                    });
+
+
+                    function dateRange(start, end) {
+                        if (start != "" && end != "") {
+                            var startInt = start.substring(0, 4) + start.substring(5, 7) + start.substring(8);
+                            var endInt = end.substring(0, 4) + end.substring(5, 7) + end.substring(8);
+
+                            if(startInt>endInt){
+                                alert("Please select start date before end date.");
+                            }else{
+                                /*var regex="";
+                                for(var i=0; i<start.length; i++){
+                                    if(start[i]==end[i] && start[i]!='-'){
+                                        regex+=start[i];
+                                    }else if(start[i]==end[i] && start[i]=='-'){
+                                        regex+='-';
+                                    }else{
+                                        regex
+                                    }
+                                }
+                                alert(regex);*/
+                            }
+                        }
+                    }
 
                     // Apply the column search
                     table.columns().every(function () {
@@ -625,6 +682,7 @@ var hide = [];
                             if (that.search() !== this.value) {
                                 replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
                                 that.search(this.value).draw();
+
 
                                 if (that.search() == "") {
                                     replaceUrlParam(window.location.toString(), 'col' + that.index());
@@ -903,7 +961,7 @@ var hide = [];
                 var names = [];
                 var values = [];
 
-                if(search.length==0){
+                if (search.length == 0) {
                     entriesTabClick();
                 }
 
@@ -928,14 +986,14 @@ var hide = [];
 
                 var tab = values[names.indexOf('tab')];
 
-                if(tab=='entries'){
-                    entriesOnLoad(names,values);
-                }else if(tab=='entriesDetails'){
-                    entriesDetailsOnLoad(names,values);
-                }else if(tab=='compareFile'){
-                    compareFileOnLoad(names,values);
-                }else if(tab=='compareOutput'){
-                    compareOutputOnLoad(names,values);
+                if (tab == 'entries') {
+                    entriesOnLoad(names, values);
+                } else if (tab == 'entriesDetails') {
+                    entriesDetailsOnLoad(names, values);
+                } else if (tab == 'compareFile') {
+                    compareFileOnLoad(names, values);
+                } else if (tab == 'compareOutput') {
+                    compareOutputOnLoad(names, values);
                 }
             }
 
@@ -1087,20 +1145,20 @@ var hide = [];
             }
 
             //occurs when the compare output tab is loaded
-            function compareOutputOnLoad(names, values){
+            function compareOutputOnLoad(names, values) {
                 var compare1 = values[names.indexOf('compare1')];
                 var compare2 = values[names.indexOf('compare2')];
 
                 compareOutput(compare1, compare2);
 
-                var page3 = values[names.indexOf('page3')]-1;
-                var page4 = values[names.indexOf('page4')]-1;
+                var page3 = values[names.indexOf('page3')] - 1;
+                var page4 = values[names.indexOf('page4')] - 1;
                 var size3 = values[names.indexOf('size3')];
                 var size4 = values[names.indexOf('size4')];
-                var search3="";
-                var search4="";
-                var colOrder3="";
-                var colOrder4="";
+                var search3 = "";
+                var search4 = "";
+                var colOrder3 = "";
+                var colOrder4 = "";
 
 
                 if (names.indexOf('colOrder3') != -1) {
