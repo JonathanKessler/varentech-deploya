@@ -11,7 +11,7 @@
     String context_path = resource.getString("context_path");
     String port_number = resource.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + "/" + context_path + "/login.jsp");
+        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/pages/login.jsp");
         return;
     }
 %>
