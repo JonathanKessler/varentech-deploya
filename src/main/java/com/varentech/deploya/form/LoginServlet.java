@@ -1,6 +1,5 @@
 package com.varentech.deploya.form;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +8,6 @@ import java.io.IOException;
 import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * Runs a servlet for the form page to gather information from the user.
@@ -21,7 +19,7 @@ public class LoginServlet extends HttpServlet {
      * Adds username as a session attribute.
      * Redirects to form.jsp
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/html");
         logg.debug("Successfully connected to login servlet.");
@@ -37,9 +35,11 @@ public class LoginServlet extends HttpServlet {
 
         //redirect to the main form
         logg.debug("Now redirecting to file upload page.");
-        response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/pages/form.jsp");
+        try {
+            response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/pages/form.jsp");
+        } catch (IOException e) {
+            logg.error("Error while redirecting to file upload: ", e);
+        }
         return;
-
     }
 }
-
