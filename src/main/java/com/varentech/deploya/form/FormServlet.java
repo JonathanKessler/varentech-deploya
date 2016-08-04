@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -144,14 +145,14 @@ public class FormServlet extends HttpServlet {
         out.println("<html>");
         out.println("<body>");
         if (res.entriesDetail.getOutput() != null) {
-            out.println("<font color=\"000000\">" + res.entriesDetail.getOutput() + "</font>");
+            out.println("<font color=”000000”>" + res.entriesDetail.getOutput() + "</font>");
             out.println("<br>");
         }
         if (res.entriesDetail.getError() != null) {
-            out.println("<font color=\"ff0000\">" + res.entriesDetail.getError() + "</font>");
+            out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
         }
         out.println(
-                "<center> <a href=\"http://" + request.getServerName() + ":" + port + "/" + context_path + "/history.jsp\">Click to see history</a> </center>\n"
+                "<center> <a href=\"http://" + request.getServerName() + ":" + port + context_path + "/pages/history.jsp\">Click to see history</a> </center>\n"
         );
         out.println("</body>");
         out.println("</html>");

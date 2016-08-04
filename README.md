@@ -9,4 +9,21 @@
 
 ###STEPS TO ACTUALLY RUN THE APP
 
-  Execute the jar using the commanad: java -jar deploya-1.0-SNAPSHOT.jar. Then go to the login page (currently: localhost:8080/ProjectThunder/login.jsp)  in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url), which includes the information stored in the database. *The user can override log level using logback and slf4j.*
+  Execute the jar using the commanad: java -jar deploya.jar. Then go to the login page (currently: localhost:8080/ProjectThunder/pages/login.jsp) in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url). The history page includes the information stored in the database. 
+  
+  They can compare two runs, either by files or output. When comparing by files, added files are shown in green, removed in red, changed in purple, and unchanged in grey. When comparing by output, yellow shows a change in output and red shows a change in error.
+  
+  
+  *The user can override log level using logback and slf4j.*
+  *The configuration file can be overriden as well. To update this file, create a application.conf file and add updated parameters.*
+  - port_number
+  - default_directory
+  - tab_name_form
+  - tab_name_histroy
+  - tab_name_login
+  - page_title
+  - context_path
+  - execute_timeout (-1 if no timeout for executing the file)
+  - path_to_DB
+    
+
