@@ -7,7 +7,7 @@
     String context_path = resource.getString("context_path");
     String port = resource.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/pages/login.jsp");
+        response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/login.jsp");
         return;
     }
 %>
@@ -19,10 +19,8 @@
     <title><%=tab_name_form%></title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-
 </head>
 <body>
-
 
 <!-- creates top menu-->
 <div class="container">
@@ -35,10 +33,8 @@
     </nav>
 </div>
 
-
 <!-- creates form-->
 <form class="form-horizontal" id="form_members" role="form" method="POST" action="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/upload" enctype="multipart/form-data">
-
 
     <div class="col-md-4 col-md-offset-4">
         <div class="form-group">
@@ -48,7 +44,6 @@
         </div>
     </div>
 
-
     <!--text input-->
     <div class="col-md-4 col-md-offset-4">
         <div class="form-group">
@@ -56,7 +51,6 @@
             <input type="text" id="path_to_destination" name="path_to_destination" class="form-control" placeholder="Enter save location for file" required>
         </div>
     </div>
-
 
     <div class="col-md-4 col-md-offset-4">
         <div class="form-group">
@@ -92,11 +86,9 @@
         </div>
     </div>
 
-
 </form>
 <div class="navbar-inner navbar-fixed-bottom">
-    <center> <a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/pages/history.jsp">Click to see history</a> </center>
+    <center> <a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">Click to see history</a> </center>
 </div>
 </body>
 </html>
-

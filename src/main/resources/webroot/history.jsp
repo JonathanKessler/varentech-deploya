@@ -11,7 +11,7 @@
     String context_path = resource.getString("context_path");
     String port_number = resource.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/pages/login.jsp");
+        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
         return;
     }
 %>
@@ -128,9 +128,7 @@
                     document.getElementById("t5" + i).value="";
                 }
             }
-
             $('#toggle-event').bootstrapToggle('off');
-
             replaceUrlParam(window.location.toString(), 'tab', 'entries');
             replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
             replaceUrlParam(window.location.toString(), 'size', (table.page.len()).toString());
@@ -333,13 +331,11 @@
                                 if (run1Array[i][2] != run2Array[j][2]) {
                                     rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
                                     $(rownode).css('background-color', '#cc99ff'); //purple changed file
-
                                 } else {
                                     rownode = table5.row.add([run1Array[i][1], run1Array[i][3], run1Array[i][4]]).draw().node();
                                     $(rownode).css('background-color', '#dadcd6'); //grey unchanged file
                                     unchange.push(rownode);
                                 }
-
                             }
                         }
                         if (flag == false) {
@@ -353,7 +349,6 @@
                             $(rownode).css('background-color', '#ff8c66'); //red deleted file
                         }
                     }
-
                 }
                 $(document).ready(function () {
                     table = $('#table1').DataTable({
@@ -433,7 +428,6 @@
                             }
                         ]
                     });
-
                     //detects a change in page number
                     table.on('page', function () {
                         replaceUrlParam(window.location.toString(), 'page', (table.page.info().page + 1).toString());
@@ -864,7 +858,6 @@
                         replaceUrlParam(window.location.toString(), 'hide', $('#toggle-event').prop('checked'));
                         hideUnchanged();
                     });
-
                     function hideUnchanged(){
                         var state = $('#toggle-event').prop('checked');
                         for(var i = 0; i<unchange.length; i++) {
@@ -1119,4 +1112,3 @@
 </div>
 </body>
 </html>
-

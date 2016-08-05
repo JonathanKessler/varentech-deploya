@@ -16,7 +16,6 @@
     <title><%=tab_name_login%></title>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
-
 </head>
 <BODY>
 
@@ -38,7 +37,6 @@
             <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
         </div>
     </div>
-
 
     <div class="col-md-4 col-md-offset-4">
         <div class="form-group">

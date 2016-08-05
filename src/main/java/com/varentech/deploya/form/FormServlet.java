@@ -18,7 +18,6 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Runs a servlet for the form page to gather information from the user.
  */
@@ -31,15 +30,13 @@ public class FormServlet extends HttpServlet {
      * Calls all methods necessary to process the file.
      * Inserts information into our database.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         HttpSession session = request.getSession();
 
         response.setContentType("text/html");
         logg.debug("Successfully connected to form servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
-
 
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         SendFile send = new SendFile();
@@ -48,13 +45,13 @@ public class FormServlet extends HttpServlet {
         String context_path = resource.getString("context_path");
         String port = resource.getString("port_number");
 
-
         String file_name = null;
         String path_to_destination = null;
         String execute_args = null;
         String unpack_args = null;
         String archive = null;
         FileItem fileItem = null;
+        InputStream fileInputStream = null;
 
         //get all parameters from the form
         try {
@@ -67,6 +64,11 @@ public class FormServlet extends HttpServlet {
                 if (!item.isFormField()) {
                     file_name = new File(item.getName()).getName();
                     fileItem = item;
+                    try {
+                        fileInputStream = fileItem.getInputStream();
+                    } catch (IOException e) {
+                        logg.error("Exception while getting file item from form: ",e);
+                    }
                 }
                 //gets all other parameters from form
                 if (item.isFormField()) {
@@ -112,7 +114,7 @@ public class FormServlet extends HttpServlet {
         res.entriesDetail.setFileName(res.entry.getFileName());
 
         //saves file to destination
-        send.sendToDestination(fileItem, file_name);
+        send.sendToDestination(fileInputStream, file_name);
 
         //if they want to archive, then send file to archive destination
         boolean fileDoesNotExist = false;
@@ -120,7 +122,7 @@ public class FormServlet extends HttpServlet {
             File archiveFile = new File(res.entry.getPathToLocalFile());
             //only archive if the archive directory already exists
             if (archiveFile.exists()) {
-                send.sendToArchive(file_name);
+                send.sendToArchive(fileInputStream);
             } else if (!archiveFile.exists()) {
                 logg.error("Was not able to archive. Directory does not exist");
                 fileDoesNotExist = true;
@@ -128,9 +130,8 @@ public class FormServlet extends HttpServlet {
         }
 
         //save all files to a temporary directory in order to directory and get hash, and execute
-        SaveTempDirectory un = new SaveTempDirectory();
-        un.directory(file_name);
-
+        SaveTempDirectory dir = new SaveTempDirectory();
+        dir.directory(file_name);
 
         //add entriesDetail to database
         impl.insertIntoEntriesDetail(res.entriesDetail);
@@ -141,7 +142,12 @@ public class FormServlet extends HttpServlet {
         }
 
         //send output and error to the screen (error will appear in red)
-        PrintWriter out = response.getWriter();
+        PrintWriter out = null;
+        try {
+            out = response.getWriter();
+        } catch (IOException e) {
+            logg.error("Exception while sending output/error to screen", e);
+        }
         out.println("<html>");
         out.println("<body>");
         if (res.entriesDetail.getOutput() != null) {
@@ -152,13 +158,12 @@ public class FormServlet extends HttpServlet {
             out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
         }
         out.println(
-                "<center> <a href=\"http://" + request.getServerName() + ":" + port + context_path + "/pages/history.jsp\">Click to see history</a> </center>\n"
+                "<center> <a href=\"http://" + request.getServerName() + ":" + port + context_path + "/history.jsp\">Click to see history</a> </center>\n"
         );
         out.println("</body>");
         out.println("</html>");
 
     }
-
 
     /**
      * Returns a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
