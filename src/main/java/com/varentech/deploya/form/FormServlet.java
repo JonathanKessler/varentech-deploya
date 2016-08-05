@@ -152,7 +152,7 @@ public class FormServlet extends HttpServlet {
             out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
         }
         out.println(
-                "<center> <a href=\"http://" + request.getServerName() + ":" + port + context_path + "/history.jsp\">Click to see history</a> </center>\n"
+                "<center> <a href=\"http://" + request.getServerName() + ":" + port + context_path + "/pages/history.jsp\">Click to see history</a> </center>\n"
         );
         out.println("</body>");
         out.println("</html>");
