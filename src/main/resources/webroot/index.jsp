@@ -9,9 +9,9 @@
     Varen Interns
   </p>
   <ul>
-    <li><a href="pages/login.jsp">login</a></li>
-    <li><a href="pages/form.jsp">form</a></li>
-    <li><a href="pages/history.jsp">history</a></li>
+    <li><a href="login.jsp">Login page</a></li>
+    <li><a href="form.jsp">Upload a file</a></li>
+    <li><a href="history.jsp">Browse the history table</a></li>
   </ul>
 </body>
 </html>
