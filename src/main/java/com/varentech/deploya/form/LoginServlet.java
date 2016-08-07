@@ -5,7 +5,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -30,9 +29,6 @@ public class LoginServlet extends HttpServlet {
         Config config = ConfigFactory.load();
         String port = config.getString("varentech.project.port_number");
         String context_path = config.getString("varentech.project.context_path");
-        //ResourceBundle resource = ResourceBundle.getBundle("config");
-        //String port = resource.getString("port_number");
-        //String context_path = resource.getString("context_path");
 
         //set the username as a session attribute
         String username = request.getParameter("username");
