@@ -3,7 +3,6 @@
 <%@ page import="com.varentech.deploya.util.ConnectionConfiguration" %>
 
 <!DOCTYPE html>
-<%@ page import="java.util.ResourceBundle" %>
 <%@ page import="com.typesafe.config.Config" %>
 <%@ page import="com.typesafe.config.ConfigFactory" %>
 
@@ -12,11 +11,6 @@
     String page_title = config1.getString("varentech.project.page_title");
     String context_path = config1.getString("varentech.project.context_path");
     String port_number = config1.getString("varentech.project.port_number");
-    //ResourceBundle resource = ResourceBundle.getBundle("config");
-    //String tab_name_history = resource.getString("tab_name_history");
-    //String page_title = resource.getString("page_title");
-    //String context_path = resource.getString("context_path");
-    //String port_number = resource.getString("port_number");
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
         return;
