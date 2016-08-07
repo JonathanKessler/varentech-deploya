@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <%@ page import = "java.util.ResourceBundle" %>
+<%@ page import="com.typesafe.config.Config" %>
+<%@ page import="com.typesafe.config.ConfigFactory" %>
 
-<% ResourceBundle resource = ResourceBundle.getBundle("config");
-    String tab_name_login=resource.getString("tab_name_login");
-    String page_title = resource.getString("page_title");
-    String context_path = resource.getString("context_path");
-    String port = resource.getString("port_number");
+<% Config config1 = ConfigFactory.load();
+    String tab_name_login = config1.getString("varentech.project.tab_name_login");
+    String page_title = config1.getString("varentech.project.page_title");
+    String context_path = config1.getString("varentech.project.context_path");
+    String port = config1.getString("varentech.project.port_number");
+    //ResourceBundle resource = ResourceBundle.getBundle("config");
+    //String tab_name_login=resource.getString("tab_name_login");
+    //String page_title = resource.getString("page_title");
+    //String context_path = resource.getString("context_path");
+    //String port = resource.getString("port_number");
 %>
 
 <html lang="en">
