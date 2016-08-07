@@ -10,7 +10,6 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -46,10 +45,6 @@ public class FormServlet extends HttpServlet {
         String default_directory = config.getString("varentech.project.default_directory");
         String context_path = config.getString("varentech.project.context_path");
         String port = config.getString("varentech.project.port_number");
-        //ResourceBundle resource = ResourceBundle.getBundle("config");
-        //String default_directory = resource.getString("default_directory");
-        //String context_path = resource.getString("context_path");
-        //String port = resource.getString("port_number");
 
         String file_name = null;
         String path_to_destination = null;
