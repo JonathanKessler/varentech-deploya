@@ -13,7 +13,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
 
@@ -36,10 +35,8 @@ public class ProcessFile {
      */
     public void executeArguments() {
 
-        //ResourceBundle resource = ResourceBundle.getBundle("config");
         Config config = ConfigFactory.load();
         int timeout = config.getInt("varentech.project.execute_timeout");
-        //int timeout = Integer.parseInt(resource.getString("execute_timeout"));
 
         ExecutorService service = Executors.newSingleThreadExecutor();
 
