@@ -8,7 +8,6 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.typesafe.config.Config;
@@ -39,18 +38,13 @@ public class Main {
     private static final String WEBROOT_INDEX = "/webroot/";
     private static Logger logg = LoggerFactory.getLogger(Main.class);
 
-
-
     public static void main(String[] args) {
         Config config = ConfigFactory.load();
         String path_to_DB = config.getString("varentech.project.path_to_database");
 
         if (args.length == 0) {
-            ResourceBundle resource = ResourceBundle.getBundle("config");
             int port = config.getInt("varentech.project.port_number");
-            //int port = Integer.valueOf(resource.getString("port_number"));
             String context_path = config.getString("varentech.project.context_path");
-            //String context_path = resource.getString("context_path");
             Main main = new Main(port,context_path);
             main.start();
             main.waitForInterrupt();
