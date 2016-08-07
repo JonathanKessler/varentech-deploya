@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.form.LoginServlet;
@@ -38,11 +40,17 @@ public class Main {
     private static Logger logg = LoggerFactory.getLogger(Main.class);
 
 
+
     public static void main(String[] args) {
+        Config config = ConfigFactory.load();
+        String path_to_DB = config.getString("varentech.project.path_to_database");
+
         if (args.length == 0) {
             ResourceBundle resource = ResourceBundle.getBundle("config");
-            int port = Integer.valueOf(resource.getString("port_number"));
-            String context_path = resource.getString("context_path");
+            int port = config.getInt("varentech.project.port_number");
+            //int port = Integer.valueOf(resource.getString("port_number"));
+            String context_path = config.getString("varentech.project.context_path");
+            //String context_path = resource.getString("context_path");
             Main main = new Main(port,context_path);
             main.start();
             main.waitForInterrupt();
@@ -229,7 +237,6 @@ public class Main {
         }
         return serverURI;
     }
-
 
     /**
      * Cause server to keep running until it receives a Interrupt.
