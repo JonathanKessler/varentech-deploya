@@ -17,7 +17,7 @@ public class SaveTempDirectory {
      *This method creates and saves all files to a temporary directory
      * Calls methods to unpack files, move files to destination directory, execute files, and find the hash of all files.
      */
-    void directory(String file_name) {
+    public void directory(String file_name) {
         Resource res = new Resource();
 
         try {
@@ -28,7 +28,7 @@ public class SaveTempDirectory {
             temp.mkdir();
             logg.debug("Temporary directory has been made: {}" , temp);
 
-            OutputStream outputStream = null;
+            OutputStream outputStream;
             outputStream = new FileOutputStream(temp + File.separator + file_name);
             IOUtils.copy(inputStream, outputStream);
             logg.debug("{} has been copied to the temporary directory.", file_name);
@@ -48,7 +48,7 @@ public class SaveTempDirectory {
             logg.debug("{} has been unpacked into the destination.", file_name);
 
             //execute jar/tar file and save output. Only execute if there was no error while unpacking
-            if (res.entriesDetail.getError()== "" || (res.entriesDetail.getError() != "" && res.entry.getUnpackArguments() == null)) {
+            if (res.entriesDetail.getError() == "" || (res.entriesDetail.getError() != "" && res.entry.getUnpackArguments() == null)) {
                 pro.executeArguments();
                 logg.debug("{} has been executed.", file_name);
             }
@@ -77,7 +77,7 @@ public class SaveTempDirectory {
 
                     try {
                         if (!file.isDirectory()) {
-                            InputStream inputStream = null;
+                            InputStream inputStream;
 
                             inputStream = new FileInputStream(file);
 
