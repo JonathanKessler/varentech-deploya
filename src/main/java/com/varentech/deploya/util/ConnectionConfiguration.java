@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.ResourceBundle;
 
 /**
  * This class manages a connection to the database.
@@ -23,8 +22,6 @@ public class ConnectionConfiguration {
 
     private static Config config = ConfigFactory.load();
     private static String databasePath = config.getString("varentech.project.path_to_database");
-    //private static ResourceBundle resource = ResourceBundle.getBundle("config");
-    //private static String databasePath = resource.getString("path_to_database");
 
     public static Connection getConnection(){
         Connection connection = null;
