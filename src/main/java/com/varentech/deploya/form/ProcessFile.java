@@ -1,12 +1,13 @@
 package com.varentech.deploya.form;
 
+
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 import com.varentech.deploya.entities.EntriesDetail;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,6 +16,9 @@ import java.io.InputStreamReader;
 import java.util.ResourceBundle;
 import java.util.concurrent.*;
 
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class manages the given Linux shell commands and prints the stdOutput and stdErr of both.
@@ -32,8 +36,10 @@ public class ProcessFile {
      */
     public void executeArguments() {
 
-        ResourceBundle resource = ResourceBundle.getBundle("config");
-        int timeout = Integer.parseInt(resource.getString("execute_timeout"));
+        //ResourceBundle resource = ResourceBundle.getBundle("config");
+        Config config = ConfigFactory.load();
+        int timeout = config.getInt("varentech.project.execute_timeout");
+        //int timeout = Integer.parseInt(resource.getString("execute_timeout"));
 
         ExecutorService service = Executors.newSingleThreadExecutor();
 
@@ -48,7 +54,7 @@ public class ProcessFile {
 
                         Process p = Runtime.getRuntime().exec(res.entry.getExecuteArguments());
                         BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                        String line = null;
+                        String line;
 
                         while ((line = in.readLine()) != null) {
                             output = output + line;
