@@ -24,6 +24,6 @@
   - page_title
   - context_path
   - execute_timeout (-1 if no timeout for executing the file)
-  - path_to_DB
+  - path_to_database
     
 
