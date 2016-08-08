@@ -240,14 +240,11 @@ public class Main {
 
     public static void printHelp() {
         System.out.println("Options: ");
-        System.out.println("\t --export-config {path/to/export/config.properties} \t to export the config file in the jar.");
-        System.out.println("\t -c {path/to/config/to/use/config.properties} \t to use a config other than the default config with the jar.");
-        System.out.println("Note:\t the external properties must be moved to the same working directory as the jar file and must be called \"config.properties\"");
+        System.out.println("\t --export-config {path/to/export/reference.conf} \t to export the config file in the jar.");
         System.out.println("\t -h or --help \t for help");
         System.out.println("Example: ");
         System.out.println("\t java -jar path/to/deploya.jar \t opens on port 8080 with context path of \"ProjectThunder\"");
-        System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/config.conf");
-        System.out.println("\t java -jar path/to/deploya.jar -c path/to/config/config.properties");
+        System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/reference.conf");
         System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
     }
 }
