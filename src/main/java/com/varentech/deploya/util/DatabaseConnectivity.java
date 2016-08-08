@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
 
@@ -24,8 +25,8 @@ public class DatabaseConnectivity {
         //Load our own config values from the default location
         //application.conf
         Config config = ConfigFactory.load();
+        logg.debug("Database name: " + config.getString("varentech.project.path_to_database"));
         String pathOfDataBase = config.getString("varentech.project.path_to_database");
-        logg.debug("Database name: " + pathOfDataBase);
         ConnectionConfiguration.setPathToDataBase(pathOfDataBase);
     }
 
@@ -57,37 +58,31 @@ public class DatabaseConnectivity {
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
         if (resultSet.next()){
             logg.debug("Entries table exists");
-            //check to see if all of columns exists in Entries table.
-            String tempColName;
-            resultSet = metaData.getColumns(null, null, "Entries", "time_stamp");
-            tempColName = "time_stamp";
-            if(resultSet.next()){logg.debug("time_stamp column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "username");
-            tempColName = "username";
-            if(resultSet.next()){logg.debug("username column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "file_name");
-            tempColName = "file_name";
-            if(resultSet.next()){logg.debug("file_name column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "path_to_local_file");
-            tempColName = "path_to_local_file";
-            if(resultSet.next()){logg.debug("path_to_local_file column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "path_to_destination");
-            tempColName = "path_to_destination";
-            if(resultSet.next()){logg.debug("path_to_destination column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "unpack_args");
-            tempColName = "unpack_args";
-            if(resultSet.next()){logg.debug("unpack_args column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "execute_args");
-            tempColName = "execute_args";
-            if(resultSet.next()){logg.debug("execute_args column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries", "archive");
-            tempColName = "archive";
-            if(resultSet.next()){logg.debug("archive column exists");}
-            else{
-                logg.error("Necessary column, " + tempColName + " does not exist in Entries table.");
-                logg.error("Program will exit with Error code 1.");
-                System.exit(1);
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+            if (columnCount == 0){
+                //TODO: Need to create the columns of the table.
             }
+            //check to see if all of columns exists in Entries table.
+            String tempColName = "id";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "time_stamp";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "username";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "file_name";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "path_to_local_file";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "path_to_destination";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "unpack_args";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "execute_args";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "archive";
+            columnCheck(hasColumn(resultSet, tempColName));
+
         }
         else{
             logg.debug("Entries table does not exist, creating Entries table...");
@@ -98,28 +93,24 @@ public class DatabaseConnectivity {
         resultSet = metaData.getTables(null, null, "Entries_Details", null);
         if(resultSet.next()){
             logg.debug("Entries_Details table exists");
-            //Need to check that each column exists in Entries_Details table
-            String tempColName;
-            resultSet = metaData.getColumns(null, null, "Entries_Details", "entries_id");
-            tempColName = "entries_id";
-            if(resultSet.next()){logg.debug("entries_id column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries_Details", "file_name");
-            tempColName = "file_name";
-            if(resultSet.next()){logg.debug("file_name column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries_Details", "hash_value");
-            tempColName = "hash_value";
-            if(resultSet.next()){logg.debug("hash_value column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries_Details", "output");
-            tempColName = "output";
-            if(resultSet.next()){logg.debug("output column column exists");}
-            resultSet = metaData.getColumns(null, null, "Entries_Details", "error");
-            tempColName = "error";
-            if (resultSet.next()){logg.debug("error column exists");}
-            else{
-                logg.error("Necessary column, " + tempColName + " does not exist in Entries_Details table.");
-                logg.error("Program will exit with Error code 1.");
-                System.exit(1);
+            ResultSetMetaData rsmd = resultSet.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+            if (columnCount == 0){
+                //TODO: Need to create the columns of the table.
             }
+            //Need to check that each column is properly named in Entries_Details table
+            String tempColName = "id";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "entries_id";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "file_name";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "hash_value";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "output";
+            columnCheck(hasColumn(resultSet, tempColName));
+            tempColName = "error";
+            columnCheck(hasColumn(resultSet, tempColName));
         }
         else{
             logg.debug("Entries_Details table does not exits, creating Entries_Details table...");
@@ -128,4 +119,25 @@ public class DatabaseConnectivity {
         }
     }
 
+    public static boolean hasColumn(ResultSet rs, String columnName) throws SQLException{
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columns = rsmd.getColumnCount();
+        for (int x = 1; x <= columns; x++) {
+            if (columnName.equals(rsmd.getColumnName(x))) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static void columnCheck(boolean check){
+        if(check == true){
+
+            return;
+        }
+        else{
+            logg.error("Column does not exist in this table!");
+            logg.error("System will exit with code 1.");
+            System.exit(1);
+        }
+    }
 }
