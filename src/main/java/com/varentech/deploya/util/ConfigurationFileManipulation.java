@@ -22,7 +22,6 @@ public class ConfigurationFileManipulation {
     }
 
     public void exportConfigFile() {
-        //TODO: Figure out how to get our internal config file
         InputStream inputStream = getClass().getResourceAsStream("/config.properties");
         BufferedReader input = new BufferedReader(new InputStreamReader((inputStream)));
         String line = null;
