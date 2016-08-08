@@ -51,10 +51,10 @@ public class Main {
             printHelp();
         } else if (args[0].equals("-h") || args[0].equals("--help")) {
             printHelp();
-        } else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".properties")) {
+        } else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".conf")) {
             ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
             fileManip.exportConfigFile();
-        } else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".properties")) {
+        } else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".conf")) {
             ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
             try {
                 fileManip.importConfigFile();
