@@ -41,7 +41,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
     } catch (SQLException e) {
       logg.error("Unable to create the table Entries.");
     }
-    logg.info("Successfully created Entries table.");
+    logg.debug("Successfully created Entries table.");
   }
 
   public void createEntriesDetailsTable() {
@@ -57,7 +57,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
                       "error        TEXT           )"
       );
       preparedStatement.executeUpdate();
-      logg.info("Successfully created the Entries_Details table.");
+      logg.debug("Successfully created the Entries_Details table.");
       preparedStatement.close();
       connection.close();
     } catch (SQLException e) {
