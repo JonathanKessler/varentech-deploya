@@ -1,8 +1,5 @@
 package com.varentech.deploya.util;
 
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
-import com.varentech.deploya.form.SendFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,29 +7,36 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- * This class manages a connection to the database.
+ * This class connects to the database.
  */
 public class ConnectionConfiguration {
 
-    private static Logger logg = LoggerFactory.getLogger(SendFile.class);
+    private static String pathToDataBase;
+
+    //setter
+    public static void setPathToDataBase(String path){
+        pathToDataBase = path;
+    }
+    //getter
+    public static String getPathToDataBase(){
+        return pathToDataBase;
+    }
+
     /**
-     * This method establishes a connection to a database, that can be configurable.
-     * @return Connection to the database, or an error if there was a problem connecting to it.
+     * This method establishes a connection to a database.
      */
-
-    private static Config config = ConfigFactory.load();
-    private static String databasePath = config.getString("varentech.project.path_to_database");
-
+    private static Logger logg = LoggerFactory.getLogger(ConnectionConfiguration.class);
     public static Connection getConnection(){
         Connection connection = null;
-        try{
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + databasePath );
 
-        }catch (Exception e){
-            e.printStackTrace();
+        try {
+            //Get the SQLite JDBC class.
+            Class.forName("org.sqlite.JDBC");
+            //connect to the database given by the path
+            connection = DriverManager.getConnection("jdbc:sqlite:" + getPathToDataBase());
+        } catch (Exception e){
+            logg.error("Exception while connecting to database: ", e);
         }
-        logg.debug("Successfully created and/or connected to the database.");
         return connection;
     }
 }
