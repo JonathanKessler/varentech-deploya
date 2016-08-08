@@ -24,8 +24,8 @@ public class DatabaseConnectivity {
         //Load our own config values from the default location
         //application.conf
         Config config = ConfigFactory.load();
-        logg.debug("Database name: " + config.getString("varentech.project.path_to_database"));
         String pathOfDataBase = config.getString("varentech.project.path_to_database");
+        logg.debug("Database name: " + pathOfDataBase);
         ConnectionConfiguration.setPathToDataBase(pathOfDataBase);
     }
 
