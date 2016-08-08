@@ -49,7 +49,7 @@ public class ConfigurationFileManipulation {
                 outputStream = new FileOutputStream(destination_file);
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.close();
-                logg.info("Successfully copied reference.conf to " + getPath());
+                logg.debug("Successfully copied reference.conf to " + getPath());
             } catch (FileNotFoundException e) {
                 logg.error("Exception while finding file to path: , " + e);
             } catch (IOException e) {
@@ -57,7 +57,7 @@ public class ConfigurationFileManipulation {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logg.error("Exception while exporting config: ", e);
         }
     }
 }
