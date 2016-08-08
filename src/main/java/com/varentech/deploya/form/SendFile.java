@@ -1,7 +1,8 @@
 package com.varentech.deploya.form;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import org.apache.commons.compress.utils.IOUtils;
-import org.apache.commons.fileupload.FileItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +19,20 @@ public class SendFile {
     /**
      * This method saves the file into the destination directory.
      */
-    void sendToDestination(FileItem fileItem, String file_name) {
+    public void sendToDestination(InputStream inputStream, String file_name) {
 
         Resource res = new Resource();
 
         try {
-            fileItem.write(new File(res.entry.getPathToDestination() + File.separator + file_name));
+            File destination_file = new File(res.entry.getPathToDestination() + File.separator + file_name);
+            OutputStream outputStream;
+            outputStream = new FileOutputStream(destination_file);
+            IOUtils.copy(inputStream, outputStream);
+            outputStream.close();
+
             logg.debug("Successfully sent file to destination");
-        } catch (Exception e) {
+
+        } catch (IOException e) {
             logg.error("Exception while sending file to destination: ", e);
         }
     }
@@ -33,15 +40,16 @@ public class SendFile {
     /**
      * This method saves the file to the default archive directory is the user checked the box for archive.
      */
-    void sendToArchive(String file_name) {
+    public void sendToArchive(InputStream inputStream) {
 
         Resource res = new Resource();
-        ResourceBundle reso = ResourceBundle.getBundle("config");
+        Config config = ConfigFactory.load();
+        //ResourceBundle reso = ResourceBundle.getBundle("config");
 
         try {
-            InputStream inputStream = new FileInputStream(res.entry.getPathToDestination() + File.separator + file_name);
-            File destination_file = new File(reso.getString("default_directory") + File.separator + res.entry.getFileName());
-            OutputStream outputStream = null;
+            File destination_file = new File(config.getString("varentech.project.default_directory") + File.separator + res.entry.getFileName());
+            //File destination_file = new File(reso.getString("default_directory") + File.separator + res.entry.getFileName());
+            OutputStream outputStream;
             outputStream = new FileOutputStream(destination_file);
             IOUtils.copy(inputStream, outputStream);
             outputStream.close();
@@ -54,4 +62,5 @@ public class SendFile {
             logg.error("Exception while sending file to archive destination: ", e);
         }
     }
+
 }
