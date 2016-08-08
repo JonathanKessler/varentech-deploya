@@ -149,10 +149,18 @@
             replaceUrlParam(window.location.toString(), 'colOrder4');
             replaceUrlParam(window.location.toString(), 'hide');
             table.columns().every(function () {
-                if (this.search() != "") {
-                    replaceUrlParam(window.location.toString(), 'col' + this.index(), this.search());
-                } else {
-                    replaceUrlParam(window.location.toString(), 'col' + this.index());
+                if(this.index()==1){
+                    if($('#date_range').val()!=""){
+                        replaceUrlParam(window.location.toString(), 'col' + this.index(), $('#date_range').val());
+                    }else{
+                        replaceUrlParam(window.location.toString(), 'col' + this.index());
+                    }
+                }else {
+                    if (this.search() != "") {
+                        replaceUrlParam(window.location.toString(), 'col' + this.index(), this.search());
+                    } else {
+                        replaceUrlParam(window.location.toString(), 'col' + this.index());
+                    }
                 }
             });
             if ($('#table1_filter input').val() != "") {
@@ -463,8 +471,6 @@
                         if ($(this).index() != 1) {
                             $(this).html('<input type="text" placeholder="Search ' + title + '" id="t1' + $(this).index() + '" />');
                         } else {
-                            //$(this).html('<div class="col-md-1"><input type="text" placeholder="To" id="to"/></div><div class="col-md-1"><input type="text" placeholder="From" id="from"/></div> ');
-                            //$(this).html('<input type="text" placeholder="Start Date" id="start"/><input type="text" placeholder="End Date" id="end"/> ');
                             $(this).html('<input type="text" placeholder="Select Dates" id="date_range" />');
                         }
                     });
@@ -477,31 +483,41 @@
                     });
 
                     $("#date_range").on('apply.daterangepicker', function(ev, picker) {
-                        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
+                        var date = picker.startDate.format('YYYY-MM-DDTHH:mm:ss') + ' to ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ss');
+                        $(this).val(date);
+                        replaceUrlParam(window.location.toString(), 'col1',date);
                         table.draw();
                     });
 
                     $("#date_range").on('cancel.daterangepicker', function(ev, picker) {
+                        replaceUrlParam(window.location.toString(), 'col1');
                         $(this).val('');
                         table.draw();
                     });
-                    // Date range script - END of the script
+
+                    var allowFilter = ['table1'];
 
                     $.fn.dataTableExt.afnFiltering.push(
-                            function( oSettings, aData, dataIndex ) {
+                            function( oSettings, aData, iDataIndex ) {
+
+                                if ( $.inArray( oSettings.nTable.getAttribute('id'), allowFilter ) == -1 )
+                                {
+                                    // if not table should be ignored
+                                    return true;
+                                }
+
 
                                 var grab_daterange = $("#date_range").val();
                                 var give_results_daterange = grab_daterange.split(" to ");
-                                var filterstart = give_results_daterange[0]; //where we want results to begin
-                                var filterend = give_results_daterange[1]; //where we want results to end
+                                var filterstart = give_results_daterange[0];
+                                var filterend = give_results_daterange[1];
 
-                                var iStartDateCol = 1;
+                                var iStartDateCol = 1; //using column 2 in this instance
                                 var iEndDateCol = 1;
                                 var tabledatestart = aData[iStartDateCol];
                                 var tabledateend= aData[iEndDateCol];
 
                                 if ( !filterstart && !filterend ) {
-
                                     return true;
                                 } else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "") {
                                     return true;
@@ -514,35 +530,6 @@
                             }
                     );
 
-
-                    /*
-                     var start = "";
-                     var end = "";
-                     $("#start").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
-                     start = $(this).val();
-                     dateRange(start, end);
-                     });
-                     $("#end").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
-                     end = $(this).val();
-                     dateRange(start, end);
-                     });
-                     function dateRange(start, end) {
-                     var startInt = start.substring(0, 4) + start.substring(5, 7) + start.substring(8);
-                     var endInt = end.substring(0, 4) + end.substring(5, 7) + end.substring(8);
-
-                     if (startInt > endInt && start != "" && end != "") {
-                     alert("Please select start date before end date.");
-                     } else {
-                     table.search(start);
-                     var startSearch = table.rows({search:"applied"}).data();
-                     alert(startSearch[startSearch.length-1].);
-
-                     table.rows().each(function () {
-                     if(this.data[0]>
-                     });
-                     }
-
-                     }*/
 
                     // Apply the column search
                     table.columns().every(function () {
@@ -577,12 +564,12 @@
                 </thead>
 
                 <tfoot>
-                    <th>ID:</th>
-                    <th>Entries Table ID:</th>
-                    <th>File Name:</th>
-                    <th>Hash Value:</th>
-                    <th>Output:</th>
-                    <th>Error:</th>
+                <th>ID:</th>
+                <th>Entries Table ID:</th>
+                <th>File Name:</th>
+                <th>Hash Value:</th>
+                <th>Output:</th>
+                <th>Error:</th>
                 </tfoot>
                 <tbody>
 
@@ -849,9 +836,9 @@
                     </tr>
                     </thead>
                     <tfoot>
-                        <th>File Name:</th>
-                        <th>Output:</th>
-                        <th>Error:</th>
+                    <th>File Name:</th>
+                    <th>Output:</th>
+                    <th>Error:</th>
                     </tfoot>
 
                     <tbody>
@@ -922,6 +909,8 @@
                         }
                     }
                 </script>
+
+
             </div>
         </div>
 
@@ -997,8 +986,13 @@
                 }
                 for (var i = 0; i < 8; i++) {
                     if (names.indexOf('col' + i) != -1) {
-                        document.getElementById("t1" + i).value = values[names.indexOf('col' + i)];
-                        table.column(i).search(values[names.indexOf('col' + i)]).draw();
+                        if(i==1){
+                            $('#date_range').val(values[names.indexOf('col' + i)]);
+                            table.draw();
+                        }else {
+                            document.getElementById("t1" + i).value = values[names.indexOf('col' + i)];
+                            table.column(i).search(values[names.indexOf('col' + i)]).draw();
+                        }
                     }
                 }
                 if (page != "") {
