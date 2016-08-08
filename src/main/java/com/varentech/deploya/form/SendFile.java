@@ -44,11 +44,9 @@ public class SendFile {
 
         Resource res = new Resource();
         Config config = ConfigFactory.load();
-        //ResourceBundle reso = ResourceBundle.getBundle("config");
 
         try {
             File destination_file = new File(config.getString("varentech.project.default_directory") + File.separator + res.entry.getFileName());
-            //File destination_file = new File(reso.getString("default_directory") + File.separator + res.entry.getFileName());
             OutputStream outputStream;
             outputStream = new FileOutputStream(destination_file);
             IOUtils.copy(inputStream, outputStream);
