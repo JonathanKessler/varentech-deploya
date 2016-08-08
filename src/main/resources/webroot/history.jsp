@@ -3,13 +3,14 @@
 <%@ page import="com.varentech.deploya.util.ConnectionConfiguration" %>
 
 <!DOCTYPE html>
-<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="com.typesafe.config.Config" %>
+<%@ page import="com.typesafe.config.ConfigFactory" %>
 
-<% ResourceBundle resource = ResourceBundle.getBundle("config");
-    String tab_name_history = resource.getString("tab_name_history");
-    String page_title = resource.getString("page_title");
-    String context_path = resource.getString("context_path");
-    String port_number = resource.getString("port_number");
+<% Config config1 = ConfigFactory.load();
+    String tab_name_history = config1.getString("varentech.project.tab_name_history");
+    String page_title = config1.getString("varentech.project.page_title");
+    String context_path = config1.getString("varentech.project.context_path");
+    String port_number = config1.getString("varentech.project.port_number");
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
         return;
@@ -35,6 +36,10 @@
 
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <script src="http://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script src="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css">
 
 
 </head>
@@ -120,12 +125,12 @@
             table3.search("").draw();
             table4.search("").draw();
             table5.search("").draw();
-            for(var i=0; i<5;i++){
+            for (var i = 0; i < 5; i++) {
                 table2.columns(i).search("", true).draw();
-                document.getElementById("t2" + i).value="";
-                if(i<3){
+                document.getElementById("t2" + i).value = "";
+                if (i < 3) {
                     table5.columns(i).search("", true).draw();
-                    document.getElementById("t5" + i).value="";
+                    document.getElementById("t5" + i).value = "";
                 }
             }
             $('#toggle-event').bootstrapToggle('off');
@@ -459,52 +464,100 @@
                             $(this).html('<input type="text" placeholder="Search ' + title + '" id="t1' + $(this).index() + '" />');
                         } else {
                             //$(this).html('<div class="col-md-1"><input type="text" placeholder="To" id="to"/></div><div class="col-md-1"><input type="text" placeholder="From" id="from"/></div> ');
-                            $(this).html('<input type="text" placeholder="Start Date" id="start"/><input type="text" placeholder="End Date" id="end"/> ');
+                            //$(this).html('<input type="text" placeholder="Start Date" id="start"/><input type="text" placeholder="End Date" id="end"/> ');
+                            $(this).html('<input type="text" placeholder="Select Dates" id="date_range" />');
                         }
                     });
-                    var start = "";
-                    var end = "";
-                    $("#start").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
-                        start = $(this).val();
-                        dateRange(start, end);
+
+                    $("#date_range").daterangepicker({
+                        autoUpdateInput: false,
+                        locale: {
+                            "cancelLabel": "Clear"
+                        }
                     });
-                    $("#end").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
-                        end = $(this).val();
-                        dateRange(start, end);
+
+                    $("#date_range").on('apply.daterangepicker', function(ev, picker) {
+                        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' to ' + picker.endDate.format('YYYY-MM-DD'));
+                        table.draw();
                     });
-                    function dateRange(start, end) {
-                        if (start != "" && end != "") {
-                            var startInt = start.substring(0, 4) + start.substring(5, 7) + start.substring(8);
-                            var endInt = end.substring(0, 4) + end.substring(5, 7) + end.substring(8);
-                            if(startInt>endInt){
-                                alert("Please select start date before end date.");
-                            }else{
-                                /*var regex="";
-                                 for(var i=0; i<start.length; i++){
-                                 if(start[i]==end[i] && start[i]!='-'){
-                                 regex+=start[i];
-                                 }else if(start[i]==end[i] && start[i]=='-'){
-                                 regex+='-';
-                                 }else{
-                                 regex
-                                 }
-                                 }
-                                 alert(regex);*/
+
+                    $("#date_range").on('cancel.daterangepicker', function(ev, picker) {
+                        $(this).val('');
+                        table.draw();
+                    });
+                    // Date range script - END of the script
+
+                    $.fn.dataTableExt.afnFiltering.push(
+                            function( oSettings, aData, dataIndex ) {
+
+                                var grab_daterange = $("#date_range").val();
+                                var give_results_daterange = grab_daterange.split(" to ");
+                                var filterstart = give_results_daterange[0]; //where we want results to begin
+                                var filterend = give_results_daterange[1]; //where we want results to end
+
+                                var iStartDateCol = 1;
+                                var iEndDateCol = 1;
+                                var tabledatestart = aData[iStartDateCol];
+                                var tabledateend= aData[iEndDateCol];
+
+                                if ( !filterstart && !filterend ) {
+
+                                    return true;
+                                } else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "") {
+                                    return true;
+                                } else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isAfter(tabledatestart)) && filterstart === "") {
+                                    return true;
+                                } else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && (moment(filterend).isSame(tabledateend) || moment(filterend).isAfter(tabledateend))) {
+                                    return true;
+                                }
+                                return false;
                             }
-                        }
-                    }
+                    );
+
+
+                    /*
+                     var start = "";
+                     var end = "";
+                     $("#start").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
+                     start = $(this).val();
+                     dateRange(start, end);
+                     });
+                     $("#end").datepicker({dateFormat: 'yy-mm-dd'}).on("change", function () {
+                     end = $(this).val();
+                     dateRange(start, end);
+                     });
+                     function dateRange(start, end) {
+                     var startInt = start.substring(0, 4) + start.substring(5, 7) + start.substring(8);
+                     var endInt = end.substring(0, 4) + end.substring(5, 7) + end.substring(8);
+
+                     if (startInt > endInt && start != "" && end != "") {
+                     alert("Please select start date before end date.");
+                     } else {
+                     table.search(start);
+                     var startSearch = table.rows({search:"applied"}).data();
+                     alert(startSearch[startSearch.length-1].);
+
+                     table.rows().each(function () {
+                     if(this.data[0]>
+                     });
+                     }
+
+                     }*/
+
                     // Apply the column search
                     table.columns().every(function () {
                         var that = this;
-                        $('input', this.footer()).on('keyup change', function () {
-                            if (that.search() !== this.value) {
-                                replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
-                                that.search(this.value).draw();
-                                if (that.search() == "") {
-                                    replaceUrlParam(window.location.toString(), 'col' + that.index());
+                        if (that.index() != 1) {
+                            $('input', this.footer()).on('keyup change', function () {
+                                if (that.search() !== this.value) {
+                                    replaceUrlParam(window.location.toString(), 'col' + that.index(), this.value);
+                                    that.search(this.value).draw();
+                                    if (that.search() == "") {
+                                        replaceUrlParam(window.location.toString(), 'col' + that.index());
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     });
                 });
             </script>
@@ -524,12 +577,12 @@
                 </thead>
 
                 <tfoot>
-                <th>ID:</th>
-                <th>Entries Table ID:</th>
-                <th>File Name:</th>
-                <th>Hash Value:</th>
-                <th>Output:</th>
-                <th>Error:</th>
+                    <th>ID:</th>
+                    <th>Entries Table ID:</th>
+                    <th>File Name:</th>
+                    <th>Hash Value:</th>
+                    <th>Output:</th>
+                    <th>Error:</th>
                 </tfoot>
                 <tbody>
 
@@ -796,9 +849,9 @@
                     </tr>
                     </thead>
                     <tfoot>
-                    <th>File Name:</th>
-                    <th>Output:</th>
-                    <th>Error:</th>
+                        <th>File Name:</th>
+                        <th>Output:</th>
+                        <th>Error:</th>
                     </tfoot>
 
                     <tbody>
@@ -858,19 +911,17 @@
                         replaceUrlParam(window.location.toString(), 'hide', $('#toggle-event').prop('checked'));
                         hideUnchanged();
                     });
-                    function hideUnchanged(){
+                    function hideUnchanged() {
                         var state = $('#toggle-event').prop('checked');
-                        for(var i = 0; i<unchange.length; i++) {
+                        for (var i = 0; i < unchange.length; i++) {
                             if (state == true) {
-                                unchange[i].style.display='none';
+                                unchange[i].style.display = 'none';
                             } else {
-                                unchange[i].style.display='';
+                                unchange[i].style.display = '';
                             }
                         }
                     }
                 </script>
-
-
             </div>
         </div>
 
@@ -1022,9 +1073,9 @@
                     var colNumber = colOrder.substring(0, split);
                     var col = colOrder.substring(split + 1).toString();
                 }
-                if(hide=='true'){
+                if (hide == 'true') {
                     $('#toggle-event').bootstrapToggle('on');
-                }else{
+                } else {
                     $('#toggle-event').bootstrapToggle('off');
                 }
                 hideUnchanged();

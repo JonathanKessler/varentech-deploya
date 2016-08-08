@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 
-<%@ page import ="java.util.ResourceBundle"%>
-<% ResourceBundle resource = ResourceBundle.getBundle("config");
-    String tab_name_form=resource.getString("tab_name_form");
-    String page_title = resource.getString("page_title");
-    String context_path = resource.getString("context_path");
-    String port = resource.getString("port_number");
+<%@ page import="com.typesafe.config.Config" %>
+<%@ page import="com.typesafe.config.ConfigFactory" %>
+<% Config config1 = ConfigFactory.load();
+    String tab_name_form = config1.getString("varentech.project.tab_name_form");
+    String page_title = config1.getString("varentech.project.page_title");
+    String context_path = config1.getString("varentech.project.context_path");
+    String port = config1.getString("varentech.project.port_number");
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/login.jsp");
         return;

@@ -1,5 +1,7 @@
 package com.varentech.deploya.form;
 
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
 import javax.servlet.ServletException;
@@ -8,7 +10,6 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -40,24 +41,24 @@ public class FormServlet extends HttpServlet {
 
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         SendFile send = new SendFile();
-        ResourceBundle resource = ResourceBundle.getBundle("config");
-        String default_directory = resource.getString("default_directory");
-        String context_path = resource.getString("context_path");
-        String port = resource.getString("port_number");
+        Config config = ConfigFactory.load();
+        String default_directory = config.getString("varentech.project.default_directory");
+        String context_path = config.getString("varentech.project.context_path");
+        String port = config.getString("varentech.project.port_number");
 
         String file_name = null;
         String path_to_destination = null;
         String execute_args = null;
         String unpack_args = null;
         String archive = null;
-        FileItem fileItem = null;
+        FileItem fileItem;
         InputStream fileInputStream = null;
 
         //get all parameters from the form
         try {
-            List<FileItem> multiparts = null;
+            List<FileItem> multiparts;
             multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-            String inputName = null;
+            String inputName;
             for (FileItem item : multiparts) {
 
                 //gets file item from form

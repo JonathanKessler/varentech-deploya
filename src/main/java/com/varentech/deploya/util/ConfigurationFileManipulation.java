@@ -9,18 +9,19 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
+
 public class ConfigurationFileManipulation {
     static Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
     String path;
-    public ConfigurationFileManipulation(String path){
+    public ConfigurationFileManipulation(String path) {
         this.path = path;
     }
 
-    public String getPath(){
+    public String getPath() {
         return path;
     }
 
-    public void exportConfigFile(){
+    public void exportConfigFile() {
         //TODO: Figure out how to get our internal config file
         InputStream inputStream = getClass().getResourceAsStream("/config.properties");
         BufferedReader input = new BufferedReader(new InputStreamReader((inputStream)));
@@ -36,44 +37,42 @@ public class ConfigurationFileManipulation {
             File exportedPropertiesFile = new File(path);
             //exportedPropertiesFile.createNewFile();
 
+
             String text = Resources.toString(url, Charsets.UTF_8);
             System.out.println(text);
 
             //Copy the contents of the internalConfig to the desired properties file.
             //Files.copy(inputStream, exportedPropertiesFile.toPath());
 
-            try{
+            try {
                 File destination_file = new File(path);
-                OutputStream outputStream = null;
+                OutputStream outputStream;
                 outputStream = new FileOutputStream(destination_file);
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.close();
                 logg.info("Successfully copied config.properties to " + getPath());
-            }
-            catch (FileNotFoundException e){
+            } catch (FileNotFoundException e) {
                 logg.error("Exception while finding file to path: , " + e);
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 logg.error("Exception while sending file to path: , " + e);
             }
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void importConfigFile() throws IOException {
         StringBuffer output = new StringBuffer();
-        logg.info("Helo from importConfigFile method");
+        Process p;
         try {
-
-            Runtime rt = Runtime.getRuntime();
-            Process p = rt.exec("jar -uf " + getPath());
-            
-        }catch (Exception e){
+            p = Runtime.getRuntime().exec("jar -uf " + getPath());
+            p.waitFor();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        } catch (Exception e) {
             logg.error("Exception thrown while trying jar -uf " + getPath());
         }
         logg.info(output.toString());
     }
 }
+
