@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ResourceBundle;
 
 /**
  * This class contains methods to send the file to the destination directory and archive directory (if applicable).
