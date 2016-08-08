@@ -54,13 +54,6 @@ public class Main {
         } else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".conf")) {
             ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
             fileManip.exportConfigFile();
-        } else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".conf")) {
-            ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
-            try {
-                fileManip.importConfigFile();
-            } catch (IOException e) {
-                logg.error("Exception while importing config file: ", e);
-            }
         } else {
             System.out.println("Illegal Expression(s) given.");
             printHelp();
