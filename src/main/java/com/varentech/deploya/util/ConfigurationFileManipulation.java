@@ -22,7 +22,7 @@ public class ConfigurationFileManipulation {
     }
 
     public void exportConfigFile() {
-        InputStream inputStream = getClass().getResourceAsStream("/config.properties");
+        InputStream inputStream = getClass().getResourceAsStream("/reference.conf");
         BufferedReader input = new BufferedReader(new InputStreamReader((inputStream)));
         String line = null;
 
@@ -30,7 +30,7 @@ public class ConfigurationFileManipulation {
         try {
 
             //Getting the default .properties file as a File object.
-            URL url = Resources.getResource("config.properties");
+            URL url = Resources.getResource("reference.conf");
             File internalConfig = new File(url.getPath());
 
             File exportedPropertiesFile = new File(path);
@@ -49,7 +49,7 @@ public class ConfigurationFileManipulation {
                 outputStream = new FileOutputStream(destination_file);
                 IOUtils.copy(inputStream, outputStream);
                 outputStream.close();
-                logg.info("Successfully copied config.properties to " + getPath());
+                logg.info("Successfully copied reference.conf to " + getPath());
             } catch (FileNotFoundException e) {
                 logg.error("Exception while finding file to path: , " + e);
             } catch (IOException e) {
@@ -59,19 +59,6 @@ public class ConfigurationFileManipulation {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void importConfigFile() throws IOException {
-        StringBuffer output = new StringBuffer();
-        Process p;
-        try {
-            p = Runtime.getRuntime().exec("jar -uf " + getPath());
-            p.waitFor();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        } catch (Exception e) {
-            logg.error("Exception thrown while trying jar -uf " + getPath());
-        }
-        logg.info(output.toString());
     }
 }
 
