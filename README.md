@@ -15,7 +15,7 @@
   
   
   *The user can override log level using logback and slf4j.*
-  *The configuration file can be overriden as well. To update this file, create a application.conf file and add updated parameters.*
+  *The configuration file can be overriden as well. To update this file, create a resource.conf file and add updated parameters.*
   - port_number
   - default_directory
   - tab_name_form
