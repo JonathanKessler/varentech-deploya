@@ -243,7 +243,7 @@ public class Main {
         System.out.println("\t --export-config {path/to/export/reference.conf} \t to export the config file in the jar.");
         System.out.println("\t -h or --help \t for help");
         System.out.println("Example: ");
-        System.out.println("\t java -jar path/to/deploya.jar \t opens on port 8080 with context path of \"ProjectThunder\"");
+        System.out.println("\t java -jar path/to/deploya.jar");
         System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/reference.conf");
         System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
     }
