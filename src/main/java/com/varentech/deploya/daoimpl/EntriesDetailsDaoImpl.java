@@ -20,6 +20,51 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
      * This table holds data from user input.
      */
      Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
+     
+     
+  public void createEntriesTable(){
+      Connection connection = ConnectionConfiguration.getConnection();
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement(
+              "CREATE TABLE Entries " +
+                      "(ID INT PRIMARY KEY NOT NULL, " +
+                      "time_stamp           TEXT    NOT NULL," +
+                      "username             TEXT    NOT NULL," +
+                      "file_name            TEXT    NOT NULL," +
+                      "path_to_local_file   TEXT    NOT NULL," +
+                      "path_to_destination  TEXT    NOT NULL," +
+                      "unpack_args          TEXT    NOT NULL," +
+                      "execute_args         TEXT    NOT NULL," +
+                      "archive              TEXT            )"
+      );
+      preparedStatement.executeUpdate();
+    } catch (SQLException e) {
+      logg.error("Unable to create the table Entries.");
+    }
+    logg.info("Successfully created Entries table.");
+  }
+
+  public void createEntriesDetailsTable() {
+    Connection connection = ConnectionConfiguration.getConnection();
+    try {
+      PreparedStatement preparedStatement = connection.prepareStatement(
+              "CREATE TABLE Entries_Details " +
+                      "(ID INT PRIMARY KEY NOT NULL," +
+                      "entries_id   INT    NOT NULL," +
+                      "file_name    TEXT   NOT NULL," +
+                      "hash_value   TEXT   NOT NULL," +
+                      "output       TEXT           ," +
+                      "error        TEXT           )"
+      );
+      preparedStatement.executeUpdate();
+      logg.info("Successfully created the Entries_Details table.");
+      preparedStatement.close();
+      connection.close();
+    } catch (SQLException e) {
+      logg.error("Unable to create Entries_Details table.");
+    }
+  }
+  
   public void insertIntoEntries() {
 
     Resource res = new Resource();
