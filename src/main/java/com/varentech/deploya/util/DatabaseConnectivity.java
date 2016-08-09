@@ -12,25 +12,25 @@ import java.sql.*;
 
 public class DatabaseConnectivity {
 
-    static Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
+    private final static Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
 
     /**
      *
      */
-    public static void findDataBase(){
+    public static void findDataBase() {
         //Load the given config values given from the arguments
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
         logg.debug("Loading values from the config file");
         String pathOfDataBase = config.getString("varentech.project.path_to_database");
-        try{
-            logg.info("Loading database path given at " + pathOfDataBase);
+        try {
+            logg.debug("Loading database path given at " + pathOfDataBase);
             //setting path of database to ConnectionConfiguration
             ConnectionConfiguration.setPathToDataBase(pathOfDataBase);
             //need to check to see if the tables exist
             databaseCheck();
         }
-        catch(Exception e){
+        catch(Exception e) {
             logg.error("File not found at " + pathOfDataBase);
             logg.debug("Using default values to create a database.");
         }
@@ -40,11 +40,11 @@ public class DatabaseConnectivity {
         DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        if (resultSet.next()){
+        if (resultSet.next()) {
             logg.debug("Entries table exists");
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
-            if (columnCount == 0){
+            if (columnCount == 0) {
                 EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
                 dao.insertColumnsIntoEntries();
             }
@@ -70,18 +70,18 @@ public class DatabaseConnectivity {
                 columnCheck(hasColumn("Entries",tempColName));
             }
         }
-        else{
+        else {
             logg.debug("Entries table does not exist, creating Entries table...");
             EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
             impl.createEntriesTable();
         }
         //check for Entries_Details table
         resultSet = metaData.getTables(null, null, "Entries_Details", null);
-        if(resultSet.next()){
+        if(resultSet.next()) {
             logg.debug("Entries_Details table exists");
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
-            if (columnCount == 0){
+            if (columnCount == 0) {
                 EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
                 dao.insertColumnsIntoEntriesDetails();
             }
@@ -101,7 +101,7 @@ public class DatabaseConnectivity {
                 columnCheck(hasColumn("Entries_Details",tempColName));
             }
         }
-        else{
+        else {
             logg.debug("Entries_Details table does not exits, creating Entries_Details table...");
             EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
             impl.createEntriesDetailsTable();
@@ -109,7 +109,7 @@ public class DatabaseConnectivity {
         resultSet.close();
     }
 
-    public static boolean hasColumn(String table, String columnName) throws SQLException{
+    public static boolean hasColumn (String table, String columnName) throws SQLException {
 
         Connection connection = ConnectionConfiguration.getConnection();
         Statement statement = connection.createStatement();
@@ -129,12 +129,12 @@ public class DatabaseConnectivity {
         connection.close();
         return false;
     }
-    public static void columnCheck(boolean check){
-        if(check == true){
+    public static void columnCheck (boolean check) {
+        if (check == true) {
 
             return;
         }
-        else{
+        else {
             logg.error("Column does not exist in this table!");
             logg.error("System will exit with code 1.");
             System.exit(1);
