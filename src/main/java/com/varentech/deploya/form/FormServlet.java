@@ -41,7 +41,10 @@ public class FormServlet extends HttpServlet {
 
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         SendFile send = new SendFile();
-        Config config = ConfigFactory.load();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
         String default_directory = config.getString("varentech.project.default_directory");
         String context_path = config.getString("varentech.project.context_path");
         String port = config.getString("varentech.project.port_number");

@@ -35,7 +35,9 @@ public class ProcessFile {
      */
     public void executeArguments() {
 
-        Config config = ConfigFactory.load();
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
         int timeout = config.getInt("varentech.project.execute_timeout");
 
         ExecutorService service = Executors.newSingleThreadExecutor();
