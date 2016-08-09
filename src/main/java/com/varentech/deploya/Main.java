@@ -8,6 +8,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.typesafe.config.ConfigOrigin;
+import com.varentech.deploya.util.DatabaseConnectivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.typesafe.config.Config;
@@ -39,7 +42,15 @@ public class Main {
     private static Logger logg = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        Config config = ConfigFactory.load();
+        DatabaseConnectivity db = new DatabaseConnectivity();
+        db.findDataBase();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+        ConfigOrigin origin = config.origin();
+        logg.debug("Loaded " + origin);
+
+
         String path_to_DB = config.getString("varentech.project.path_to_database");
 
         if (args.length == 0) {

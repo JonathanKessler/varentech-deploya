@@ -42,7 +42,9 @@ public class SendFile {
     public void sendToArchive(InputStream inputStream) {
 
         Resource res = new Resource();
-        Config config = ConfigFactory.load();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
 
         try {
             File destination_file = new File(config.getString("varentech.project.default_directory") + File.separator + res.entry.getFileName());
