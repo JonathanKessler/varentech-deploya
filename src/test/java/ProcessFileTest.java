@@ -67,6 +67,11 @@ public class ProcessFileTest {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); //format the date to have no spaces
         String formatted_time = formatter.format(date);
+        
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
+        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
 
         res.entry.setPathToDestination("path");
         res.entry.setExecuteArguments("execute");
