@@ -106,6 +106,7 @@ public class DatabaseConnectivity {
             EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
             impl.createEntriesDetailsTable();
         }
+        resultSet.close();
     }
 
     public static boolean hasColumn(String table, String columnName) throws SQLException{
