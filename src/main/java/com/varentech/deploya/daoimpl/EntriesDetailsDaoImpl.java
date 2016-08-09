@@ -79,7 +79,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
       }
   }
 
-  public void insertColoumnsIntoEntriesDetails(){
+  public void insertColumnsIntoEntriesDetails(){
       try{
           Connection connection = ConnectionConfiguration.getConnection();
           //Drops the given table, and calls createEntriesDetailsTable with appropriate columns
