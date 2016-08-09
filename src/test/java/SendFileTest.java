@@ -15,9 +15,6 @@ import static org.junit.Assert.*;
 
 public class SendFileTest {
 
-    // @Rule
-    // public TemporaryFolder testFolder = new TemporaryFolder();
-
     @Before
     public void setUp() throws Exception {
 
