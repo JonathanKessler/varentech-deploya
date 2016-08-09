@@ -64,7 +64,34 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
       logg.error("Unable to create Entries_Details table.");
     }
   }
-  
+
+  public void insertColumnsIntoEntries() {
+      try {
+          Connection connection = ConnectionConfiguration.getConnection();
+          //Drops the given table, and calls createEntriesTable with appropriate columns
+          PreparedStatement preparedStatement = connection.prepareStatement(
+                  "DROP TABLE Entries;"
+          );
+          createEntriesTable();
+      }
+      catch (SQLException s){
+          logg.error(s.getSQLState());
+      }
+  }
+
+  public void insertColoumnsIntoEntriesDetails(){
+      try{
+          Connection connection = ConnectionConfiguration.getConnection();
+          //Drops the given table, and calls createEntriesDetailsTable with appropriate columns
+          PreparedStatement preparedStatement = connection.prepareStatement(
+                  "DROP TABLE Entries_Details;"
+          );
+      }
+      catch (SQLException s){
+          logg.error(s.getSQLState());
+      }
+  }
+
   public void insertIntoEntries() {
 
     Resource res = new Resource();
