@@ -15,7 +15,7 @@ public class EntriesDetail {
 
   //Constructor
   public EntriesDetail(
-          String fileName, String hashValue, String output) {
+          String fileName, String hashValue, String output, String error) {
     this.fileName = fileName;
     this.hashValue = hashValue;
     this.output = output;

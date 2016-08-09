@@ -8,6 +8,9 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.typesafe.config.ConfigOrigin;
+import com.varentech.deploya.util.DatabaseConnectivity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.typesafe.config.Config;
@@ -39,7 +42,15 @@ public class Main {
     private static Logger logg = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
-        Config config = ConfigFactory.load();
+        DatabaseConnectivity db = new DatabaseConnectivity();
+        db.findDataBase();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+        ConfigOrigin origin = config.origin();
+        logg.debug("Loaded " + origin);
+
+
         String path_to_DB = config.getString("varentech.project.path_to_database");
 
         if (args.length == 0) {
@@ -51,16 +62,9 @@ public class Main {
             printHelp();
         } else if (args[0].equals("-h") || args[0].equals("--help")) {
             printHelp();
-        } else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".properties")) {
+        } else if (args[0].equals("--export-config") && args.length == 2 && args[1].contains(".conf")) {
             ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
             fileManip.exportConfigFile();
-        } else if (args[0].equals("-c") && args.length == 2 && args[1].contains(".properties")) {
-            ConfigurationFileManipulation fileManip = new ConfigurationFileManipulation(args[1]);
-            try {
-                fileManip.importConfigFile();
-            } catch (IOException e) {
-                logg.error("Exception while importing config file: ", e);
-            }
         } else {
             System.out.println("Illegal Expression(s) given.");
             printHelp();
@@ -247,14 +251,11 @@ public class Main {
 
     public static void printHelp() {
         System.out.println("Options: ");
-        System.out.println("\t --export-config {path/to/export/config.properties} \t to export the config file in the jar.");
-        System.out.println("\t -c {path/to/config/to/use/config.properties} \t to use a config other than the default config with the jar.");
-        System.out.println("Note:\t the external properties must be moved to the same working directory as the jar file and must be called \"config.properties\"");
+        System.out.println("\t --export-config {path/to/export/reference.conf} \t to export the config file in the jar.");
         System.out.println("\t -h or --help \t for help");
         System.out.println("Example: ");
-        System.out.println("\t java -jar path/to/deploya.jar \t opens on port 8080 with context path of \"ProjectThunder\"");
-        System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/config.conf");
-        System.out.println("\t java -jar path/to/deploya.jar -c path/to/config/config.properties");
+        System.out.println("\t java -jar path/to/deploya.jar");
+        System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/reference.conf");
         System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
     }
 }

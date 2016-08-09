@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 
 import com.typesafe.config.Config;
@@ -26,7 +27,10 @@ public class LoginServlet extends HttpServlet {
         response.setContentType("text/html");
         logg.debug("Successfully connected to login servlet.");
         response.setStatus(HttpServletResponse.SC_OK);
-        Config config = ConfigFactory.load();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
         String port = config.getString("varentech.project.port_number");
         String context_path = config.getString("varentech.project.context_path");
 
