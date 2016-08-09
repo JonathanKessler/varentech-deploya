@@ -25,8 +25,8 @@ public class ConnectionConfiguration {
     /**
      * This method establishes a connection to a database.
      */
-    private static Logger logg = LoggerFactory.getLogger(ConnectionConfiguration.class);
-    public static Connection getConnection(){
+    private final static Logger logg = LoggerFactory.getLogger(ConnectionConfiguration.class);
+    public static Connection getConnection() {
         Connection connection = null;
 
         try {
@@ -34,7 +34,7 @@ public class ConnectionConfiguration {
             Class.forName("org.sqlite.JDBC");
             //connect to the database given by the path
             connection = DriverManager.getConnection("jdbc:sqlite:" + getPathToDataBase());
-        } catch (Exception e){
+        } catch (Exception e) {
             logg.error("Exception while connecting to database: ", e);
         }
         return connection;
