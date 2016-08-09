@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
 
 public class SaveTempDirectoryTest {
 
-   /* @Test
+   @Test
     public void directoryTest() throws IOException {
         Resource res = new Resource();
         SaveTempDirectory saveTempDirectory = new SaveTempDirectory();
@@ -42,7 +42,7 @@ public class SaveTempDirectoryTest {
         assertEquals(3, tempDir.list().length);
 
     }
-*/
+
     @Test
     public void moveFilesTest() throws IOException {
         SaveTempDirectory saveTempDirectory = new SaveTempDirectory();
