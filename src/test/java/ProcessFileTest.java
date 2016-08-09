@@ -34,7 +34,7 @@ public class ProcessFileTest {
         assertEquals(res.entriesDetail.getError(), "");
     }
 
-   /* @Test
+    @Test
     public void unpackTest() throws IOException {
         ProcessFile processFile = new ProcessFile();
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
@@ -118,6 +118,5 @@ public class ProcessFileTest {
         statement.close();
         connection.close();
 
-    }*/
-
+    }
 }
