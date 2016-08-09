@@ -5,8 +5,10 @@
 <!DOCTYPE html>
 <%@ page import="com.typesafe.config.Config" %>
 <%@ page import="com.typesafe.config.ConfigFactory" %>
+<%@ page import="java.io.File" %>
 
-<% Config config1 = ConfigFactory.load();
+<% Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+    Config config1 = ConfigFactory.load(fileConf);
     String tab_name_history = config1.getString("varentech.project.tab_name_history");
     String page_title = config1.getString("varentech.project.page_title");
     String context_path = config1.getString("varentech.project.context_path");
