@@ -99,7 +99,7 @@ public class DatabaseConnectivity {
             int columnCount = rsmd.getColumnCount();
             if (columnCount == 0){
                 EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
-                dao.insertColoumnsIntoEntriesDetails();
+                dao.insertColumnsIntoEntriesDetails();
             }
             else {
                 //Need to check that each column is properly named in Entries_Details table
