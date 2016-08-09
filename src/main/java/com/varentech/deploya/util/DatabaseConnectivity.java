@@ -61,28 +61,30 @@ public class DatabaseConnectivity {
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
             if (columnCount == 0){
-                //TODO: Need to create the columns of the table.
+                EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
+                dao.insertColumnsIntoEntries();
             }
-            //check to see if all of columns exists in Entries table.
-            String tempColName = "id";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "time_stamp";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "username";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "file_name";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "path_to_local_file";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "path_to_destination";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "unpack_args";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "execute_args";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "archive";
-            columnCheck(hasColumn(resultSet, tempColName));
-
+            else {
+                //check to see if all of columns exists in Entries table.
+                String tempColName = "id";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "time_stamp";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "username";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "file_name";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "path_to_local_file";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "path_to_destination";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "unpack_args";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "execute_args";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "archive";
+                columnCheck(hasColumn(resultSet, tempColName));
+            }
         }
         else{
             logg.debug("Entries table does not exist, creating Entries table...");
@@ -96,21 +98,24 @@ public class DatabaseConnectivity {
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
             if (columnCount == 0){
-                //TODO: Need to create the columns of the table.
+                EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
+                dao.insertColoumnsIntoEntriesDetails();
             }
-            //Need to check that each column is properly named in Entries_Details table
-            String tempColName = "id";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "entries_id";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "file_name";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "hash_value";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "output";
-            columnCheck(hasColumn(resultSet, tempColName));
-            tempColName = "error";
-            columnCheck(hasColumn(resultSet, tempColName));
+            else {
+                //Need to check that each column is properly named in Entries_Details table
+                String tempColName = "id";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "entries_id";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "file_name";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "hash_value";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "output";
+                columnCheck(hasColumn(resultSet, tempColName));
+                tempColName = "error";
+                columnCheck(hasColumn(resultSet, tempColName));
+            }
         }
         else{
             logg.debug("Entries_Details table does not exits, creating Entries_Details table...");
