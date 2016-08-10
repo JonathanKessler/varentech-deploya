@@ -68,21 +68,6 @@ public class EntriesDetailsDaoImplTest {
         }
     }
 
-   /* @Test
-    public void insertColumnsIntoEntriesTest() throws SQLException {
-        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
-        Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
-
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
-        //check to see if Entries table exists.
-        ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        if (resultSet.next()) {
-            impl.insertColumnsIntoEntries();
-        }
-
-    }*/
-
     @Test
     public void insertIntoEntriesTest() throws SQLException {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
