@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
  * Runs a servlet for the form page to gather information from the user.
  */
 public class LoginServlet extends HttpServlet {
-    private Logger logg = LoggerFactory.getLogger(LoginServlet.class);
+    private static final Logger logg = LoggerFactory.getLogger(LoginServlet.class);
     /**
      * This method runs when the login submit button is clicked.
      * Adds username as a session attribute.
