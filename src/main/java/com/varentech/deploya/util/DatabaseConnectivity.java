@@ -33,8 +33,7 @@ public class DatabaseConnectivity {
 
     public static void databaseCheck() {
         try {
-            DatabaseMetaData metaData = null;
-            metaData = ConnectionConfiguration.getConnection().getMetaData();
+            DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
 
             //check to see if Entries table exists.
             ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
@@ -88,9 +87,7 @@ public class DatabaseConnectivity {
     public static boolean hasColumn(String table, String columnName) {
         try {
             Connection connection = ConnectionConfiguration.getConnection();
-            Statement statement = null;
-
-            statement = connection.createStatement();
+            Statement statement = connection.createStatement();
 
             ResultSet rs = statement.executeQuery("SELECT * FROM " + table);
             ResultSetMetaData rsmd = rs.getMetaData();
