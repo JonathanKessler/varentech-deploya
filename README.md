@@ -16,7 +16,7 @@
   
   *The user can override log level using logback and slf4j.*
   
-  The default configuration file can be overriden as well. To update this file, create a file named application.conf and add updated parameters. The application.conf file must be in your working directory when you run java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config path/to/export/reference.conf.
+  The default configuration file can be overriden as well. To update this file, create a file named application.conf and add updated parameters. The application.conf file must be in your working directory when you run java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config {path/to/export}/application.conf.
   - port_number
   - default_directory
   - tab_name_form
