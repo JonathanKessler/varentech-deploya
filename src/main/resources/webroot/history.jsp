@@ -108,19 +108,7 @@
                 return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue;
             }
         }
-        //clears all parameters from the url
-        function clearParams(url) {
-            var index = 0;
-            var newURL = url;
-            index = url.indexOf('?');
-            if (index == -1) {
-                index = url.indexOf('#');
-            }
-            if (index != -1) {
-                newURL = url.substring(0, index);
-            }
-            window.history.pushState("", "", newURL);
-        }
+
         //clears unnecessary parameters from the url when the entries tab is clicked. Adds the appropriate parameters
         function entriesTabClick() {
             table2.search("").draw();
@@ -476,49 +464,39 @@
                             $(this).html('<input type="text" placeholder="Select Dates" id="date_range" />');
                         }
                     });
-
                     $("#date_range").daterangepicker({
                         autoUpdateInput: false,
                         locale: {
                             "cancelLabel": "Clear"
                         }
                     });
-
                     $("#date_range").on('apply.daterangepicker', function(ev, picker) {
                         var date = picker.startDate.format('YYYY-MM-DDTHH:mm:ss') + ' to ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ss');
                         $(this).val(date);
                         replaceUrlParam(window.location.toString(), 'col1',date);
                         table.draw();
                     });
-
                     $("#date_range").on('cancel.daterangepicker', function(ev, picker) {
                         replaceUrlParam(window.location.toString(), 'col1');
                         $(this).val('');
                         table.draw();
                     });
-
                     var allowFilter = ['table1'];
-
                     $.fn.dataTableExt.afnFiltering.push(
                             function( oSettings, aData, iDataIndex ) {
-
                                 if ( $.inArray( oSettings.nTable.getAttribute('id'), allowFilter ) == -1 )
                                 {
                                     // if not table should be ignored
                                     return true;
                                 }
-
-
                                 var grab_daterange = $("#date_range").val();
                                 var give_results_daterange = grab_daterange.split(" to ");
                                 var filterstart = give_results_daterange[0];
                                 var filterend = give_results_daterange[1];
-
                                 var iStartDateCol = 1; //using column 2 in this instance
                                 var iEndDateCol = 1;
                                 var tabledatestart = aData[iStartDateCol];
                                 var tabledateend= aData[iEndDateCol];
-
                                 if ( !filterstart && !filterend ) {
                                     return true;
                                 } else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "") {
@@ -531,8 +509,6 @@
                                 return false;
                             }
                     );
-
-
                     // Apply the column search
                     table.columns().every(function () {
                         var that = this;
