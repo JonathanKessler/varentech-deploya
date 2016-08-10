@@ -39,7 +39,7 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Main {
     // Resource path pointing to where the WEBROOT is.
     private static final String WEBROOT_INDEX = "/webroot/";
-    private static Logger logg = LoggerFactory.getLogger(Main.class);
+    private static final Logger logg = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         DatabaseConnectivity db = new DatabaseConnectivity();
