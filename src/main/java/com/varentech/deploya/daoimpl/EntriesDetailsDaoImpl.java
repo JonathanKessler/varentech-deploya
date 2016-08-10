@@ -165,7 +165,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             statement.close();
             connection.close();
 
-            logg.debug("Successfully inserted entries details into database");
+            logg.debug("Successfully inserted " + entriesDetail.getFileName() + "entries details into database");
         } catch (SQLException e) {
             logg.error("Exception while inserting entries details into database: ", e);
         }
