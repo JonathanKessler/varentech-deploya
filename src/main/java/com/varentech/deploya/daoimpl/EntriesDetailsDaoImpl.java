@@ -19,7 +19,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
      * This method inserts into the Entries table.
      * This table holds data from user input.
      */
-    Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
+    private static final Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
 
 
     public void createEntriesTable() {
