@@ -11,7 +11,7 @@ import java.sql.*;
 
 public class DatabaseConnectivity {
 
-    private final static Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
+    private static final Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
 
     public static void findDataBase() {
         //Load the given config values given from the arguments
