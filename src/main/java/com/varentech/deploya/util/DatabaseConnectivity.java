@@ -45,7 +45,7 @@ public class DatabaseConnectivity {
                 dao.insertColumnsIntoEntries();
             }
             else {
-                String[] columns = {"id", "time_stamp", "username", "file_name", "path_to_local_file", "path_to_destination", "unpack args", "execute_args", "archive"};
+                String[] columns = {"id", "time_stamp", "username", "file_name", "path_to_local_file", "path_to_destination", "unpack_args", "execute_args", "archive"};
                 //check to see if all of columns exists in Entries table.
                 for (String col: columns) {
                     columnCheck(hasColumn("Entries", col));
