@@ -9,14 +9,10 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.sql.*;
 
-
 public class DatabaseConnectivity {
 
     private final static Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
 
-    /**
-     *
-     */
     public static void findDataBase() {
         //Load the given config values given from the arguments
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
@@ -40,7 +36,7 @@ public class DatabaseConnectivity {
         DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        if (resultSet.next()) {
+        if (resultSet.next()){
             logg.debug("Entries table exists");
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
@@ -49,25 +45,11 @@ public class DatabaseConnectivity {
                 dao.insertColumnsIntoEntries();
             }
             else {
+                String[] columns = {"id", "time_stamp", "username", "file_name", "path_to_local_file", "path_to_destination", "unpack args", "execute_args", "archive"};
                 //check to see if all of columns exists in Entries table.
-                String tempColName = "id";
-                columnCheck(hasColumn("Entries", tempColName));
-                tempColName = "time_stamp";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "username";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "file_name";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "path_to_local_file";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "path_to_destination";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "unpack_args";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "execute_args";
-                columnCheck(hasColumn("Entries",tempColName));
-                tempColName = "archive";
-                columnCheck(hasColumn("Entries",tempColName));
+                for (String col: columns) {
+                    columnCheck(hasColumn("Entries", col));
+                }
             }
         }
         else {
@@ -77,7 +59,7 @@ public class DatabaseConnectivity {
         }
         //check for Entries_Details table
         resultSet = metaData.getTables(null, null, "Entries_Details", null);
-        if(resultSet.next()) {
+        if (resultSet.next()) {
             logg.debug("Entries_Details table exists");
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
@@ -87,18 +69,10 @@ public class DatabaseConnectivity {
             }
             else {
                 //Need to check that each column is properly named in Entries_Details table
-                String tempColName = "id";
-                columnCheck(hasColumn("Entries_Details", tempColName));
-                tempColName = "entries_id";
-                columnCheck(hasColumn("Entries_Details",tempColName));
-                tempColName = "file_name";
-                columnCheck(hasColumn("Entries_Details",tempColName));
-                tempColName = "hash_value";
-                columnCheck(hasColumn("Entries_Details",tempColName));
-                tempColName = "output";
-                columnCheck(hasColumn("Entries_Details",tempColName));
-                tempColName = "error";
-                columnCheck(hasColumn("Entries_Details",tempColName));
+                String[] column = {"id", "entries_id", "file_name", "hash_value", "output", "error"};
+                for (String col : column) {
+                    columnCheck(hasColumn("Entries_Details", col));
+                }
             }
         }
         else {
@@ -130,8 +104,7 @@ public class DatabaseConnectivity {
         return false;
     }
     public static void columnCheck (boolean check) {
-        if (check == true) {
-
+        if (check) {
             return;
         }
         else {
@@ -141,4 +114,3 @@ public class DatabaseConnectivity {
         }
     }
 }
-
