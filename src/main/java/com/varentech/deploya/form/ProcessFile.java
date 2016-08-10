@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 public class ProcessFile {
 
-    private Logger logg = LoggerFactory.getLogger(ProcessFile.class);
+    private static final Logger logg = LoggerFactory.getLogger(ProcessFile.class);
 
     /**
      * Executes a file in the terminal using the execute command given by the user.
