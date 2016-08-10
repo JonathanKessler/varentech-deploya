@@ -11,7 +11,7 @@ import java.net.URL;
 
 
 public class ConfigurationFileManipulation {
-    static Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
+    private static final Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
     String path;
     public ConfigurationFileManipulation(String path) {
         this.path = path;
