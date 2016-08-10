@@ -42,7 +42,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             connection.close();
 
         } catch (SQLException e) {
-            logg.error("Unable to create the table Entries.");
+            logg.error("Unable to create the table Entries.", e);
         }
         logg.debug("Successfully created Entries table.");
 
@@ -66,7 +66,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
-            logg.error("Unable to create Entries_Details table.");
+            logg.error("Unable to create Entries_Details table.", e);
         }
     }
 
@@ -82,7 +82,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             connection.close();
             createEntriesTable();
         } catch (SQLException s) {
-            logg.error(s.getSQLState());
+            logg.error(s.getSQLState(), s);
         }
     }
 
