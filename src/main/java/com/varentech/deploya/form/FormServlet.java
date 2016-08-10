@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FormServlet extends HttpServlet {
     Resource res = new Resource();
-    private final Logger logg = LoggerFactory.getLogger(FormServlet.class);
+    private static final Logger logg = LoggerFactory.getLogger(FormServlet.class);
 
     /**
      * This method runs when the submit button is clicked on the form.jsp.
