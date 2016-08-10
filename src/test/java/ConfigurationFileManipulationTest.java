@@ -8,7 +8,7 @@ public class ConfigurationFileManipulationTest {
 
     @Test
     public void exportConfigFileTest(){
-        String path = "C:\\Users\\kesslerk\\Documents\\application.conf";
+        String path = "src" + File.separator + "test" + File.separator + "resources" + File.separator + "application.conf";
         ConfigurationFileManipulation conf = new ConfigurationFileManipulation(path);
         conf.exportConfigFile();
 
