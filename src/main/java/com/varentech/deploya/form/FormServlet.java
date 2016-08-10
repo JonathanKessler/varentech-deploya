@@ -58,8 +58,7 @@ public class FormServlet extends HttpServlet {
 
         //get all parameters from the form
         try {
-            List<FileItem> multiparts;
-            multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+            List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             String inputName;
             for (FileItem item : multiparts) {
 
