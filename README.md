@@ -20,17 +20,17 @@
 
 <p> varentech{ </p>
    <p> project{</p>
-    	port_number=8080
-    	default_directory=/home/admin/Documents/archive
-	    tab_name_form=Form
-    	tab_name_history=History
-	    tab_name_login=Login
-	    page_title= Project Thunder
-	    context_path=/ProjectThunder
-    	#execute timeout in minutes
-	    #if no timeout put -1
-	    execute_timeout=10
-	    path_to_database=/home/admin/Documents/Deploya.db
+    <p>    port_number=8080 </p>
+    <p>	default_directory=/home/admin/Documents/archive</p>
+	  <p>  tab_name_form=Form</p>
+    <p>	tab_name_history=History</p>
+	<p>    tab_name_login=Login</p>
+	 <p>   page_title= Project Thunder</p>
+	<p>    context_path=/ProjectThunder</p>
+    <p>	#execute timeout in minutes</p>
+<p>	    #if no timeout put -1</p>
+<p>	    execute_timeout=10</p>
+<p>	    path_to_database=/home/admin/Documents/Deploya.db</p>
  <p>   } </p>
 <p>} </p>
     
