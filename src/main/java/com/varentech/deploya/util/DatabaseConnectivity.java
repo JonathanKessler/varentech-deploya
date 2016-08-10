@@ -25,84 +25,94 @@ public class DatabaseConnectivity {
             ConnectionConfiguration.setPathToDataBase(pathOfDataBase);
             //need to check to see if the tables exist
             databaseCheck();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             logg.error("File not found at " + pathOfDataBase);
             logg.debug("Using default values to create a database.");
         }
     }
 
-    public static void databaseCheck() throws SQLException {
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
-        //check to see if Entries table exists.
-        ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        if (resultSet.next()) {
-            logg.debug("Entries table exists");
-            ResultSetMetaData rsmd = resultSet.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            if (columnCount == 0) {
-                EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
-                dao.insertColumnsIntoEntries();
-            }
-            else {
-                String[] columns = {"id", "time_stamp", "username", "file_name", "path_to_local_file", "path_to_destination", "unpack_args", "execute_args", "archive"};
-                //check to see if all of columns exists in Entries table.
-                for (String col: columns) {
-                    columnCheck(hasColumn("Entries", col));
+    public static void databaseCheck() {
+        try {
+            DatabaseMetaData metaData = null;
+            metaData = ConnectionConfiguration.getConnection().getMetaData();
+
+            //check to see if Entries table exists.
+            ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
+            if (resultSet.next()) {
+                logg.debug("Entries table exists");
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                int columnCount = rsmd.getColumnCount();
+                if (columnCount == 0) {
+                    EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
+                    dao.insertColumnsIntoEntries();
+                } else {
+                    String[] columns = {"id", "time_stamp", "username", "file_name", "path_to_local_file", "path_to_destination", "unpack_args", "execute_args", "archive"};
+                    //check to see if all of columns exists in Entries table.
+                    for (String col : columns) {
+                        columnCheck(hasColumn("Entries", col));
+                    }
                 }
+            } else {
+                logg.debug("Entries table does not exist, creating Entries table...");
+                EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+                impl.createEntriesTable();
             }
-        }
-        else {
-            logg.debug("Entries table does not exist, creating Entries table...");
-            EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
-            impl.createEntriesTable();
-        }
-        //check for Entries_Details table
-        resultSet = metaData.getTables(null, null, "Entries_Details", null);
-        if (resultSet.next()) {
-            logg.debug("Entries_Details table exists");
-            ResultSetMetaData rsmd = resultSet.getMetaData();
-            int columnCount = rsmd.getColumnCount();
-            if (columnCount == 0) {
-                EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
-                dao.insertColumnsIntoEntriesDetails();
-            }
-            else {
-                //Need to check that each column is properly named in Entries_Details table
-                String[] column = {"id", "entries_id", "file_name", "hash_value", "output", "error"};
-                for (String col : column) {
-                    columnCheck(hasColumn("Entries_Details", col));
+            //check for Entries_Details table
+            resultSet = metaData.getTables(null, null, "Entries_Details", null);
+            if (resultSet.next()) {
+                logg.debug("Entries_Details table exists");
+                ResultSetMetaData rsmd = resultSet.getMetaData();
+                int columnCount = rsmd.getColumnCount();
+                if (columnCount == 0) {
+                    EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
+                    dao.insertColumnsIntoEntriesDetails();
+                } else {
+                    //Need to check that each column is properly named in Entries_Details table
+                    String[] column = {"id", "entries_id", "file_name", "hash_value", "output", "error"};
+                    for (String col : column) {
+                        columnCheck(hasColumn("Entries_Details", col));
+                    }
                 }
+            } else {
+                logg.debug("Entries_Details table does not exits, creating Entries_Details table...");
+                EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+                impl.createEntriesDetailsTable();
             }
+            resultSet.close();
+
+        } catch (SQLException e) {
+            logg.error("Exception while checking for columns in database. ", e);
         }
-        else {
-            logg.debug("Entries_Details table does not exits, creating Entries_Details table...");
-            EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
-            impl.createEntriesDetailsTable();
-        }
-        resultSet.close();
     }
 
-    public static boolean hasColumn (String table, String columnName) throws SQLException {
+    public static boolean hasColumn(String table, String columnName) {
+        try {
+            Connection connection = ConnectionConfiguration.getConnection();
+            Statement statement = null;
 
-        Connection connection = ConnectionConfiguration.getConnection();
-        Statement statement = connection.createStatement();
-        ResultSet rs = statement.executeQuery("SELECT * FROM " + table);
-        ResultSetMetaData rsmd = rs.getMetaData();
-        int columns = rsmd.getColumnCount();
-        for (int x = 1; x <= columns; x++) {
-            if (columnName.equals(rsmd.getColumnName(x))) {
-                rs.close();
-                statement.close();
-                connection.close();
-                return true;
+            statement = connection.createStatement();
+
+            ResultSet rs = statement.executeQuery("SELECT * FROM " + table);
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columns = rsmd.getColumnCount();
+            for (int x = 1; x <= columns; x++) {
+                if (columnName.equals(rsmd.getColumnName(x))) {
+                    rs.close();
+                    statement.close();
+                    connection.close();
+                    return true;
+                }
             }
+            rs.close();
+            statement.close();
+            connection.close();
+            return false;
+        } catch (SQLException e) {
+            logg.error("Exception while finding columns.", e);
+            return false;
         }
-        rs.close();
-        statement.close();
-        connection.close();
-        return false;
     }
+
     public static void columnCheck(boolean check) {
         if (!check) {
             logg.error("Column does not exist in this table!");
