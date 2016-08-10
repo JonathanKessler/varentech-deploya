@@ -103,11 +103,8 @@ public class DatabaseConnectivity {
         connection.close();
         return false;
     }
-    public static void columnCheck (boolean check) {
-        if (check) {
-            return;
-        }
-        else {
+     public static void columnCheck(boolean check) {
+        if (!check) {
             logg.error("Column does not exist in this table!");
             logg.error("System will exit with code 1.");
             System.exit(1);
