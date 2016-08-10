@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.sql.*;
 
 /**
- * Connects to Deploya.db in order to add to the data tables
+ * Connects to Deploya.db in order to add to the data tables.
  */
 public class EntriesDetailsDaoImpl implements DatabaseInterface {
 
