@@ -36,7 +36,7 @@ public class DatabaseConnectivity {
         DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        if (resultSet.next()){
+        if (resultSet.next()) {
             logg.debug("Entries table exists");
             ResultSetMetaData rsmd = resultSet.getMetaData();
             int columnCount = rsmd.getColumnCount();
