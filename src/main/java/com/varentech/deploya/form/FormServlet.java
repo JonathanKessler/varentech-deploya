@@ -4,7 +4,6 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -112,7 +111,6 @@ public class FormServlet extends HttpServlet {
 
         //add entry to database
         impl.insertIntoEntries();
-        logg.debug("Successfully added entries to database.");
 
         //add file name to entriesDetail object
         res.entriesDetail.setFileName(res.entry.getFileName());
