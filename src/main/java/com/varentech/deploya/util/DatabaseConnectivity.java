@@ -13,7 +13,7 @@ public class DatabaseConnectivity {
 
     private static final Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
 
-    public static void findDataBase() {
+    public static void findDatabase() {
         //Load the given config values given from the arguments
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
@@ -103,7 +103,7 @@ public class DatabaseConnectivity {
         connection.close();
         return false;
     }
-     public static void columnCheck(boolean check) {
+    public static void columnCheck(boolean check) {
         if (!check) {
             logg.error("Column does not exist in this table!");
             logg.error("System will exit with code 1.");
