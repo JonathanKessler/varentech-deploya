@@ -76,7 +76,7 @@ public class ProcessFile {
             Future<?> f = service.submit(r);
 
             if (timeout != -1) {
-                f.get(timeout, TimeUnit.MINUTES);     // attempt the task for one minute
+                f.get(timeout, TimeUnit.MINUTES);     // attempt the task for given amount
             }
         } catch (final InterruptedException e) {
             logg.error("Thread interrupted during sleep: ", e);
