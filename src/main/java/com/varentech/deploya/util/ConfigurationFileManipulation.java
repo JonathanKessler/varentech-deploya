@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
-
 public class ConfigurationFileManipulation {
     private static final Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
     String path;
