@@ -18,20 +18,20 @@
   The default configuration file can be overriden as well. To update this file, create a file named application.conf and add updated parameters. The application.conf file must be in your working directory when you run java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config {path/to/export}/application.conf.
   Below is the default configuration file. When creating application.conf, be sure to use the same layout. It is not necessary to include all variables, only ones that are being updated. 
 
-<p> varentech{ </p>
-   <p> project{</p>
-    + port_number=8080 
-    + default_directory=/home/admin/Documents/archive
-    + tab_name_form=Form
-    + tab_name_history=History
-    + tab_name_login=Login
-    + page_title= Project Thunder
-    + context_path=/ProjectThunder
-    + #execute timeout in minutes
-    + #if no timeout put -1
-    + execute_timeout=10
-    + path_to_database=/home/admin/Documents/Deploya.db
- <p>   } </p>
-<p>} </p>
+	varentech{
+		project{
+			port_number=8080 
+			default_directory=/home/admin/Documents/archive
+			tab_name_form=Form
+			tab_name_history=History
+			tab_name_login=Login
+			page_title= Project Thunder
+			context_path=/ProjectThunder
+			#execute timeout in minutes
+			#if no timeout put -1
+			execute_timeout=10
+			path_to_database=/home/admin/Documents/Deploya.db
+		}
+	}
     
 
