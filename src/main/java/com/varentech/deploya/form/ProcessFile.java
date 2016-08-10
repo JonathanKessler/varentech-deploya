@@ -45,6 +45,7 @@ public class ProcessFile {
                 public void run() {
 
                     try {
+
                         Resource res = new Resource();
                         String output = "";
 
@@ -76,7 +77,7 @@ public class ProcessFile {
             Future<?> f = service.submit(r);
 
             if (timeout != -1) {
-                f.get(timeout, TimeUnit.MINUTES);     // attempt the task for given amount
+                f.get(timeout, TimeUnit.MINUTES); // attempt the task for given amount
             }
         } catch (final InterruptedException e) {
             logg.error("Thread interrupted during sleep: ", e);
@@ -169,8 +170,6 @@ public class ProcessFile {
                     }
 
                     imp.insertIntoEntriesDetail(subentry);
-                    logg.debug("{} was added to the database.", fileName);
-
                 }
 
             } catch (IOException e) {
