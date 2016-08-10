@@ -307,7 +307,6 @@
                     var run1FileName = table.row('#' + compare1).data()[3];
                     var run2UserName = table.row('#' + compare2).data()[2];
                     var run2FileName = table.row('#' + compare2).data()[3];
-                    //$("#here").replaceWith('<h4 id="here"> Comparing run <a onclick="compare();">' + run1FileName + '</a>, ' + run1UserName + ' to run <a href="#" onclick="compare();">' + run2FileName + '</a>, ' + run2UserName + '.</h4>');
                     $("#here").replaceWith('<h4 id="here"> Comparing run ' + run1FileName + ', ' + run1UserName + ' to run ' + run2FileName + ', ' + run2UserName + '.</h4>');
                     table5.clear();
                     table2.columns(1).search("^" + compare1.toString() + "$", true);
