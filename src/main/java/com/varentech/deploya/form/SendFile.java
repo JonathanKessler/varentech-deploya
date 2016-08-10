@@ -13,7 +13,7 @@ import java.io.*;
  */
 public class SendFile {
 
-    private Logger logg = LoggerFactory.getLogger(SendFile.class);
+    private static final Logger logg = LoggerFactory.getLogger(SendFile.class);
 
     /**
      * This method saves the file into the destination directory.
