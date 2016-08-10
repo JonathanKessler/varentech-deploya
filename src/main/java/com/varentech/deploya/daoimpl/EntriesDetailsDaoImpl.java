@@ -46,6 +46,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
 
     }
 
+
     public void createEntriesDetailsTable() {
         Connection connection = ConnectionConfiguration.getConnection();
         try {
@@ -123,6 +124,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             preparedStatement.close();
             connection.close();
 
+            logg.debug("Successfully inserted entries into database.");
         } catch (SQLException e) {
             logg.error("Exception while inserting entries into database: ", e);
         }
@@ -163,6 +165,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             statement.close();
             connection.close();
 
+            logg.debug("Successfully inserted entries details into database");
         } catch (SQLException e) {
             logg.error("Exception while inserting entries details into database: ", e);
         }
