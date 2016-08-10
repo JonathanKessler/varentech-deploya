@@ -25,7 +25,7 @@ public class ConnectionConfiguration {
     /**
      * This method establishes a connection to a database.
      */
-    private final static Logger logg = LoggerFactory.getLogger(ConnectionConfiguration.class);
+    private static final Logger logg = LoggerFactory.getLogger(ConnectionConfiguration.class);
     public static Connection getConnection() {
         Connection connection = null;
 
