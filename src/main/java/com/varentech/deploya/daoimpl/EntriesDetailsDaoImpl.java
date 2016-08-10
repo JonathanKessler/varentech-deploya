@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
-
 /**
  * Connects to Deploya.db in order to add to the data tables
  */
@@ -20,7 +19,6 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
      * This table holds data from user input.
      */
     private static final Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
-
 
     public void createEntriesTable() {
         Connection connection = ConnectionConfiguration.getConnection();
@@ -47,7 +45,6 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
         logg.debug("Successfully created Entries table.");
 
     }
-
 
     public void createEntriesDetailsTable() {
         Connection connection = ConnectionConfiguration.getConnection();
@@ -170,6 +167,4 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             logg.error("Exception while inserting entries details into database: ", e);
         }
     }
-
-
 }
