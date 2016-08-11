@@ -46,7 +46,6 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
 
     }
 
-
     public void createEntriesDetailsTable() {
         Connection connection = ConnectionConfiguration.getConnection();
         try {
