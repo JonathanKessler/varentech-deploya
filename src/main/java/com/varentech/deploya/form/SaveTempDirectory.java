@@ -11,7 +11,7 @@ import java.io.*;
  */
 public class SaveTempDirectory {
 
-    private static final Logger logg = LoggerFactory.getLogger(SaveTempDirectory.class);
+    private Logger logg = LoggerFactory.getLogger(SaveTempDirectory.class);
 
     /**
      *This method creates and saves all files to a temporary directory

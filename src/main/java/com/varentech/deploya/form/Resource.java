@@ -1,7 +1,7 @@
 package com.varentech.deploya.form;
 
-import com.varentech.deploya.entities.Entries;
 import com.varentech.deploya.entities.EntriesDetail;
+import com.varentech.deploya.entities.Entries;
 
 /**
  * This class creates objects of the two different tables.

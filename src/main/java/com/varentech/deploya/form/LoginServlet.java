@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
      * Adds username as a session attribute.
      * Redirects to form.jsp
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet (HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/html");
         logg.debug("Successfully connected to login servlet.");
@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        String port = config.getString("varentech.project.port_number");
-        String context_path = config.getString("varentech.project.context_path");
+        String port = config.getString("port_number");
+        String context_path = config.getString("context_path");
 
         //set the username as a session attribute
         String username = request.getParameter("username");

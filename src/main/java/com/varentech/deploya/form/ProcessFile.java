@@ -36,7 +36,7 @@ public class ProcessFile {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        int timeout = config.getInt("varentech.project.execute_timeout");
+        int timeout = config.getInt("execute_timeout");
 
         ExecutorService service = Executors.newSingleThreadExecutor();
 
@@ -45,7 +45,6 @@ public class ProcessFile {
                 public void run() {
 
                     try {
-
                         Resource res = new Resource();
                         String output = "";
 

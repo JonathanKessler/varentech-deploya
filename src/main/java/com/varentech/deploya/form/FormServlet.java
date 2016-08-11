@@ -44,9 +44,9 @@ public class FormServlet extends HttpServlet {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        String default_directory = config.getString("varentech.project.default_directory");
-        String context_path = config.getString("varentech.project.context_path");
-        String port = config.getString("varentech.project.port_number");
+        String default_directory = config.getString("default_directory");
+        String context_path = config.getString("context_path");
+        String port = config.getString("port_number");
 
         String file_name = null;
         String path_to_destination = null;
