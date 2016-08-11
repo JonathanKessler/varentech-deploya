@@ -5,6 +5,7 @@ import com.varentech.deploya.util.DatabaseConnectivity;
 import org.junit.Test;
 
 import java.io.File;
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,19 +20,21 @@ public class DatabaseConnectivityTest {
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
         db.databaseCheck();
 
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
+        Connection connection = ConnectionConfiguration.getConnection();
+        DatabaseMetaData metaData = connection.getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        assertTrue(resultSet.next());
+        assertEquals("Entries", resultSet.getString(3));
         resultSet.close();
 
         resultSet = metaData.getTables(null, null, "Entries_Details", null);
-        assertTrue(resultSet.next());
+        assertEquals("Entries_Details", resultSet.getString(3));
         resultSet.close();
+        connection.close();
     }
 
     @Test
@@ -40,13 +43,14 @@ public class DatabaseConnectivityTest {
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
+        Connection connection = ConnectionConfiguration.getConnection();
+        DatabaseMetaData metaData = connection.getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
         if (resultSet.next()) {
-
+            connection.close();
             String table = "Entries";
             String columnName = "time_stamp";
             assertTrue(db.hasColumn(table, columnName));
@@ -55,13 +59,18 @@ public class DatabaseConnectivityTest {
         }
 
         resultSet.close();
+        connection = ConnectionConfiguration.getConnection();
+        metaData = connection.getMetaData();
         resultSet = metaData.getTables(null, null, "Entries_Details", null);
         if (resultSet.next()) {
+            connection.close();
             String table = "Entries_Details";
             String columnName = "error";
             assertTrue(db.hasColumn(table, columnName));
             columnName = "notThere";
             assertFalse(db.hasColumn(table, columnName));
         }
+        resultSet.close();
+        connection.close();
     }
 }

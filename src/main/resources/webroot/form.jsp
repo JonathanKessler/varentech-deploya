@@ -27,11 +27,16 @@
 
 <!-- creates top menu-->
 <div class="container">
-
     <nav class="navbar navbar-inverse">
-
-        <div class="navbar-header">
-            <p class="navbar-brand" href="#"><%=page_title%></p>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-brand" href="#"><%=page_title%>
+                </p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/form.jsp">Form</a></li>
+                <li><a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">History</a></li>
+            </ul>
         </div>
     </nav>
 </div>
@@ -90,8 +95,5 @@
     </div>
 
 </form>
-<div class="navbar-inner navbar-fixed-bottom">
-    <center> <a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">Click to see history</a> </center>
-</div>
 </body>
 </html>

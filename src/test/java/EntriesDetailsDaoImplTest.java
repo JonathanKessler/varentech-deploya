@@ -3,8 +3,6 @@ import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 import com.varentech.deploya.form.Resource;
 import com.varentech.deploya.util.ConnectionConfiguration;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
@@ -12,71 +10,99 @@ import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
 public class EntriesDetailsDaoImplTest {
 
-    public EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
-    public static Resource res = new Resource();
-
-    public  static  Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
-    public static Config config = ConfigFactory.load(fileConf);
-    public static Connection connection = ConnectionConfiguration.getConnection();
-
-
-    @BeforeClass
-    public static void setUp() {
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
-    }
-
-    @AfterClass
-    public static void breakDown() throws SQLException {
-        connection.close();
-    }
-
     @Test
-    public void createEntriesTableTest() throws SQLException {
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
-        //check to see if Entries table exists.
-        ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
-        if (!resultSet.next()) {
-            resultSet.close();
-            impl.createEntriesTable();
+    public void createEntriesTableTest() {
 
-            metaData = ConnectionConfiguration.getConnection().getMetaData();
-            //check to see if Entries table exists.
-            resultSet = metaData.getTables(null, null, "Entries", null);
-            assertTrue(resultSet.next());
-            resultSet.close();
+        EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        Connection connection = ConnectionConfiguration.getConnection();
+
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
+
+            if (resultSet.getString(3).equals("Entries")) {
+                System.out.println("Entries exists");
+                resultSet.close();
+                connection.close();
+            }
+        } catch (SQLException e) {
+            try {
+                connection.close();
+
+                impl.createEntriesTable();
+                connection = ConnectionConfiguration.getConnection();
+                DatabaseMetaData metaData = connection.getMetaData();
+                ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
+
+                assertEquals("Entries", resultSet.getString(3));
+                resultSet.close();
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
     @Test
     public void createEntriesDetailsTableTest() throws SQLException {
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
-        //check to see if Entries_Details table exists.
-        ResultSet resultSet = metaData.getTables(null, null, "Entries_Details", null);
-        if (!resultSet.next()) {
-            impl.createEntriesDetailsTable();
-            resultSet.close();
+        EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
 
-            metaData = ConnectionConfiguration.getConnection().getMetaData();
-            //check to see if Entries Details table exists.
-            resultSet = metaData.getTables(null, null, "Entries_Details", null);
-            assertTrue(resultSet.next());
-            resultSet.close();
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        Connection connection = ConnectionConfiguration.getConnection();
+
+        try {
+            DatabaseMetaData metaData = connection.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, "Entries_Details", null);
+
+            if (resultSet.getString(3).equals("Entries_Details")) {
+                System.out.println("Entries_Details exists");
+                resultSet.close();
+                connection.close();
+            }
+        } catch (SQLException e) {
+            try {
+                connection.close();
+
+                impl.createEntriesDetailsTable();
+                connection = ConnectionConfiguration.getConnection();
+                DatabaseMetaData metaData = connection.getMetaData();
+                ResultSet resultSet = metaData.getTables(null, null, "Entries_Details", null);
+
+                assertEquals("Entries_Details", resultSet.getString(3));
+                resultSet.close();
+                connection.close();
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
     @Test
     public void insertIntoEntriesTest() throws SQLException {
+        Resource res = new Resource();
+        EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
+
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
         Connection connection = ConnectionConfiguration.getConnection();
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
 
-
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
+        DatabaseMetaData metaData = connection.getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
         if (resultSet.next()) {
@@ -102,7 +128,7 @@ public class EntriesDetailsDaoImplTest {
                     "SELECT * FROM Entries WHERE time_stamp = " + "'" + res.entry.getTime() + "'"
             );
 
-            assertNotEquals("", resultSet.getString(1));
+            assertThat("",not(resultSet.getString(1)));
             assertEquals(formatted_time, resultSet.getString(2));
             assertEquals("katie", resultSet.getString(3));
             assertEquals("file", resultSet.getString(4));
@@ -114,17 +140,23 @@ public class EntriesDetailsDaoImplTest {
 
             resultSet.close();
             statement.close();
+            connection.close();
+
         }
     }
 
     @Test
     public void insertIntoEntriesDetailsTest() throws SQLException {
+        EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+        Resource res = new Resource();
+
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        Connection connection = ConnectionConfiguration.getConnection();
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
 
-        DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        Connection connection = ConnectionConfiguration.getConnection();
+
+        DatabaseMetaData metaData = connection.getMetaData();
         //check to see if Entries table exists.
         ResultSet resultSet = metaData.getTables(null, null, "Entries_Details", null);
         if (resultSet.next()) {
@@ -156,6 +188,7 @@ public class EntriesDetailsDaoImplTest {
             resultSet = statement.executeQuery(
                     "SELECT id FROM Entries WHERE time_stamp = " + "'" + res.entry.getTime() + "'"
             );
+
             int id = resultSet.getInt("id");
 
             resultSet.close();
@@ -166,7 +199,7 @@ public class EntriesDetailsDaoImplTest {
                     "SELECT * FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
             );
 
-            assertNotEquals("", resultSet.getString(1));
+            assertThat("",not(resultSet.getString(1)));
             assertEquals(String.valueOf(id), resultSet.getString(2));
             assertEquals("file", resultSet.getString(3));
             assertEquals("hash", resultSet.getString(4));
@@ -175,6 +208,8 @@ public class EntriesDetailsDaoImplTest {
 
             resultSet.close();
             statement.close();
+            connection.close();
         }
     }
+
 }

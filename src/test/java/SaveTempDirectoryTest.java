@@ -1,6 +1,10 @@
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 import com.varentech.deploya.form.Resource;
 import com.varentech.deploya.form.SaveTempDirectory;
 import com.varentech.deploya.form.SendFile;
+import com.varentech.deploya.util.ConnectionConfiguration;
 import org.junit.Test;
 
 import java.io.File;
@@ -8,16 +12,28 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
 public class SaveTempDirectoryTest {
 
-   @Test
-    public void directoryTest() throws IOException {
+    @Test
+    public void directoryTest() throws IOException, SQLException {
         Resource res = new Resource();
+        EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         SaveTempDirectory saveTempDirectory = new SaveTempDirectory();
         SendFile sendFile = new SendFile();
+
+        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
+        Config config = ConfigFactory.load(fileConf);
+
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
         File testFile = new File(url.getFile());
@@ -27,24 +43,44 @@ public class SaveTempDirectoryTest {
         tempDir.delete();
         tempDir.mkdir();
 
-        res.entry.setPathToDestination(tempDir.getPath());
-        res.entry.setUnpackArguments("on");
-        res.entry.setExecuteArguments("java -jar " + tempDir.getPath() + File.separator + testFile.getName());
+        Connection connection = ConnectionConfiguration.getConnection();
+        DatabaseMetaData metaData = connection.getMetaData();
+        //check to see if Entries table exists.
+        ResultSet resultSet = metaData.getTables(null, null, "Entries_Details", null);
+        if (resultSet.next()) {
+            resultSet.close();
 
-        InputStream inputStream = new FileInputStream(testFile.getPath());
-        sendFile.sendToDestination(inputStream,testFile.getName());
+            Date date = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); //format the date to have no spaces
+            String formatted_time = formatter.format(date);
 
-        saveTempDirectory.directory(testFile.getName());
+            res.entry.setPathToDestination(tempDir.getPath());
+            res.entry.setExecuteArguments("java -jar " + tempDir.getPath() + File.separator + testFile.getName());
+            res.entry.setUnpackArguments("on");
+            res.entry.setTime(formatted_time);
+            res.entry.setFileName("file");
+            res.entry.setUserName("katie");
+            res.entry.setArchive("archive");
+            res.entry.setPathToLocalFile("local");
 
-        File destination_file = new File(tempDir.getPath() + File.separator + testFile.getName());
+            connection.close();
+            impl.insertIntoEntries();
 
-        assertEquals(actualLength, destination_file.length());
-        assertEquals(3, tempDir.list().length);
+            InputStream inputStream = new FileInputStream(testFile.getPath());
+            sendFile.sendToDestination(inputStream, testFile.getName());
 
+            saveTempDirectory.directory(testFile.getName());
+
+            File destination_file = new File(tempDir.getPath() + File.separator + testFile.getName());
+
+            assertEquals(actualLength, destination_file.length());
+            assertEquals(3, tempDir.list().length);
+
+        }
     }
 
     @Test
-    public void moveFilesTest() throws IOException {
+    public void moveFilesTest () throws IOException {
         SaveTempDirectory saveTempDirectory = new SaveTempDirectory();
         Resource res = new Resource();
 
@@ -53,7 +89,7 @@ public class SaveTempDirectoryTest {
         URL url2 = this.getClass().getResource("/AnotherJar.jar");
         File anotherJarFile = new File(url2.getFile());
 
-        File[] fileList = {helloWorldFile,anotherJarFile};
+        File[] fileList = {helloWorldFile, anotherJarFile};
 
         File tempDir = File.createTempFile("temp", "");
         tempDir.delete();
@@ -62,7 +98,7 @@ public class SaveTempDirectoryTest {
         res.entry.setPathToDestination(tempDir.getPath());
         res.entry.setUnpackArguments("on");
 
-        saveTempDirectory.moveFiles(fileList,helloWorldFile);
+        saveTempDirectory.moveFiles(fileList, helloWorldFile);
 
         assertEquals(tempDir.list().length, 1);
         assertEquals(tempDir.list()[0].toString(), anotherJarFile.getName());
