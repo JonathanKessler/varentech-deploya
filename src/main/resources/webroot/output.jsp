@@ -44,7 +44,6 @@
         </div>
     </nav>
 
-
     <%if (res.entriesDetail.getOutput() != null) {%>
     <FONT COLOR="#000000"><%=res.entriesDetail.getOutput()%>
     </FONT>
