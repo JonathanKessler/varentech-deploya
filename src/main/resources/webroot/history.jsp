@@ -49,9 +49,15 @@
 
 <div class="container">
     <nav class="navbar navbar-inverse">
-        <div class="navbar-header">
-            <p class="navbar-brand" href="#"><%=page_title%>
-            </p>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-brand" href="#"><%=page_title%>
+                </p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/form.jsp">Form</a></li>
+                <li><a href="http://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/history.jsp">History</a></li>
+            </ul>
         </div>
     </nav>
 </div>
@@ -1133,3 +1139,4 @@
 </div>
 </body>
 </html>
+
