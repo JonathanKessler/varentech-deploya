@@ -1,7 +1,6 @@
 package com.varentech.deploya;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,23 +38,20 @@ import org.eclipse.jetty.webapp.WebAppContext;
 public class Main {
     // Resource path pointing to where the WEBROOT is.
     private static final String WEBROOT_INDEX = "/webroot/";
-    private static Logger logg = LoggerFactory.getLogger(Main.class);
+    private static final Logger logg = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) {
+    public static void main (String[] args) {
         DatabaseConnectivity db = new DatabaseConnectivity();
-        db.findDataBase();
+        db.findDatabase();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
         ConfigOrigin origin = config.origin();
         logg.debug("Loaded " + origin);
 
-
-        String path_to_DB = config.getString("varentech.project.path_to_database");
-
         if (args.length == 0) {
-            int port = config.getInt("varentech.project.port_number");
-            String context_path = config.getString("varentech.project.context_path");
+            int port = config.getInt("port_number");
+            String context_path = config.getString("context_path");
             Main main = new Main(port,context_path);
             main.start();
             main.waitForInterrupt();
@@ -76,7 +72,7 @@ public class Main {
     private URI serverURI;
     private String context_path;
 
-    public Main(int port, String context_path) {
+    public Main (int port, String context_path) {
         this.port = port;
         this.context_path = context_path;
     }
@@ -150,7 +146,7 @@ public class Main {
         context.setContextPath(context_path);
         context.setAttribute("javax.servlet.context.tempdir", scratchDir);
         context.setAttribute("org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern",
-          ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$");
+                ".*/[^/]*servlet-api-[^/]*\\.jar$|.*/javax.servlet.jsp.jstl-.*\\.jar$|.*/.*taglibs.*\\.jar$");
         context.setResourceBase(baseUri.toASCIIString());
         context.setAttribute("org.eclipse.jetty.containerInitializers", jspInitializers());
         context.setAttribute(InstanceManager.class.getName(), new SimpleInstanceManager());

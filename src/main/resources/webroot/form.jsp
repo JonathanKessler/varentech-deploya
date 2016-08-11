@@ -5,10 +5,10 @@
 <%@ page import="java.io.File" %>
 <% Config fileConf1 = ConfigFactory.parseFile(new File("application.conf"));
     Config config1 = ConfigFactory.load(fileConf1);
-    String tab_name_form = config1.getString("varentech.project.tab_name_form");
-    String page_title = config1.getString("varentech.project.page_title");
-    String context_path = config1.getString("varentech.project.context_path");
-    String port = config1.getString("varentech.project.port_number");
+    String tab_name_form = config1.getString("tab_name_form");
+    String page_title = config1.getString("page_title");
+    String context_path = config1.getString("context_path");
+    String port = config1.getString("port_number");
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/login.jsp");
         return;
@@ -27,11 +27,16 @@
 
 <!-- creates top menu-->
 <div class="container">
-
     <nav class="navbar navbar-inverse">
-
-        <div class="navbar-header">
-            <p class="navbar-brand" href="#"><%=page_title%></p>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-brand" href="#"><%=page_title%>
+                </p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/form.jsp">Form</a></li>
+                <li><a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">History</a></li>
+            </ul>
         </div>
     </nav>
 </div>
@@ -90,8 +95,5 @@
     </div>
 
 </form>
-<div class="navbar-inner navbar-fixed-bottom">
-    <center> <a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">Click to see history</a> </center>
-</div>
 </body>
 </html>

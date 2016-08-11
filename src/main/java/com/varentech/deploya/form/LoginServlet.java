@@ -16,13 +16,13 @@ import org.slf4j.LoggerFactory;
  * Runs a servlet for the form page to gather information from the user.
  */
 public class LoginServlet extends HttpServlet {
-    private Logger logg = LoggerFactory.getLogger(LoginServlet.class);
+    private static final Logger logg = LoggerFactory.getLogger(LoginServlet.class);
     /**
      * This method runs when the login submit button is clicked.
      * Adds username as a session attribute.
      * Redirects to form.jsp
      */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet (HttpServletRequest request, HttpServletResponse response) {
 
         response.setContentType("text/html");
         logg.debug("Successfully connected to login servlet.");
@@ -31,8 +31,8 @@ public class LoginServlet extends HttpServlet {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        String port = config.getString("varentech.project.port_number");
-        String context_path = config.getString("varentech.project.context_path");
+        String port = config.getString("port_number");
+        String context_path = config.getString("context_path");
 
         //set the username as a session attribute
         String username = request.getParameter("username");

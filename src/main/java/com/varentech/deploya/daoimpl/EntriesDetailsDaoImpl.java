@@ -9,9 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 
-
 /**
- * Connects to Deploya.db in order to add to the data tables
+ * Connects to Deploya.db in order to add to the data tables.
  */
 public class EntriesDetailsDaoImpl implements DatabaseInterface {
 
@@ -19,8 +18,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
      * This method inserts into the Entries table.
      * This table holds data from user input.
      */
-    Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
-
+    private static final Logger logg = LoggerFactory.getLogger(EntriesDetailsDaoImpl.class);
 
     public void createEntriesTable() {
         Connection connection = ConnectionConfiguration.getConnection();
@@ -42,12 +40,11 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             connection.close();
 
         } catch (SQLException e) {
-            logg.error("Unable to create the table Entries.");
+            logg.error("Unable to create the table Entries.", e);
         }
         logg.debug("Successfully created Entries table.");
 
     }
-
 
     public void createEntriesDetailsTable() {
         Connection connection = ConnectionConfiguration.getConnection();
@@ -66,7 +63,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             preparedStatement.close();
             connection.close();
         } catch (SQLException e) {
-            logg.error("Unable to create Entries_Details table.");
+            logg.error("Unable to create Entries_Details table.", e);
         }
     }
 
@@ -82,7 +79,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             connection.close();
             createEntriesTable();
         } catch (SQLException s) {
-            logg.error(s.getSQLState());
+            logg.error(s.getSQLState(), s);
         }
     }
 
@@ -126,6 +123,7 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             preparedStatement.close();
             connection.close();
 
+            logg.debug("Successfully inserted entries into database.");
         } catch (SQLException e) {
             logg.error("Exception while inserting entries into database: ", e);
         }
@@ -166,10 +164,9 @@ public class EntriesDetailsDaoImpl implements DatabaseInterface {
             statement.close();
             connection.close();
 
+            logg.debug("Successfully inserted " + entriesDetail.getFileName() + "entries details into database");
         } catch (SQLException e) {
             logg.error("Exception while inserting entries details into database: ", e);
         }
     }
-
-
 }

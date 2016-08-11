@@ -1,3 +1,5 @@
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 import com.varentech.deploya.form.ProcessFile;
 import com.varentech.deploya.form.Resource;
@@ -67,11 +69,11 @@ public class ProcessFileTest {
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); //format the date to have no spaces
         String formatted_time = formatter.format(date);
-        
+
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
         res.entry.setPathToDestination("path");
         res.entry.setExecuteArguments("execute");
@@ -97,12 +99,11 @@ public class ProcessFileTest {
         ResultSet resultSet = statement.executeQuery(
                 "SELECT id FROM Entries WHERE time_stamp = " + "'" + res.entry.getTime() + "'"
         );
+
         int id = resultSet.getInt("id");
 
         resultSet.close();
-        statement.close();
 
-        statement = connection.createStatement();
         resultSet = statement.executeQuery(
                 "SELECT hash_value FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
         );
@@ -110,9 +111,7 @@ public class ProcessFileTest {
         assertEquals("63fc37d0b2e737cb245a22fa29e17cb8", resultSet.getString(1));
 
         resultSet.close();
-        statement.close();
 
-        statement = connection.createStatement();
         resultSet = statement.executeQuery(
                 "SELECT COUNT(hash_value) FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
         );
@@ -122,6 +121,5 @@ public class ProcessFileTest {
         resultSet.close();
         statement.close();
         connection.close();
-
     }
 }

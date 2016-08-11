@@ -4,7 +4,6 @@ import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -24,7 +23,7 @@ import org.slf4j.LoggerFactory;
  */
 public class FormServlet extends HttpServlet {
     Resource res = new Resource();
-    private final Logger logg = LoggerFactory.getLogger(FormServlet.class);
+    private static final Logger logg = LoggerFactory.getLogger(FormServlet.class);
 
     /**
      * This method runs when the submit button is clicked on the form.jsp.
@@ -45,9 +44,10 @@ public class FormServlet extends HttpServlet {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        String default_directory = config.getString("varentech.project.default_directory");
-        String context_path = config.getString("varentech.project.context_path");
-        String port = config.getString("varentech.project.port_number");
+        String default_directory = config.getString("default_directory");
+        String context_path = config.getString("context_path");
+        String port = config.getString("port_number");
+        String tab_name = config.getString("tab_name_form");
 
         String file_name = null;
         String path_to_destination = null;
@@ -59,8 +59,7 @@ public class FormServlet extends HttpServlet {
 
         //get all parameters from the form
         try {
-            List<FileItem> multiparts;
-            multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+            List<FileItem> multiparts = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
             String inputName;
             for (FileItem item : multiparts) {
 
@@ -112,7 +111,6 @@ public class FormServlet extends HttpServlet {
 
         //add entry to database
         impl.insertIntoEntries();
-        logg.debug("Successfully added entries to database.");
 
         //add file name to entriesDetail object
         res.entriesDetail.setFileName(res.entry.getFileName());
@@ -145,28 +143,14 @@ public class FormServlet extends HttpServlet {
             res.entriesDetail.setError("Was not able to archive. Directory does not exist. " + res.entriesDetail.getError());
         }
 
-        //send output and error to the screen (error will appear in red)
-        PrintWriter out = null;
-        try {
-            out = response.getWriter();
-        } catch (IOException e) {
-            logg.error("Exception while sending output/error to screen", e);
-        }
-        out.println("<html>");
-        out.println("<body>");
-        if (res.entriesDetail.getOutput() != null) {
-            out.println("<font color=”000000”>" + res.entriesDetail.getOutput() + "</font>");
-            out.println("<br>");
-        }
-        if (res.entriesDetail.getError() != null) {
-            out.println("<font color=”ff0000”>" + res.entriesDetail.getError() + "</font>");
-        }
-        out.println(
-                "<center> <a href=\"http://" + request.getServerName() + ":" + port + context_path + "/history.jsp\">Click to see history</a> </center>\n"
-        );
-        out.println("</body>");
-        out.println("</html>");
 
+        //redirect to the output
+        logg.debug("Now redirecting to file output page.");
+        try {
+            response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/output.jsp");
+        } catch (IOException e) {
+            logg.error("Error while redirecting to file output: ", e);
+        }
     }
 
     /**

@@ -1,6 +1,5 @@
 package com.varentech.deploya.form;
 
-
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.io.Files;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.concurrent.*;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class ProcessFile {
 
-    private Logger logg = LoggerFactory.getLogger(ProcessFile.class);
+    private static final Logger logg = LoggerFactory.getLogger(ProcessFile.class);
 
     /**
      * Executes a file in the terminal using the execute command given by the user.
@@ -38,7 +36,7 @@ public class ProcessFile {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        int timeout = config.getInt("varentech.project.execute_timeout");
+        int timeout = config.getInt("execute_timeout");
 
         ExecutorService service = Executors.newSingleThreadExecutor();
 
@@ -47,7 +45,6 @@ public class ProcessFile {
                 public void run() {
 
                     try {
-
                         Resource res = new Resource();
                         String output = "";
 
@@ -79,7 +76,7 @@ public class ProcessFile {
             Future<?> f = service.submit(r);
 
             if (timeout != -1) {
-                f.get(timeout, TimeUnit.MINUTES);     // attempt the task for one minute
+                f.get(timeout, TimeUnit.MINUTES); // attempt the task for given amount
             }
         } catch (final InterruptedException e) {
             logg.error("Thread interrupted during sleep: ", e);
@@ -172,8 +169,6 @@ public class ProcessFile {
                     }
 
                     imp.insertIntoEntriesDetail(subentry);
-                    logg.debug("{} was added to the database.", fileName);
-
                 }
 
             } catch (IOException e) {

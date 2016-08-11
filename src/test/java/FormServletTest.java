@@ -1,6 +1,5 @@
 import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.form.Resource;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -8,6 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.Assert.*;
+
 
 public class FormServletTest {
     Resource res = new Resource();

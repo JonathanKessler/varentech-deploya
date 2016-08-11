@@ -5,10 +5,10 @@
 
 <% Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
     Config config1 = ConfigFactory.load(fileConf);
-    String tab_name_login = config1.getString("varentech.project.tab_name_login");
-    String page_title = config1.getString("varentech.project.page_title");
-    String context_path = config1.getString("varentech.project.context_path");
-    String port = config1.getString("varentech.project.port_number");
+    String tab_name_login = config1.getString("tab_name_login");
+    String page_title = config1.getString("page_title");
+    String context_path = config1.getString("context_path");
+    String port = config1.getString("port_number");
 %>
 
 <html lang="en">
@@ -23,7 +23,6 @@
 <BODY>
 
 <div class="container">
-
     <nav class="navbar navbar-inverse">
 
         <div class="navbar-header">

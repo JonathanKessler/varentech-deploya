@@ -9,10 +9,10 @@
 
 <% Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
     Config config1 = ConfigFactory.load(fileConf);
-    String tab_name_history = config1.getString("varentech.project.tab_name_history");
-    String page_title = config1.getString("varentech.project.page_title");
-    String context_path = config1.getString("varentech.project.context_path");
-    String port_number = config1.getString("varentech.project.port_number");
+    String tab_name_history = config1.getString("tab_name_history");
+    String page_title = config1.getString("page_title");
+    String context_path = config1.getString("context_path");
+    String port_number = config1.getString("port_number");
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
         return;
@@ -49,9 +49,15 @@
 
 <div class="container">
     <nav class="navbar navbar-inverse">
-        <div class="navbar-header">
-            <p class="navbar-brand" href="#"><%=page_title%>
-            </p>
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <p class="navbar-brand" href="#"><%=page_title%>
+                </p>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="http://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/form.jsp">Form</a></li>
+                <li><a href="http://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/history.jsp">History</a></li>
+            </ul>
         </div>
     </nav>
 </div>
@@ -108,19 +114,7 @@
                 return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue;
             }
         }
-        //clears all parameters from the url
-        function clearParams(url) {
-            var index = 0;
-            var newURL = url;
-            index = url.indexOf('?');
-            if (index == -1) {
-                index = url.indexOf('#');
-            }
-            if (index != -1) {
-                newURL = url.substring(0, index);
-            }
-            window.history.pushState("", "", newURL);
-        }
+
         //clears unnecessary parameters from the url when the entries tab is clicked. Adds the appropriate parameters
         function entriesTabClick() {
             table2.search("").draw();
@@ -319,7 +313,6 @@
                     var run1FileName = table.row('#' + compare1).data()[3];
                     var run2UserName = table.row('#' + compare2).data()[2];
                     var run2FileName = table.row('#' + compare2).data()[3];
-                    //$("#here").replaceWith('<h4 id="here"> Comparing run <a onclick="compare();">' + run1FileName + '</a>, ' + run1UserName + ' to run <a href="#" onclick="compare();">' + run2FileName + '</a>, ' + run2UserName + '.</h4>');
                     $("#here").replaceWith('<h4 id="here"> Comparing run ' + run1FileName + ', ' + run1UserName + ' to run ' + run2FileName + ', ' + run2UserName + '.</h4>');
                     table5.clear();
                     table2.columns(1).search("^" + compare1.toString() + "$", true);
@@ -476,49 +469,39 @@
                             $(this).html('<input type="text" placeholder="Select Dates" id="date_range" />');
                         }
                     });
-
                     $("#date_range").daterangepicker({
                         autoUpdateInput: false,
                         locale: {
                             "cancelLabel": "Clear"
                         }
                     });
-
                     $("#date_range").on('apply.daterangepicker', function(ev, picker) {
                         var date = picker.startDate.format('YYYY-MM-DDTHH:mm:ss') + ' to ' + picker.endDate.format('YYYY-MM-DDTHH:mm:ss');
                         $(this).val(date);
                         replaceUrlParam(window.location.toString(), 'col1',date);
                         table.draw();
                     });
-
                     $("#date_range").on('cancel.daterangepicker', function(ev, picker) {
                         replaceUrlParam(window.location.toString(), 'col1');
                         $(this).val('');
                         table.draw();
                     });
-
                     var allowFilter = ['table1'];
-
                     $.fn.dataTableExt.afnFiltering.push(
                             function( oSettings, aData, iDataIndex ) {
-
                                 if ( $.inArray( oSettings.nTable.getAttribute('id'), allowFilter ) == -1 )
                                 {
                                     // if not table should be ignored
                                     return true;
                                 }
-
-
                                 var grab_daterange = $("#date_range").val();
                                 var give_results_daterange = grab_daterange.split(" to ");
                                 var filterstart = give_results_daterange[0];
                                 var filterend = give_results_daterange[1];
-
                                 var iStartDateCol = 1; //using column 2 in this instance
                                 var iEndDateCol = 1;
                                 var tabledatestart = aData[iStartDateCol];
                                 var tabledateend= aData[iEndDateCol];
-
                                 if ( !filterstart && !filterend ) {
                                     return true;
                                 } else if ((moment(filterstart).isSame(tabledatestart) || moment(filterstart).isBefore(tabledatestart)) && filterend === "") {
@@ -531,8 +514,6 @@
                                 return false;
                             }
                     );
-
-
                     // Apply the column search
                     table.columns().every(function () {
                         var that = this;
@@ -912,7 +893,6 @@
                     }
                 </script>
 
-
             </div>
         </div>
 
@@ -1159,3 +1139,4 @@
 </div>
 </body>
 </html>
+

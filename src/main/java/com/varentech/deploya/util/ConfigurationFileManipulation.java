@@ -9,9 +9,8 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.URL;
 
-
 public class ConfigurationFileManipulation {
-    static Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
+    private static final Logger logg = LoggerFactory.getLogger(ConfigurationFileManipulation.class);
     String path;
     public ConfigurationFileManipulation(String path) {
         this.path = path;
@@ -23,25 +22,14 @@ public class ConfigurationFileManipulation {
 
     public void exportConfigFile() {
         InputStream inputStream = getClass().getResourceAsStream("/reference.conf");
-        BufferedReader input = new BufferedReader(new InputStreamReader((inputStream)));
-        String line = null;
 
         logg.debug("Reading internal config file.");
         try {
-
             //Getting the default .properties file as a File object.
             URL url = Resources.getResource("reference.conf");
-            File internalConfig = new File(url.getPath());
-
-            File exportedPropertiesFile = new File(path);
-            //exportedPropertiesFile.createNewFile();
-
 
             String text = Resources.toString(url, Charsets.UTF_8);
             System.out.println(text);
-
-            //Copy the contents of the internalConfig to the desired properties file.
-            //Files.copy(inputStream, exportedPropertiesFile.toPath());
 
             try {
                 File destination_file = new File(path);
@@ -61,4 +49,3 @@ public class ConfigurationFileManipulation {
         }
     }
 }
-
