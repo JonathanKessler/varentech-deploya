@@ -9,10 +9,10 @@
 
 <% Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
     Config config1 = ConfigFactory.load(fileConf);
-    String tab_name_history = config1.getString("varentech.project.tab_name_history");
-    String page_title = config1.getString("varentech.project.page_title");
-    String context_path = config1.getString("varentech.project.context_path");
-    String port_number = config1.getString("varentech.project.port_number");
+    String tab_name_history = config1.getString("tab_name_history");
+    String page_title = config1.getString("page_title");
+    String context_path = config1.getString("context_path");
+    String port_number = config1.getString("port_number");
     if (session.getAttribute("Username") == null) {
         response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
         return;
@@ -886,7 +886,6 @@
                         }
                     }
                 </script>
-
 
             </div>
         </div>
