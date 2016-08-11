@@ -1,5 +1,7 @@
 import com.varentech.deploya.util.ConfigurationFileManipulation;
 import org.junit.Test;
+
+import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -13,6 +15,6 @@ public class ConfigurationFileManipulationTest {
         conf.exportConfigFile();
 
         File file = new File(path);
-        assertNotEquals(0,file.length());
+        assertThat(0,not(file.length()));
     }
 }
