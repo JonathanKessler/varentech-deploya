@@ -20,7 +20,7 @@ public class DatabaseConnectivityTest {
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
         db.databaseCheck();
 
@@ -43,7 +43,7 @@ public class DatabaseConnectivityTest {
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
         Connection connection = ConnectionConfiguration.getConnection();
         DatabaseMetaData metaData = connection.getMetaData();

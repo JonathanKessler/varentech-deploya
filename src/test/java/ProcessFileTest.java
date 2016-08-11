@@ -73,7 +73,7 @@ public class ProcessFileTest {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("varentech.project.path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
 
         res.entry.setPathToDestination("path");
         res.entry.setExecuteArguments("execute");
@@ -100,28 +100,26 @@ public class ProcessFileTest {
                 "SELECT id FROM Entries WHERE time_stamp = " + "'" + res.entry.getTime() + "'"
         );
 
-            int id = resultSet.getInt("id");
+        int id = resultSet.getInt("id");
 
-            resultSet.close();
+        resultSet.close();
 
-            resultSet = statement.executeQuery(
-                    "SELECT hash_value FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
-            );
+        resultSet = statement.executeQuery(
+                "SELECT hash_value FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
+        );
 
-            assertEquals("63fc37d0b2e737cb245a22fa29e17cb8", resultSet.getString(1));
+        assertEquals("63fc37d0b2e737cb245a22fa29e17cb8", resultSet.getString(1));
 
-            resultSet.close();
+        resultSet.close();
 
-            resultSet = statement.executeQuery(
-                    "SELECT COUNT(hash_value) FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
-            );
+        resultSet = statement.executeQuery(
+                "SELECT COUNT(hash_value) FROM Entries_Details WHERE entries_id = " + "'" + id + "'"
+        );
 
-            assertEquals(1, resultSet.getInt(1));
+        assertEquals(1, resultSet.getInt(1));
 
-            resultSet.close();
-            statement.close();
-            connection.close();
-        }
-
-
+        resultSet.close();
+        statement.close();
+        connection.close();
+    }
 }

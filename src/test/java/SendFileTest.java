@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.ResourceBundle;
 
 import static org.junit.Assert.*;
 
@@ -49,9 +48,7 @@ public class SendFileTest {
 
         Resource res = new Resource();
         SendFile sendFile = new SendFile();
-
-        Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
-        Config config = ConfigFactory.load(fileConf);
+        Config config = ConfigFactory.load();
 
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
         File testFile = new File(url.getFile());
@@ -62,9 +59,8 @@ public class SendFileTest {
         InputStream inputStream = new FileInputStream(testFile.getPath());
         sendFile.sendToArchive(inputStream);
 
-        File archive_file = new File(config.getString("varentech.project.default_directory") + File.separator + testFile.getName());
+        File archive_file = new File(config.getString("default_directory") + File.separator + testFile.getName());
         assertEquals(actualLength, archive_file.length());
 
     }
-
 }
