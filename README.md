@@ -16,7 +16,7 @@
   *The user can override log level using logback and slf4j by creating a logback-test.xml and running java -Dlogback.configurationFile=path/to/logback-test.xml -jar /path/to/deploya.jar.*
   
   The default configuration file can be overriden as well. To update this file, create a file named application.conf and add updated parameters. The application.conf file must be in your working directory when you run java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config {path/to/export}/application.conf.
-  Below is the default configuration file. When creating application.conf, be sure to use the same layout. It is not necessary to include all variables, only ones that are being updated. 
+  Below is the default configuration file.It is not necessary to include all variables, only ones that are being updated. 
 
 	
 			port_number=8080 
