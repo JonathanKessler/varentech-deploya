@@ -22,7 +22,7 @@ public class ConfigurationFileManipulation {
 
     public void exportConfigFile() {
         InputStream inputStream = getClass().getResourceAsStream("/reference.conf");
-       
+
         logg.debug("Reading internal config file.");
         try {
             //Getting the default .properties file as a File object.

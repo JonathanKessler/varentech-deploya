@@ -18,7 +18,7 @@ public class DatabaseConnectivity {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
         logg.debug("Loading values from the config file");
-        String pathOfDataBase = config.getString("varentech.project.path_to_database");
+        String pathOfDataBase = config.getString("path_to_database");
         try {
             logg.debug("Loading database path given at " + pathOfDataBase);
             //setting path of database to ConnectionConfiguration
