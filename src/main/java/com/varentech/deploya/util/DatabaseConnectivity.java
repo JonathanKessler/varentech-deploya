@@ -33,7 +33,8 @@ public class DatabaseConnectivity {
 
     public static void databaseCheck() {
         try {
-            DatabaseMetaData metaData = ConnectionConfiguration.getConnection().getMetaData();
+            Connection connection = ConnectionConfiguration.getConnection();
+            DatabaseMetaData metaData = connection.getMetaData();
 
             //check to see if Entries table exists.
             ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
@@ -43,20 +44,25 @@ public class DatabaseConnectivity {
                 int columnCount = rsmd.getColumnCount();
                 if (columnCount == 0) {
                     EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
+                    connection.close();
                     dao.insertColumnsIntoEntries();
                 } else {
                     String[] columns = {"id", "time_stamp", "username", "file_name", "path_to_local_file", "path_to_destination", "unpack_args", "execute_args", "archive"};
                     //check to see if all of columns exists in Entries table.
                     for (String col : columns) {
+                        connection.close();
                         columnCheck(hasColumn("Entries", col));
                     }
                 }
             } else {
                 logg.debug("Entries table does not exist, creating Entries table...");
                 EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+                connection.close();
                 impl.createEntriesTable();
             }
             //check for Entries_Details table
+            connection = ConnectionConfiguration.getConnection();
+            metaData = connection.getMetaData();
             resultSet = metaData.getTables(null, null, "Entries_Details", null);
             if (resultSet.next()) {
                 logg.debug("Entries_Details table exists");
@@ -64,20 +70,24 @@ public class DatabaseConnectivity {
                 int columnCount = rsmd.getColumnCount();
                 if (columnCount == 0) {
                     EntriesDetailsDaoImpl dao = new EntriesDetailsDaoImpl();
+                    connection.close();
                     dao.insertColumnsIntoEntriesDetails();
                 } else {
                     //Need to check that each column is properly named in Entries_Details table
                     String[] column = {"id", "entries_id", "file_name", "hash_value", "output", "error"};
                     for (String col : column) {
+                        connection.close();
                         columnCheck(hasColumn("Entries_Details", col));
                     }
                 }
             } else {
                 logg.debug("Entries_Details table does not exits, creating Entries_Details table...");
                 EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+                connection.close();
                 impl.createEntriesDetailsTable();
             }
             resultSet.close();
+            connection.close();
 
         } catch (SQLException e) {
             logg.error("Exception while checking for columns in database. ", e);
