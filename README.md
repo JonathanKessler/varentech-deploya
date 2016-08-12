@@ -20,7 +20,7 @@
 
 	
 			port_number=8080 
-			default_directory=/home/admin/Documents/archive
+			default_directory=~/Documents/archive
 			tab_name_form=Form
 			tab_name_history=History
 			tab_name_login=Login
@@ -29,7 +29,7 @@
 			#execute timeout in minutes
 			#if no timeout put -1
 			execute_timeout=10
-			path_to_database=/home/admin/Documents/Deploya.db
+			path_to_database=~/Documents/Deploya.db
 
     
 
