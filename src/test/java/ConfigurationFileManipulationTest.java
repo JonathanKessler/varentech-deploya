@@ -16,5 +16,7 @@ public class ConfigurationFileManipulationTest {
 
         File file = new File(path);
         assertThat(0,not(file.length()));
+        
+        file.delete();
     }
 }
