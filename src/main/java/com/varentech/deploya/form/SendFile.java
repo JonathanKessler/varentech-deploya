@@ -42,12 +42,13 @@ public class SendFile {
     public void sendToArchive(InputStream inputStream) {
 
         Resource res = new Resource();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
         try {
-            File destination_file = new File(config.getString("default_directory") + File.separator + res.entry.getFileName());
+            File destination_file = new File(formServlet.homeDirectory(config.getString("default_directory")) + File.separator + res.entry.getFileName());
             OutputStream outputStream;
             outputStream = new FileOutputStream(destination_file);
             IOUtils.copy(inputStream, outputStream);

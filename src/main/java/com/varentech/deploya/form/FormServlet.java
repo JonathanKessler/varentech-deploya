@@ -44,10 +44,9 @@ public class FormServlet extends HttpServlet {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        String default_directory = config.getString("default_directory");
+        String default_directory = homeDirectory(config.getString("default_directory"));
         String context_path = config.getString("context_path");
         String port = config.getString("port_number");
-        String tab_name = config.getString("tab_name_form");
 
         String file_name = null;
         String path_to_destination = null;
@@ -70,7 +69,7 @@ public class FormServlet extends HttpServlet {
                     try {
                         fileInputStream = fileItem.getInputStream();
                     } catch (IOException e) {
-                        logg.error("Exception while getting file item from form: ",e);
+                        logg.error("Exception while getting file item from form: ", e);
                     }
                 }
                 //gets all other parameters from form
@@ -167,5 +166,13 @@ public class FormServlet extends HttpServlet {
             time_stamped = file_name.substring(0, dot) + "_" + res.entry.getTime() + file_name.substring(dot);
         }
         return time_stamped;
+    }
+
+    public static String homeDirectory(String directory) {
+        String home = System.getProperty("user.home");
+        if(home!=null) {
+            directory = directory.replace("~", home);
+        }
+        return directory;
     }
 }

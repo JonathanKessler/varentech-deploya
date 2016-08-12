@@ -1,6 +1,7 @@
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
+import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.form.Resource;
 import com.varentech.deploya.util.ConnectionConfiguration;
 import org.junit.Test;
@@ -20,11 +21,12 @@ public class EntriesDetailsDaoImplTest {
     public void createEntriesTableTest() {
 
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
         Connection connection = ConnectionConfiguration.getConnection();
 
         try {
@@ -57,11 +59,12 @@ public class EntriesDetailsDaoImplTest {
     @Test
     public void createEntriesDetailsTableTest() throws SQLException {
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
         Connection connection = ConnectionConfiguration.getConnection();
 
         try {
@@ -95,11 +98,12 @@ public class EntriesDetailsDaoImplTest {
     public void insertIntoEntriesTest() throws SQLException {
         Resource res = new Resource();
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
         Connection connection = ConnectionConfiguration.getConnection();
 
         DatabaseMetaData metaData = connection.getMetaData();
@@ -149,11 +153,12 @@ public class EntriesDetailsDaoImplTest {
     public void insertIntoEntriesDetailsTest() throws SQLException {
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
         Resource res = new Resource();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
         Connection connection = ConnectionConfiguration.getConnection();
 
         DatabaseMetaData metaData = connection.getMetaData();

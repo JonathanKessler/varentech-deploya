@@ -1,5 +1,6 @@
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.util.ConnectionConfiguration;
 import com.varentech.deploya.util.DatabaseConnectivity;
 import org.junit.Test;
@@ -17,10 +18,11 @@ public class DatabaseConnectivityTest {
     @Test
     public void databaseCheckTest() throws SQLException {
         DatabaseConnectivity db = new DatabaseConnectivity();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
 
         db.databaseCheck();
 
@@ -40,10 +42,11 @@ public class DatabaseConnectivityTest {
     @Test
     public void hasColumnTest() throws SQLException {
         DatabaseConnectivity db = new DatabaseConnectivity();
+        FormServlet formServlet = new FormServlet();
 
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
 
         Connection connection = ConnectionConfiguration.getConnection();
         DatabaseMetaData metaData = connection.getMetaData();
