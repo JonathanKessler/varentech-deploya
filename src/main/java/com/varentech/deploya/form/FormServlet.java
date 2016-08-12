@@ -76,9 +76,9 @@ public class FormServlet extends HttpServlet {
                 if (item.isFormField()) {
                     inputName = item.getFieldName();
                     if (inputName.equalsIgnoreCase("path_to_destination")) {
-                        path_to_destination = item.getString();
+                        path_to_destination = homeDirectory(item.getString());
                     } else if (inputName.equalsIgnoreCase("execute_args")) {
-                        execute_args = item.getString();
+                        execute_args = homeDirectory(item.getString());
                     } else if (inputName.equalsIgnoreCase("unpack_args")) {
                         unpack_args = item.getString();
                     } else if (inputName.equalsIgnoreCase("archive")) {
