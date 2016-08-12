@@ -1,5 +1,6 @@
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.form.Resource;
 import com.varentech.deploya.form.SendFile;
 import org.junit.Before;
@@ -48,6 +49,7 @@ public class SendFileTest {
 
         Resource res = new Resource();
         SendFile sendFile = new SendFile();
+        FormServlet formServlet = new FormServlet();
         Config config = ConfigFactory.load();
 
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
@@ -59,7 +61,7 @@ public class SendFileTest {
         InputStream inputStream = new FileInputStream(testFile.getPath());
         sendFile.sendToArchive(inputStream);
 
-        File archive_file = new File(config.getString("default_directory") + File.separator + testFile.getName());
+        File archive_file = new File(formServlet.homeDirectory(config.getString("default_directory")) + File.separator + testFile.getName());
         assertEquals(actualLength, archive_file.length());
 
     }

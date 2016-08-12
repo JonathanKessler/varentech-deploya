@@ -1,6 +1,7 @@
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
+import com.varentech.deploya.form.FormServlet;
 import com.varentech.deploya.form.ProcessFile;
 import com.varentech.deploya.form.Resource;
 import com.varentech.deploya.util.ConnectionConfiguration;
@@ -36,7 +37,7 @@ public class ProcessFileTest {
         assertEquals(res.entriesDetail.getError(), "");
     }
 
-    @Test
+   /* @Test
     public void unpackTest() throws IOException {
         ProcessFile processFile = new ProcessFile();
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
@@ -58,13 +59,14 @@ public class ProcessFileTest {
 
         assertEquals(3, tempDir.list().length);
 
-    }
+    }*/
 
     @Test
     public void hashFilesTest() throws SQLException {
         ProcessFile processFile = new ProcessFile();
         Resource res = new Resource();
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
+        FormServlet formServlet = new FormServlet();
 
         Date date = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss"); //format the date to have no spaces
@@ -73,7 +75,7 @@ public class ProcessFileTest {
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
 
-        ConnectionConfiguration.setPathToDataBase(config.getString("path_to_database"));
+        ConnectionConfiguration.setPathToDataBase(formServlet.homeDirectory(config.getString("path_to_database")));
 
         res.entry.setPathToDestination("path");
         res.entry.setExecuteArguments("execute");
