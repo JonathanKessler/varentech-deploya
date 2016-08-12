@@ -3,6 +3,7 @@ package com.varentech.deploya.util;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
+import com.varentech.deploya.form.FormServlet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,11 +15,12 @@ public class DatabaseConnectivity {
     private static final Logger logg = LoggerFactory.getLogger(DatabaseConnectivity.class);
 
     public static void findDatabase() {
+        FormServlet formServlet = new FormServlet();
         //Load the given config values given from the arguments
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
         logg.debug("Loading values from the config file");
-        String pathOfDataBase = config.getString("path_to_database");
+        String pathOfDataBase = formServlet.homeDirectory(config.getString("path_to_database"));
         try {
             logg.debug("Loading database path given at " + pathOfDataBase);
             //setting path of database to ConnectionConfiguration
