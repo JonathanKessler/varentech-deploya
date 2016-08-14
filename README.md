@@ -9,7 +9,7 @@
 
 ###STEPS TO ACTUALLY RUN THE APP
 
-  Execute the jar using the commanad: java -jar deploya.jar. Then go to the login page (currently: localhost:8080/ProjectThunder/login.jsp) in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url). The history page includes the information stored in the database. The database will be created if one does not already exist at the path given in the configuration file.
+  Execute the jar using the commanad: java -jar deploya.jar. Then go to the login page (currently: localhost:8080/Deploya/login.jsp) in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url). The history page includes the information stored in the database. The database will be created if one does not already exist at the path given in the configuration file.
   
   They can compare two runs, either by files or output. When comparing by files, added files are shown in green, removed in red, changed in purple, and unchanged in grey. When comparing by output, yellow shows a change in output and red shows a change in error.
   
@@ -24,8 +24,8 @@
 			tab_name_form=Form
 			tab_name_history=History
 			tab_name_login=Login
-			page_title= Project Thunder
-			context_path=/ProjectThunder
+			page_title= Deploya
+			context_path=/Deploya
 			#execute timeout in minutes
 			#if no timeout put -1
 			execute_timeout=10
