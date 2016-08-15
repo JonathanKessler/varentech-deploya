@@ -49,8 +49,12 @@ public class Main {
         logg.debug("Loaded " + origin);
 
         String path_DB = config.getString("path_to_database");
-        form.createDirectoryDB(form.homeDirectory(path_DB));
+        boolean run = form.createDirectoryDB(form.homeDirectory(path_DB));
 
+        //if database cannot be created then exit
+        if(!run) {
+            System.exit(1);
+        }
 
         db.findDatabase();
         if (args.length == 0) {
