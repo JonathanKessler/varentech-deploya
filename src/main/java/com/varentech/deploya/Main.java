@@ -41,14 +41,18 @@ public class Main {
     private static final Logger logg = LoggerFactory.getLogger(Main.class);
 
     public static void main (String[] args) {
+        FormServlet form = new FormServlet();
         DatabaseConnectivity db = new DatabaseConnectivity();
-        db.findDatabase();
-
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
         Config config = ConfigFactory.load(fileConf);
         ConfigOrigin origin = config.origin();
         logg.debug("Loaded " + origin);
 
+        String path_DB = config.getString("path_to_database");
+        form.createDirectoryDB(form.homeDirectory(path_DB));
+
+
+        db.findDatabase();
         if (args.length == 0) {
             int port = config.getInt("port_number");
             String context_path = config.getString("context_path");
