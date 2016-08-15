@@ -174,15 +174,29 @@ public class FormServlet extends HttpServlet {
         return directory;
     }
 
-    public void createDirectoryDB(String path) {
+    /**
+     *create the directory where the database will be if it does not exist
+     */
+    public boolean createDirectoryDB(String path) {
         File paths = new File(path);
         File parent = new File(paths.getParent());
-        if (!parent.exists() || !parent.isDirectory()) {
-            new File(parent.toString()).mkdir();
-            logg.info("Directory has been made: " + parent);
+        File superparent = new File(parent.getParent());
+        if (superparent.exists()){
+            if (!parent.exists() || !parent.isDirectory()) {
+                new File(parent.toString()).mkdir();
+                logg.info("Directory has been made: " + parent);
+                return true;
+            }
+        }else{
+            logg.error("Error " + superparent + "does not exist. No such path " + path);
+            return false;
         }
+        return false;
     }
 
+    /**
+     *create the directory for archive if it does not exist
+     */
     public boolean createDirectoryArchive(String path) {
         File paths = new File(path);
         File parent = new File(paths.getParent());
