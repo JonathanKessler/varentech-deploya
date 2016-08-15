@@ -8,6 +8,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jetty-version>9.3.7.v20160115</jetty-version>
+        <src.libdir>${project.build.directory}/embedded-jetty-jsp-1-SNAPSHOT.jar</src.libdir>
     </properties>
     <dependencies>
         <dependency>
@@ -214,8 +215,6 @@
             <version>1.9.5</version>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 
     <profiles>
@@ -339,7 +338,7 @@
                             <version>1.0</version>
                             <release>1%{?dist}</release>
                             <group>Development/Tools</group>
-                            <packager>Varen Technologies</packager>
+                            <packager>Varen Technolsrc/main/resourcesogies</packager>
                             <description>The user will upload a file along with
                                 execute instructions, a desired location, and
                                 options to unpack and archive as well. The app
@@ -364,9 +363,21 @@
                                 </mapping>
                                 <mapping>
                                     <directory>/target/lib</directory>
+                                    <dependency></dependency>
+                                </mapping>
+                                <mapping>
+                                    <directory>/target/lib</directory>
                                     <sources>
                                         <source>
-                                            <location>/target/</location>
+                                            <location>${src.libdir}</location>
+                                        </source>
+                                    </sources>
+                                </mapping>
+                                <mapping>
+                                    <directory>/target/bin</directory>
+                                    <sources>
+                                        <source>
+                                            <location>scriptt</location>
                                         </source>
                                     </sources>
                                 </mapping>
