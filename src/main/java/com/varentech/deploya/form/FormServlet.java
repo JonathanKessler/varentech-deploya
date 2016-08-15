@@ -122,9 +122,9 @@ public class FormServlet extends HttpServlet {
 
         //if they want to archive, then send file to archive destination
 
-
+        boolean arch = false;
         if (archive != null) {
-            boolean arch = createDirectoryArchive(default_directory);
+            arch = createDirectoryArchive(default_directory);
             if (arch) {
                 send.sendToArchive(fileInputStream);
             }
@@ -133,6 +133,10 @@ public class FormServlet extends HttpServlet {
         //save all files to a temporary directory in order to directory and get hash, and execute
         SaveTempDirectory dir = new SaveTempDirectory();
         dir.directory(file_name);
+
+        if (arch == false){
+            res.entriesDetail.setError("Was not able to archive. Directory does not exist. " + res.entriesDetail.getError());
+        }
 
         //add entriesDetail to database
         impl.insertIntoEntriesDetail(res.entriesDetail);
@@ -190,7 +194,6 @@ public class FormServlet extends HttpServlet {
             }
         } else {
             logg.error("Error " + parent + " does not exist. Could not archive.");
-            res.entriesDetail.setError("Was not able to archive." + parent + " does not exist. " + res.entriesDetail.getError());
             return false;
         }
         return false;
