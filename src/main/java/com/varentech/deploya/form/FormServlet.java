@@ -6,6 +6,9 @@ import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
 import javax.servlet.http.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -118,15 +121,12 @@ public class FormServlet extends HttpServlet {
         send.sendToDestination(fileInputStream, file_name);
 
         //if they want to archive, then send file to archive destination
-        boolean fileDoesNotExist = false;
+
+
         if (archive != null) {
-            File archiveFile = new File(res.entry.getPathToLocalFile());
-            //only archive if the archive directory already exists
-            if (archiveFile.exists()) {
+            boolean arch = createDirectoryArchive(default_directory);
+            if (arch) {
                 send.sendToArchive(fileInputStream);
-            } else if (!archiveFile.exists()) {
-                logg.error("Was not able to archive. Directory does not exist");
-                fileDoesNotExist = true;
             }
         }
 
@@ -136,12 +136,6 @@ public class FormServlet extends HttpServlet {
 
         //add entriesDetail to database
         impl.insertIntoEntriesDetail(res.entriesDetail);
-
-        //if the archive directory did not exist, add to error
-        if (fileDoesNotExist) {
-            res.entriesDetail.setError("Was not able to archive. Directory does not exist. " + res.entriesDetail.getError());
-        }
-
 
         //redirect to the output
         logg.debug("Now redirecting to file output page.");
@@ -170,9 +164,35 @@ public class FormServlet extends HttpServlet {
 
     public static String homeDirectory(String directory) {
         String home = System.getProperty("user.home");
-        if(home!=null) {
+        if (home != null) {
             directory = directory.replace("~", home);
         }
         return directory;
+    }
+
+    public void createDirectoryDB(String path) {
+        File paths = new File(path);
+        File parent = new File(paths.getParent());
+        if (!parent.exists() || !parent.isDirectory()) {
+            new File(parent.toString()).mkdir();
+            logg.info("Directory has been made: " + parent);
+        }
+    }
+
+    public boolean createDirectoryArchive(String path) {
+        File paths = new File(path);
+        File parent = new File(paths.getParent());
+        if (parent.exists()) {
+            if (!paths.exists() || !paths.isDirectory()) {
+                new File(paths.toString()).mkdir();
+                logg.info("Directory has been made: " + paths);
+                return true;
+            }
+        } else {
+            logg.error("Error " + parent + " does not exist. Could not archive.");
+            res.entriesDetail.setError("Was not able to archive." + parent + " does not exist. " + res.entriesDetail.getError());
+            return false;
+        }
+        return false;
     }
 }
