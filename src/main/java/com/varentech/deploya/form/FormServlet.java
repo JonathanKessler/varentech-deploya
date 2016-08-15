@@ -188,10 +188,10 @@ public class FormServlet extends HttpServlet {
                 return true;
             }
         }else{
-            logg.error("Error " + superparent + "does not exist. No such path " + path);
+            logg.error("Error " + superparent + " does not exist. No such path " + path);
             return false;
         }
-        return false;
+        return true;
     }
 
     /**
