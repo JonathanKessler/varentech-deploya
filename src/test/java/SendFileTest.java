@@ -14,12 +14,7 @@ import java.net.URL;
 import static org.junit.Assert.*;
 
 public class SendFileTest {
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
-
+    
     @Test
     public void sendToDestinationTest() throws Exception {
 
@@ -50,6 +45,8 @@ public class SendFileTest {
         Resource res = new Resource();
         SendFile sendFile = new SendFile();
         FormServlet formServlet = new FormServlet();
+        File file = new File("src/test/resources/archive");
+        file.mkdir();
         Config config = ConfigFactory.load();
 
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
@@ -63,6 +60,7 @@ public class SendFileTest {
 
         File archive_file = new File(formServlet.homeDirectory(config.getString("default_directory")) + File.separator + testFile.getName());
         assertEquals(actualLength, archive_file.length());
+        file.delete();
 
     }
 }
