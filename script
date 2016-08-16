@@ -1,0 +1,15 @@
+#!/bin/sh
+
+cd /target
+
+#---------------------------------#
+# dynamically build the classpath #
+#---------------------------------#
+THE_CLASSPATH=
+for i in `ls ./lib/*.jar`
+do
+  THE_CLASSPATH=${THE_CLASSPATH}:${i}
+done
+
+java -cp ".:${THE_CLASSPATH}"  \
+  com.varentech.deploya.Main

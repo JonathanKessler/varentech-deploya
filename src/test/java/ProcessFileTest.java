@@ -37,7 +37,7 @@ public class ProcessFileTest {
         assertEquals(res.entriesDetail.getError(), "");
     }
 
-   /* @Test
+    @Test
     public void unpackTest() throws IOException {
         ProcessFile processFile = new ProcessFile();
         URL url = this.getClass().getResource("/HelloWorldJar.jar");
@@ -59,7 +59,7 @@ public class ProcessFileTest {
 
         assertEquals(3, tempDir.list().length);
 
-    }*/
+    }
 
     @Test
     public void hashFilesTest() throws SQLException {
@@ -82,7 +82,7 @@ public class ProcessFileTest {
         res.entry.setUnpackArguments("yes");
         res.entry.setTime(formatted_time);
         res.entry.setFileName("file");
-        res.entry.setUserName("katie");
+        res.entry.setUserName("name");
         res.entry.setArchive("no");
 
         impl.insertIntoEntries();

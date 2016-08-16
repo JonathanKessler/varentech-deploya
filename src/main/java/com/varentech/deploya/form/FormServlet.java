@@ -118,15 +118,12 @@ public class FormServlet extends HttpServlet {
         send.sendToDestination(fileInputStream, file_name);
 
         //if they want to archive, then send file to archive destination
-        boolean fileDoesNotExist = false;
+
+        boolean arch = false;
         if (archive != null) {
-            File archiveFile = new File(res.entry.getPathToLocalFile());
-            //only archive if the archive directory already exists
-            if (archiveFile.exists()) {
+            arch = createDirectoryArchive(default_directory);
+            if (arch) {
                 send.sendToArchive(fileInputStream);
-            } else if (!archiveFile.exists()) {
-                logg.error("Was not able to archive. Directory does not exist");
-                fileDoesNotExist = true;
             }
         }
 
@@ -134,14 +131,12 @@ public class FormServlet extends HttpServlet {
         SaveTempDirectory dir = new SaveTempDirectory();
         dir.directory(file_name);
 
-        //add entriesDetail to database
-        impl.insertIntoEntriesDetail(res.entriesDetail);
-
-        //if the archive directory did not exist, add to error
-        if (fileDoesNotExist) {
+        if (arch == false){
             res.entriesDetail.setError("Was not able to archive. Directory does not exist. " + res.entriesDetail.getError());
         }
 
+        //add entriesDetail to database
+        impl.insertIntoEntriesDetail(res.entriesDetail);
 
         //redirect to the output
         logg.debug("Now redirecting to file output page.");
@@ -168,11 +163,53 @@ public class FormServlet extends HttpServlet {
         return time_stamped;
     }
 
+    /**
+     *replaces ~ with users home directory
+     */
     public static String homeDirectory(String directory) {
         String home = System.getProperty("user.home");
-        if(home!=null) {
+        if (home != null) {
             directory = directory.replace("~", home);
         }
         return directory;
+    }
+
+    /**
+     *create the directory where the database will be if it does not exist
+     */
+    public boolean createDirectoryDB(String path) {
+        File paths = new File(path);
+        File parent = new File(paths.getParent());
+        File superparent = new File(parent.getParent());
+        if (superparent.exists()){
+            if (!parent.exists() || !parent.isDirectory()) {
+                new File(parent.toString()).mkdir();
+                logg.info("Directory has been made: " + parent);
+                return true;
+            }
+        }else{
+            logg.error("Error " + superparent + " does not exist. No such path " + path);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     *create the directory for archive if it does not exist
+     */
+    public boolean createDirectoryArchive(String path) {
+        File paths = new File(path);
+        File parent = new File(paths.getParent());
+        if (parent.exists()) {
+            if (!paths.exists() || !paths.isDirectory()) {
+                new File(paths.toString()).mkdir();
+                logg.info("Directory has been made: " + paths);
+                return true;
+            }
+        } else {
+            logg.error("Error " + parent + " does not exist. Could not archive.");
+            return false;
+        }
+        return true;
     }
 }

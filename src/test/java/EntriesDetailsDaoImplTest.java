@@ -34,7 +34,6 @@ public class EntriesDetailsDaoImplTest {
             ResultSet resultSet = metaData.getTables(null, null, "Entries", null);
 
             if (resultSet.getString(3).equals("Entries")) {
-                System.out.println("Entries exists");
                 resultSet.close();
                 connection.close();
             }
@@ -72,7 +71,6 @@ public class EntriesDetailsDaoImplTest {
             ResultSet resultSet = metaData.getTables(null, null, "Entries_Details", null);
 
             if (resultSet.getString(3).equals("Entries_Details")) {
-                System.out.println("Entries_Details exists");
                 resultSet.close();
                 connection.close();
             }
