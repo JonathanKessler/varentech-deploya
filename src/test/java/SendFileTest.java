@@ -14,7 +14,7 @@ import java.net.URL;
 import static org.junit.Assert.*;
 
 public class SendFileTest {
-    
+
     @Test
     public void sendToDestinationTest() throws Exception {
 
@@ -60,6 +60,7 @@ public class SendFileTest {
 
         File archive_file = new File(formServlet.homeDirectory(config.getString("default_directory")) + File.separator + testFile.getName());
         assertEquals(actualLength, archive_file.length());
+        archive_file.delete();
         file.delete();
 
     }
