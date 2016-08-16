@@ -1,8 +1,5 @@
 #!/bin/sh
 
-#export JAVA_HOME=/usr/local/java
-#PATH=/usr/local/java/bin:${PATH}
-
 cd /target
 
 #---------------------------------#
