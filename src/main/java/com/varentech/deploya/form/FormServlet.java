@@ -6,9 +6,6 @@ import com.varentech.deploya.daoimpl.EntriesDetailsDaoImpl;
 
 import javax.servlet.http.*;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -166,6 +163,9 @@ public class FormServlet extends HttpServlet {
         return time_stamped;
     }
 
+    /**
+     *replaces ~ with users home directory
+     */
     public static String homeDirectory(String directory) {
         String home = System.getProperty("user.home");
         if (home != null) {
