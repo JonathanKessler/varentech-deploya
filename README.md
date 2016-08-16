@@ -7,15 +7,25 @@
 
   - *Java 1.8*
 
-###STEPS TO ACTUALLY RUN THE APP
+###STARTING THE APP
 
-  Execute the jar using the commanad: java -jar deploya.jar. Then go to the login page (currently: localhost:8080/Deploya/login.jsp) in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url). The history page includes the information stored in the database. The database will be created if one does not already exist at the path given in the configuration file.
+####As Uber Jar
+
+  Execute the jar using the commanad: java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config {path/to/export}/application.conf.
+  
+   *The user can override log level using logback and slf4j by creating a logback-test.xml and running java -Dlogback.configurationFile=path/to/logback-test.xml -jar /path/to/deploya.jar.*
+   
+####As RPM
+
+  First install the rpm using the command: rpm -i path/to/deploya-1.0-1.el7.centos.noarch.rpm. Next, go to the bin and run the command: ./script.
+  
+###USING THE APP
+  
+  After starting the application, go to the login page (currently: localhost:8080/Deploya/login.jsp) in the web browser, where the user will input a user name. Next, they will be redirected to a page where they can upload their file and necessary information. Once submitted, the standard output and/or standard error will be displayed on the screen. They will have the option to view the history page (accessible from the form upload page, the output page, and/or by putting in the url). The history page includes the information stored in the database. The database will be created if one does not already exist at the path given in the configuration file.
   
   They can compare two runs, either by files or output. When comparing by files, added files are shown in green, removed in red, changed in purple, and unchanged in grey. When comparing by output, yellow shows a change in output and red shows a change in error.
   
-  *The user can override log level using logback and slf4j by creating a logback-test.xml and running java -Dlogback.configurationFile=path/to/logback-test.xml -jar /path/to/deploya.jar.*
-  
-  The default configuration file can be overriden as well. To update this file, create a file named application.conf and add updated parameters. The application.conf file must be in your working directory when you run java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config {path/to/export}/application.conf.
+  The default configuration file can be overriden. To update this file, create a file named application.conf and add updated parameters. The application.conf file must be in your working directory when you run the app. 
   Below is the default configuration file.It is not necessary to include all variables, only ones that are being updated. 
 
 	
