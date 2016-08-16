@@ -13,7 +13,7 @@
 
   Execute the jar using the commanad: java -jar deploya.jar. You can export the default configuration file using the command java -jar path/to/deploya.jar --export-config {path/to/export}/application.conf.
   
-   The user can override log level using logback and slf4j by creating a logback-test.xml and running: 
+   The user can override log level using logback and slf4j by creating a logback-test.xml and running:  
    java -Dlogback.configurationFile=path/to/logback-test.xml -jar /path/to/deploya.jar.
    
 ####As RPM
