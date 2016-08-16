@@ -82,7 +82,7 @@ public class ProcessFileTest {
         res.entry.setUnpackArguments("yes");
         res.entry.setTime(formatted_time);
         res.entry.setFileName("file");
-        res.entry.setUserName("katie");
+        res.entry.setUserName("name");
         res.entry.setArchive("no");
 
         impl.insertIntoEntries();
