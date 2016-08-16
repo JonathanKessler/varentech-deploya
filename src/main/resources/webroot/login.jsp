@@ -9,6 +9,17 @@
     String page_title = config1.getString("page_title");
     String context_path = config1.getString("context_path");
     String port = config1.getString("port_number");
+    String default_header = config1.getString("default_header");
+
+    String userName = request.getHeader(default_header);
+    if(userName!=null){
+        session.setAttribute("Username", userName);
+        response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/form.jsp");
+    }
+
+
+
+
 %>
 
 <html lang="en">
