@@ -210,6 +210,6 @@ public class FormServlet extends HttpServlet {
             logg.error("Error " + parent + " does not exist. Could not archive.");
             return false;
         }
-        return false;
+        return true;
     }
 }
