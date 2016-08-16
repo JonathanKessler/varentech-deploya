@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 
 public class SaveTempDirectoryTest {
 
-   /* @Test
+    @Test
     public void directoryTest() throws IOException, SQLException {
         Resource res = new Resource();
         EntriesDetailsDaoImpl impl = new EntriesDetailsDaoImpl();
@@ -78,7 +78,7 @@ public class SaveTempDirectoryTest {
             assertEquals(3, tempDir.list().length);
 
         }
-    }*/
+    }
 
     @Test
     public void moveFilesTest () throws IOException {
