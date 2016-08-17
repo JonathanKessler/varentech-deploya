@@ -14,7 +14,7 @@
     String context_path = config1.getString("context_path");
     String port_number = config1.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
+        response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + port_number + context_path + "/login.jsp");
         return;
     }
 %>
@@ -55,8 +55,8 @@
                 </p>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/form.jsp">Form</a></li>
-                <li><a href="http://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/history.jsp">History</a></li>
+                <li><a href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/form.jsp">Form</a></li>
+                <li><a href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=port_number%><%=context_path%>/history.jsp">History</a></li>
             </ul>
         </div>
     </nav>
@@ -114,7 +114,6 @@
                 return url + (url.indexOf('?') > 0 ? '&' : '?') + paramName + '=' + paramValue;
             }
         }
-
         //clears unnecessary parameters from the url when the entries tab is clicked. Adds the appropriate parameters
         function entriesTabClick() {
             table2.search("").draw();
@@ -1139,4 +1138,3 @@
 </div>
 </body>
 </html>
-
