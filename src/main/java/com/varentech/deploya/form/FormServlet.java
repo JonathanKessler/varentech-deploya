@@ -141,7 +141,7 @@ public class FormServlet extends HttpServlet {
         //redirect to the output
         logg.debug("Now redirecting to file output page.");
         try {
-            response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/output.jsp");
+            response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + port + context_path + "/output.jsp");
         } catch (IOException e) {
             logg.error("Error while redirecting to file output: ", e);
         }
