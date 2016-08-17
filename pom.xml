@@ -341,7 +341,7 @@
                             <version>1.0</version>
                             <release>1%{?dist}</release>
                             <group>Development/Tools</group>
-                            <packager>Varen Technologies</packager>
+                            <packager>Varen Technolsrc/main/resourcesogies</packager>
                             <description>The user will upload a file along with
                                 execute instructions, a desired location, and
                                 options to unpack and archive as well. The app
@@ -356,20 +356,15 @@
                             <mappings>
                                 <!-- configuration files -->
                                 <mapping>
-                                    <directory>/target/config</directory>
+                                    <directory>/opt/Deploya/config</directory>
                                     <configuration>true</configuration>
-                                    <sources>
-                                        <source>
-                                            <location>src/main/resources/</location>
-                                        </source>
-                                    </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/target/lib</directory>
+                                    <directory>/opt/Deploya/lib</directory>
                                     <dependency></dependency>
                                 </mapping>
                                 <mapping>
-                                    <directory>/target/lib</directory>
+                                    <directory>/opt/Deploya/lib</directory>
                                     <sources>
                                         <source>
                                             <location>${src.libdir}</location>
@@ -377,7 +372,7 @@
                                     </sources>
                                 </mapping>
                                 <mapping>
-                                    <directory>/target/bin</directory>
+                                    <directory>/opt/Deploya/bin</directory>
                                     <sources>
                                         <source>
                                             <location>script</location>
