@@ -57,7 +57,10 @@ public class Main {
         db.findDatabase();
         if (args.length == 0) {
             int port = config.getInt("port_number");
-            localHostCheck(port);
+            String localhost = config.getString("localhost");
+            if(localhost=="yes") {
+                localHostCheck(port);
+            }
             String context_path = config.getString("context_path");
             Main main = new Main(port,context_path);
             main.start();
