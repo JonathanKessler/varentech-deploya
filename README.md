@@ -41,6 +41,8 @@
 			#if no timeout put -1
 			execute_timeout=10
 			path_to_database=~/Deploya/Deploya.db
+			#yes if app can only be bound to local host; no otherwise
+			localhost=yes
 
     
 
