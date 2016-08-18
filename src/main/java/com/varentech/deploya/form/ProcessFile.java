@@ -142,9 +142,8 @@ public class ProcessFile {
         Resource res = new Resource();
         FormServlet form = new FormServlet();
 
-        for (int i = 0; i < fileList.length; i++) {
+        for (File file : fileList) {
 
-            File file = fileList[i];
             try {
                 String fileName = file.getName();
                 HashCode hashCode = null;
