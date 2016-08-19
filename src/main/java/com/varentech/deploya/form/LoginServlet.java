@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
         //redirect to the main form
         logg.debug("Now redirecting to file upload page.");
         try {
-            response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/form.jsp");
+            response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + port + context_path + "/form.jsp");
         } catch (IOException e) {
             logg.error("Error while redirecting to file upload: ", e);
         }

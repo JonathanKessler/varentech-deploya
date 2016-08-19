@@ -131,7 +131,7 @@ public class FormServlet extends HttpServlet {
         SaveTempDirectory dir = new SaveTempDirectory();
         dir.directory(file_name);
 
-        if (arch == false){
+        if (!arch){
             res.entriesDetail.setError("Was not able to archive. Directory does not exist. " + res.entriesDetail.getError());
         }
 
@@ -141,7 +141,7 @@ public class FormServlet extends HttpServlet {
         //redirect to the output
         logg.debug("Now redirecting to file output page.");
         try {
-            response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/output.jsp");
+            response.sendRedirect(request.getScheme() + "://" + request.getServerName() + ":" + port + context_path + "/output.jsp");
         } catch (IOException e) {
             logg.error("Error while redirecting to file output: ", e);
         }
@@ -175,19 +175,19 @@ public class FormServlet extends HttpServlet {
     }
 
     /**
-     *create the directory where the database will be if it does not exist
+     *create the directory where the database will be if it does not exist.
      */
     public boolean createDirectoryDB(String path) {
         File paths = new File(path);
         File parent = new File(paths.getParent());
         File superparent = new File(parent.getParent());
-        if (superparent.exists()){
+        if (superparent.exists()) {
             if (!parent.exists() || !parent.isDirectory()) {
                 new File(parent.toString()).mkdir();
                 logg.info("Directory has been made: " + parent);
                 return true;
             }
-        }else{
+        }else {
             logg.error("Error " + superparent + " does not exist. No such path " + path);
             return false;
         }
@@ -195,7 +195,7 @@ public class FormServlet extends HttpServlet {
     }
 
     /**
-     *create the directory for archive if it does not exist
+     *create the directory for archive if it does not exist.
      */
     public boolean createDirectoryArchive(String path) {
         File paths = new File(path);

@@ -12,7 +12,7 @@
     String context_path = config1.getString("context_path");
     String port = config1.getString("port_number");
     if (session.getAttribute("Username") == null) {
-        response.sendRedirect("http://" + request.getServerName() + ":" + port + context_path + "/login.jsp");
+        response.sendRedirect(request.getScheme() +"://" + request.getServerName() + ":" + port + context_path + "/login.jsp");
         return;
     }
 %>
@@ -37,8 +37,8 @@
                 </p>
             </div>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/form.jsp">Form</a></li>
-                <li><a href="http://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">History</a>
+                <li><a href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=port%><%=context_path%>/form.jsp">Form</a></li>
+                <li><a href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=port%><%=context_path%>/history.jsp">History</a>
                 </li>
             </ul>
         </div>

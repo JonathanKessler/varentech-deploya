@@ -1,10 +1,8 @@
 package com.varentech.deploya;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.io.IOException;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,6 +57,10 @@ public class Main {
         db.findDatabase();
         if (args.length == 0) {
             int port = config.getInt("port_number");
+            String localhost = config.getString("localhost");
+            if(localhost=="yes") {
+                localHost(port);
+            }
             String context_path = config.getString("context_path");
             Main main = new Main(port,context_path);
             main.start();
@@ -261,5 +263,16 @@ public class Main {
         System.out.println("\t java -jar path/to/deploya.jar");
         System.out.println("\t java -jar path/to/deploya.jar --export-config path/to/export/reference.conf");
         System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
+    }
+
+    public static void localHost(int port) {
+        SocketAddress socketAddress = new InetSocketAddress("127.0.0.1", port);
+        try {
+            ServerSocket serverSocket = new ServerSocket();
+            serverSocket.bind(socketAddress);
+            serverSocket.accept();
+        } catch (IOException e) {
+            logg.error("Server Socket exception thrown.");
+        }
     }
 }
