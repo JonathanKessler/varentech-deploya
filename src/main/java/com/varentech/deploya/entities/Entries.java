@@ -15,12 +15,12 @@ public class Entries {
     private String archive;
 
     //Default Constructor
-    public Entries() {}
+    public Entries() { }
 
     //Constructor
     public Entries(
-            String userName, String fileName, String time, String pathToLocalFile,
-            String pathToDestination, String unpackArguments, String executeArguments, String archive) {
+            final String userName, final String fileName, final String time, final String pathToLocalFile,
+            final String pathToDestination, final String unpackArguments, final String executeArguments, final String archive) {
         this.userName = userName;
         this.fileName = fileName;
         this.time = time;
@@ -32,28 +32,28 @@ public class Entries {
     }
 
     //Setters
-    public void setUserName(String userName) {
+    public void setUserName(final String userName) {
         this.userName = userName;
     }
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
-    public void setTime(String time) {
+    public void setTime(final String time) {
         this.time = time;
     }
-    public void setPathToLocalFile(String pathToLocalFile) {
+    public void setPathToLocalFile(final String pathToLocalFile) {
         this.pathToLocalFile = pathToLocalFile;
     }
-    public void setPathToDestination(String pathToDestination) {
+    public void setPathToDestination(final String pathToDestination) {
         this.pathToDestination = pathToDestination;
     }
-    public void setUnpackArguments(String unpackArguments) {
+    public void setUnpackArguments(final String unpackArguments) {
         this.unpackArguments = unpackArguments;
     }
-    public void setExecuteArguments(String executeArguments) {
+    public void setExecuteArguments(final String executeArguments) {
         this.executeArguments = executeArguments;
     }
-    public void setArchive(String archive) {
+    public void setArchive(final String archive) {
         this.archive = archive;
     }
 
@@ -79,8 +79,9 @@ public class Entries {
     public String getExecuteArguments() {
         return executeArguments;
     }
-    public String getArchive() { 
+    public String getArchive() {
         return archive;
     }
 
 }
+
