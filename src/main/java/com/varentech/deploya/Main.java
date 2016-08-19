@@ -38,7 +38,7 @@ public class Main {
     private static final String WEBROOT_INDEX = "/webroot/";
     private static final Logger logg = LoggerFactory.getLogger(Main.class);
 
-    public static void main (String[] args) {
+    public static void main(String[] args) {
         FormServlet form = new FormServlet();
         DatabaseConnectivity db = new DatabaseConnectivity();
         Config fileConf = ConfigFactory.parseFile(new File("application.conf"));
@@ -50,7 +50,7 @@ public class Main {
         boolean run = form.createDirectoryDB(form.homeDirectory(path_DB));
 
         //if database cannot be created then exit
-        if(!run) {
+        if (!run) {
             System.exit(1);
         }
 
@@ -58,7 +58,7 @@ public class Main {
         if (args.length == 0) {
             int port = config.getInt("port_number");
             String localhost = config.getString("localhost");
-            if(localhost=="yes") {
+            if(localhost == "yes") {
                 localHost(port);
             }
             String context_path = config.getString("context_path");
@@ -82,7 +82,7 @@ public class Main {
     private URI serverURI;
     private String context_path;
 
-    public Main (int port, String context_path) {
+    public Main(final int port, final String context_path) {
         this.port = port;
         this.context_path = context_path;
     }
@@ -151,7 +151,7 @@ public class Main {
      * Setup the basic application "context" for this application at "/".
      * This is also known as the handler tree (in jetty speak).
      */
-    private WebAppContext getWebAppContext(URI baseUri, File scratchDir) {
+    private WebAppContext getWebAppContext(final URI baseUri, final File scratchDir) {
         WebAppContext context = new WebAppContext();
         context.setContextPath(context_path);
         context.setAttribute("javax.servlet.context.tempdir", scratchDir);
@@ -212,7 +212,7 @@ public class Main {
     /**
      * Create Default Servlet (must be named "default").
      */
-    private ServletHolder defaultServletHolder(URI baseUri) {
+    private ServletHolder defaultServletHolder(final URI baseUri) {
         ServletHolder holderDefault = new ServletHolder("default", DefaultServlet.class);
         holderDefault.setInitParameter("resourceBase", baseUri.toASCIIString());
         holderDefault.setInitParameter("dirAllowed", "true");
@@ -222,7 +222,7 @@ public class Main {
     /**
      * Establish the Server URI.
      */
-    private URI getServerUri(ServerConnector connector) {
+    private URI getServerUri(final ServerConnector connector) {
         String scheme = "http";
         for (ConnectionFactory connectFactory : connector.getConnectionFactories()) {
             if (connectFactory.getProtocol().equals("SSL-http")) {
@@ -265,7 +265,7 @@ public class Main {
         System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
     }
 
-    public static void localHost(int port) {
+    public static void localHost(final int port) {
         SocketAddress socketAddress = new InetSocketAddress("127.0.0.1", port);
         try {
             ServerSocket serverSocket = new ServerSocket();
