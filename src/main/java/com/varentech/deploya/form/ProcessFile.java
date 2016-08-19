@@ -93,7 +93,7 @@ public class ProcessFile {
      * Unpacks all files into a temporary directory.
      * Prints the standard output and standard error and adds them to the database.
      */
-    public File unpack(File current) {
+    public File unpack(final File current) {
 
         Resource res = new Resource();
         String file_name = current.getName();
@@ -138,7 +138,7 @@ public class ProcessFile {
     /**
      * This method finds the hash value of each individual file in an array, and it is then inserted into our database.
      */
-    public void hashFiles(File[] fileList, File current) {
+    public void hashFiles(final File[] fileList, final File current) {
         Resource res = new Resource();
         FormServlet form = new FormServlet();
 

@@ -22,7 +22,7 @@ public class LoginServlet extends HttpServlet {
      * Adds username as a session attribute.
      * Redirects to form.jsp
      */
-    protected void doGet (HttpServletRequest request, HttpServletResponse response) {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) {
 
         response.setContentType("text/html");
         logg.debug("Successfully connected to login servlet.");

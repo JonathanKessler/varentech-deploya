@@ -18,7 +18,7 @@ public class SendFile {
     /**
      * This method saves the file into the destination directory.
      */
-    public void sendToDestination(InputStream inputStream, String file_name) {
+    public void sendToDestination(final InputStream inputStream, final String file_name) {
 
         Resource res = new Resource();
 
@@ -39,7 +39,7 @@ public class SendFile {
     /**
      * This method saves the file to the default archive directory is the user checked the box for archive.
      */
-    public void sendToArchive(InputStream inputStream) {
+    public void sendToArchive(final InputStream inputStream) {
 
         Resource res = new Resource();
         FormServlet formServlet = new FormServlet();
