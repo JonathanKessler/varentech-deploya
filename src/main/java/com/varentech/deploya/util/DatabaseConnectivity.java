@@ -96,7 +96,7 @@ public class DatabaseConnectivity {
         }
     }
 
-    public static boolean hasColumn(String table, String columnName) {
+    public static boolean hasColumn(final String table, final String columnName) {
         try {
             Connection connection = ConnectionConfiguration.getConnection();
             Statement statement = connection.createStatement();
@@ -122,7 +122,7 @@ public class DatabaseConnectivity {
         }
     }
 
-    public static void columnCheck(boolean check) {
+    private static void columnCheck(final boolean check) {
         if (!check) {
             logg.error("Column does not exist in this table!");
             logg.error("System will exit with code 1.");
