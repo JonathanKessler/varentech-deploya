@@ -59,7 +59,7 @@ public class Main {
             int port = config.getInt("port_number");
             String localhost = config.getString("localhost");
             if(localhost=="yes") {
-                localHostCheck(port);
+                localHost(port);
             }
             String context_path = config.getString("context_path");
             Main main = new Main(port,context_path);
@@ -265,7 +265,7 @@ public class Main {
         System.out.println("\t java -jar path/to/deploya.jar -h or java -jar path/to/deploya.jar --help");
     }
 
-    public static void localHostCheck(int port) {
+    public static void localHost(int port) {
         SocketAddress socketAddress = new InetSocketAddress("127.0.0.1", port);
         try {
             ServerSocket serverSocket = new ServerSocket();
