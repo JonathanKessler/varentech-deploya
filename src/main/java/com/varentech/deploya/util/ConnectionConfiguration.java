@@ -14,11 +14,11 @@ public class ConnectionConfiguration {
     private static String pathToDataBase;
 
     //setter
-    public static void setPathToDataBase(String path){
+    public static void setPathToDataBase(final String path) {
         pathToDataBase = path;
     }
     //getter
-    public static String getPathToDataBase(){
+    private static String getPathToDataBase() {
         return pathToDataBase;
     }
 

@@ -17,7 +17,7 @@ public class SaveTempDirectory {
      *This method creates and saves all files to a temporary directory
      * Calls methods to unpack files, move files to destination directory, execute files, and find the hash of all files.
      */
-    public void directory(String file_name) {
+    public void directory(final String file_name) {
         Resource res = new Resource();
 
         try {
@@ -66,7 +66,7 @@ public class SaveTempDirectory {
     /**
      *This method moves unpacked files into the destination directory if the user checked the box for unpacking.
      */
-    public void moveFiles(File[] tempDirList, File current) {
+    public void moveFiles(final File[] tempDirList, final File current) {
 
         Resource res = new Resource();
 

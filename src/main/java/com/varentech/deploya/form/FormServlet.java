@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
  * Runs a servlet for the form page to gather information from the user.
  */
 public class FormServlet extends HttpServlet {
-    Resource res = new Resource();
+    private Resource res = new Resource();
     private static final Logger logg = LoggerFactory.getLogger(FormServlet.class);
 
     /**
@@ -30,7 +30,7 @@ public class FormServlet extends HttpServlet {
      * Calls all methods necessary to process the file.
      * Inserts information into our database.
      */
-    public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    public void doPost(final HttpServletRequest request, final HttpServletResponse response) {
 
         HttpSession session = request.getSession();
 
@@ -131,7 +131,7 @@ public class FormServlet extends HttpServlet {
         SaveTempDirectory dir = new SaveTempDirectory();
         dir.directory(file_name);
 
-        if (!arch){
+        if (!arch) {
             res.entriesDetail.setError("Was not able to archive. Directory does not exist. " + res.entriesDetail.getError());
         }
 
@@ -150,7 +150,7 @@ public class FormServlet extends HttpServlet {
     /**
      * Returns a new String with the file_name plus the timestamp at the end of it. This version will be saved in the archive.
      */
-    public static String renaming(String file_name) { //method to add timestamp to file name
+    public static String renaming(final String file_name) { //method to add timestamp to file name
         Resource res = new Resource();
         String time_stamped;
         int dot = file_name.indexOf('.');
@@ -164,7 +164,7 @@ public class FormServlet extends HttpServlet {
     }
 
     /**
-     *replaces ~ with users home directory
+     *replaces ~ with users home directory.
      */
     public static String homeDirectory(String directory) {
         String home = System.getProperty("user.home");
@@ -177,7 +177,7 @@ public class FormServlet extends HttpServlet {
     /**
      *create the directory where the database will be if it does not exist.
      */
-    public boolean createDirectoryDB(String path) {
+    public boolean createDirectoryDB(final String path) {
         File paths = new File(path);
         File parent = new File(paths.getParent());
         File superparent = new File(parent.getParent());
@@ -187,7 +187,7 @@ public class FormServlet extends HttpServlet {
                 logg.info("Directory has been made: " + parent);
                 return true;
             }
-        }else {
+        } else {
             logg.error("Error " + superparent + " does not exist. No such path " + path);
             return false;
         }
@@ -197,7 +197,7 @@ public class FormServlet extends HttpServlet {
     /**
      *create the directory for archive if it does not exist.
      */
-    public boolean createDirectoryArchive(String path) {
+    public boolean createDirectoryArchive(final String path) {
         File paths = new File(path);
         File parent = new File(paths.getParent());
         if (parent.exists()) {
